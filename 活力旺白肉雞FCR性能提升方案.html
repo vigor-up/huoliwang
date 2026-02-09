@@ -26,6 +26,38 @@
         }
         .container { max-width: 1200px; margin: 0 auto; }
         
+        /* 語言切換器 */
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+            background: white;
+            padding: 8px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary);
+        }
+        .lang-btn {
+            padding: 6px 15px;
+            border: none;
+            border-radius: 20px;
+            background: transparent;
+            color: var(--dark);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .lang-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+            color: white;
+        }
+        .lang-btn:hover:not(.active) {
+            background: #f1f5f9;
+        }
+        
         /* 封面抬頭 - 工業化養殖專業風 */
         header { 
             background: linear-gradient(135deg, var(--dark) 0%, #0f172a 100%); 
@@ -38,6 +70,7 @@
             overflow: hidden; 
             text-align: center; 
             border-top: 5px solid var(--secondary);
+            margin-top: 60px; /* 為語言切換器留出空間 */
         }
         header::before { 
             content: ''; 
@@ -113,8 +146,14 @@
             margin-bottom: 25px; 
             border-radius: var(--border-radius); 
             box-shadow: var(--shadow); 
-            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.6s ease; 
             border-top: 4px solid var(--primary);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         section:hover { 
             transform: translateY(-4px); 
@@ -170,6 +209,7 @@
             border: 1px solid #cbd5e1; 
             transition: all 0.3s ease; 
             border-top: 3px solid var(--primary);
+            cursor: pointer;
         }
         .spec-card:hover { 
             border-color: var(--primary); 
@@ -210,6 +250,7 @@
             transition: all 0.3s ease; 
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         .benefit-card::before {
             content: '';
@@ -341,6 +382,7 @@
             position: relative; 
             overflow: hidden; 
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         .step-card:hover {
             transform: translateY(-3px);
@@ -613,6 +655,17 @@
                 font-size: 13px;
                 padding: 6px;
             }
+            .language-switcher {
+                position: static;
+                margin: 0 auto 20px;
+                justify-content: center;
+                top: 10px;
+                right: 10px;
+                flex-wrap: wrap;
+            }
+            header {
+                margin-top: 10px;
+            }
         }
         @media (max-width: 480px) { 
             .company-info h1 { font-size: 22px; } 
@@ -630,295 +683,307 @@
             .step-card {
                 padding: 20px 15px;
             }
+            .language-switcher {
+                flex-direction: column;
+                width: auto;
+                display: inline-flex;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 語言切換器 -->
+    <div class="language-switcher">
+        <button class="lang-btn active" data-lang="zh-TW" data-rate="1.0000">繁體中文(NTD)</button>
+        <button class="lang-btn" data-lang="zh-CN" data-rate="0.2192">简体中文(CNY)</button>
+        <button class="lang-btn" data-lang="en" data-rate="0.0320">English(USD)</button>
+    </div>
+
     <div class="container">
         <!-- 封面抬頭 - 白肉鸡專業定位 -->
         <header>
             <div class="company-info">
-                <h1>活力旺白肉鸡FCR性能提升方案 TDS</h1>
-                <div class="product-target">適用：愛拔益加(AA)、樂斯(Ross)、科寶(Cobb)等白羽肉雞品種｜全期催肥專屬優化</div>
-                <div class="tagline">High-Efficiency FCR Optimization · Lean Meat Enhancement · Full-Stage Fattening</div>
-                <div class="tds-badge">Technical Data Sheet｜技術資料表</div>
+                <h1 data-translate="title">活力旺白肉鸡FCR性能提升方案 TDS</h1>
+                <div class="product-target" data-translate="product_target">適用：愛拔益加(AA)、樂斯(Ross)、科寶(Cobb)等白羽肉雞品種｜全期催肥專屬優化</div>
+                <div class="tagline" data-translate="tagline">High-Efficiency FCR Optimization · Lean Meat Enhancement · Full-Stage Fattening</div>
+                <div class="tds-badge" data-translate="tds_badge">Technical Data Sheet｜技術資料表</div>
             </div>
         </header>
 
         <!-- 產品規格與添加參數 -->
         <section>
-            <h2>產品規格與添加參數</h2>
+            <h2 data-translate="specs_title">產品規格與添加參數</h2>
             
             <div class="specs-grid">
                 <div class="spec-card">
-                    <span class="label">後期催肥階段添加量</span>
-                    <span class="value">1.5</span>
-                    <span class="unit">公斤/噸飼料 (28-42天)</span>
+                    <span class="label" data-translate="spec1_label">後期催肥階段添加量</span>
+                    <span class="value" data-value="1.5">1.5</span>
+                    <span class="unit" data-translate="spec1_unit">公斤/噸飼料 (28-42天)</span>
                 </div>
                 <div class="spec-card">
-                    <span class="label">全期添加量</span>
-                    <span class="value">1</span>
-                    <span class="unit">公斤/噸飼料 (0-42天)</span>
+                    <span class="label" data-translate="spec2_label">全期添加量</span>
+                    <span class="value" data-value="1">1</span>
+                    <span class="unit" data-translate="spec2_unit">公斤/噸飼料 (0-42天)</span>
                 </div>
                 <div class="spec-card">
-                    <span class="label">後期催肥每萬隻成本</span>
-                    <span class="value">40,950</span>
-                    <span class="unit">NTD/1萬隻</span>
+                    <span class="label" data-translate="spec3_label">後期催肥每萬隻成本</span>
+                    <span class="value" data-value="40950">40,950</span>
+                    <span class="unit" data-translate="spec3_unit">NTD/1萬隻</span>
                 </div>
                 <div class="spec-card">
-                    <span class="label">日採食量(白肉鸡)</span>
-                    <span class="value">0.12</span>
-                    <span class="unit">公斤/隻/天</span>
+                    <span class="label" data-translate="spec4_label">日採食量(白肉鸡)</span>
+                    <span class="value" data-value="0.12">0.12</span>
+                    <span class="unit" data-translate="spec4_unit">公斤/隻/天</span>
                 </div>
                 <div class="spec-card">
-                    <span class="label">催肥階段體重提升</span>
-                    <span class="value">15-20%</span>
-                    <span class="unit">42天出欄增重</span>
+                    <span class="label" data-translate="spec5_label">催肥階段體重提升</span>
+                    <span class="value" data-value="18">15-20%</span>
+                    <span class="unit" data-translate="spec5_unit">42天出欄增重</span>
                 </div>
                 <div class="spec-card">
-                    <span class="label">適用階段</span>
-                    <span class="value" style="color: var(--primary); font-size: 20px;">育雛→出欄全程</span>
-                    <span class="unit">28-42天催肥強化</span>
+                    <span class="label" data-translate="spec6_label">適用階段</span>
+                    <span class="value" style="color: var(--primary); font-size: 20px;" data-translate="spec6_value">育雛→出欄全程</span>
+                    <span class="unit" data-translate="spec6_unit">28-42天催肥強化</span>
                 </div>
             </div>
 
-            <!-- 圖片2：全期催肥實施步驟 -->
+            <!-- 圖片1：全期催肥實施步驟 -->
             <div style="text-align: center;">
-                <img class="section-img" src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/916e915b40e749568cfedda0331300f0.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=2026020220571128D1901117F3E039138F&rrcfp=8a172a1a&x-expires=1770641832&x-signature=UBVVYjnpecz1LYnygplp7P0w6qI%3D" alt="白肉鸡全期催肥實施步驟" />
-                <p class="img-caption">圖1：白肉鸡全期催肥實施步驟｜28天啟動後期催肥計畫，飼料添加1.5kg/噸，42天出欄體重提升15%</p>
+                <img class="section-img" src="assets/white-broiler-full-period-fattening-steps.png" alt="白肉鸡全期催肥實施步驟" />
+                <p class="img-caption" data-translate="img1_caption">圖1：白肉鸡全期催肥實施步驟｜28天啟動後期催肥計畫，飼料添加1.5kg/噸，42天出欄體重提升15%</p>
             </div>
             
             <div style="background: #f1f5f9; padding: 18px; border-radius: 10px; margin-top: 20px; border-left: 4px solid var(--primary);">
-                <p><strong>使用方法：</strong>全期添加模式每噸全價飼料均勻添加1公斤；後期催肥強化模式（28-42天）每噸添加1.5公斤，與預混料充分混合後使用。適用於愛拔益加(AA)、樂斯(Ross)、科寶(Cobb)等白羽肉雞品種，無需調整現有飼養流程。</p>
+                <p data-translate="usage_instructions"><strong>使用方法：</strong>全期添加模式每噸全價飼料均勻添加1公斤；後期催肥強化模式（28-42天）每噸添加1.5公斤，與預混料充分混合後使用。適用於愛拔益加(AA)、樂斯(Ross)、科寶(Cobb)等白羽肉雞品種，無需調整現有飼養流程。</p>
             </div>
         </section>
 
         <!-- 全期催肥核心功效 -->
         <section class="fattening-section">
-            <h2>全期催肥核心功效｜突破生長與效益天花板</h2>
+            <h2 data-translate="benefits_title">全期催肥核心功效｜突破生長與效益天花板</h2>
             
             <div class="benefits-grid">
                 <div class="benefit-card">
-                    <h4>體重增益最大化</h4>
-                    <span class="benefit-metric">+15-20%</span>
-                    <p>42天出欄體重顯著提升，傳統2.2kg→優化後2.4kg+</p>
-                    <p><strong>實測數據：</strong>每萬隻雞增重收益達160,000 NTD</p>
-                    <div class="benefit-note">生長曲線加速，後期增重效率提升30%</div>
+                    <h4 data-translate="benefit1_title">體重增益最大化</h4>
+                    <span class="benefit-metric" data-value="18">+15-20%</span>
+                    <p data-translate="benefit1_desc1">42天出欄體重顯著提升，傳統2.2kg→優化後2.4kg+</p>
+                    <p data-translate="benefit1_desc2"><strong>實測數據：</strong>每萬隻雞增重收益達160,000 NTD</p>
+                    <div class="benefit-note" data-translate="benefit1_note">生長曲線加速，後期增重效率提升30%</div>
                 </div>
                 
                 <div class="benefit-card">
-                    <h4>FCR極致優化</h4>
-                    <span class="benefit-metric">-8-12%</span>
-                    <p>傳統1.8kg飼料/1kg增重→優化後1.65kg，飼料浪費大幅降低</p>
-                    <p><strong>實測數據：</strong>每萬隻雞14天FCR節省收益達108,000 NTD</p>
-                    <div class="benefit-note">每萬隻雞批次節省飼料約1,800公斤</div>
+                    <h4 data-translate="benefit2_title">FCR極致優化</h4>
+                    <span class="benefit-metric" data-value="10">-8-12%</span>
+                    <p data-translate="benefit2_desc1">傳統1.8kg飼料/1kg增重→優化後1.65kg，飼料浪費大幅降低</p>
+                    <p data-translate="benefit2_desc2"><strong>實測數據：</strong>每萬隻雞14天FCR節省收益達108,000 NTD</p>
+                    <div class="benefit-note" data-translate="benefit2_note">每萬隻雞批次節省飼料約1,800公斤</div>
                 </div>
                 
                 <div class="benefit-card">
-                    <h4>屠體品質升級</h4>
-                    <span class="benefit-metric">腹脂↓ · 瘦肉率↑</span>
-                    <p>胸肉比例從65%提升至70-72%，屠宰率從82%提升至87%</p>
-                    <p><strong>實測數據：</strong>每萬隻雞屠體溢價收益達72,000 NTD</p>
-                    <div class="benefit-note">屠體等級提升，市場溢價達$3.0/lb</div>
+                    <h4 data-translate="benefit3_title">屠體品質升級</h4>
+                    <span class="benefit-metric" data-translate="benefit3_metric">腹脂↓ · 瘦肉率↑</span>
+                    <p data-translate="benefit3_desc1">胸肉比例從65%提升至70-72%，屠宰率從82%提升至87%</p>
+                    <p data-translate="benefit3_desc2"><strong>實測數據：</strong>每萬隻雞屠體溢價收益達72,000 NTD</p>
+                    <div class="benefit-note" data-translate="benefit3_note">屠體等級提升，市場溢價達$3.0/lb</div>
                 </div>
                 
                 <div class="benefit-card">
-                    <h4>存活率與穩定性提升</h4>
-                    <span class="benefit-metric">存活率↑</span>
-                    <p>後期應激抵抗力增強，減少死淘率</p>
-                    <p><strong>實測數據：</strong>每萬隻雞存活率收益達35,200 NTD</p>
-                    <div class="benefit-note">全程成活率從94%提升至96-97%</div>
+                    <h4 data-translate="benefit4_title">存活率與穩定性提升</h4>
+                    <span class="benefit-metric" data-translate="benefit4_metric">存活率↑</span>
+                    <p data-translate="benefit4_desc1">後期應激抵抗力增強，減少死淘率</p>
+                    <p data-translate="benefit4_desc2"><strong>實測數據：</strong>每萬隻雞存活率收益達35,200 NTD</p>
+                    <div class="benefit-note" data-translate="benefit4_note">全程成活率從94%提升至96-97%</div>
                 </div>
             </div>
 
-            <!-- 圖片5：生長曲線對比 + 圖片6：生長對比數據 -->
+            <!-- 圖片2和3：生長曲線對比 + 生長對比數據 -->
             <div style="text-align: center; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 25px 0;">
                 <div>
-                    <img class="section-img" style="max-width: 100%;" src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/c3015025d7604e39bbb1b415702d7e2d.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=2026020220571128D1901117F3E039138F&rrcfp=8a172a1a&x-expires=1770641832&x-signature=XixCwSuHGElCPkCNSDU8t0Qbpp0%3D" alt="白肉鸡生長曲線對比" />
-                    <p class="img-caption">圖2：白肉鸡生長曲線對比｜42天體重提升15-20%</p>
+                    <img class="section-img" style="max-width: 100%;" src="assets/white-broiler-growth-curve-comparison.png" alt="白肉鸡生長曲線對比" />
+                    <p class="img-caption" data-translate="img2_caption">圖2：白肉鸡生長曲線對比｜42天體重提升15-20%</p>
                 </div>
                 <div>
-                    <img class="section-img" style="max-width: 100%;" src="https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/e0ded55240b84fc2a317b04bc047173c.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=2026020220571128D1901117F3E039138F&rrcfp=8a172a1a&x-expires=1770641832&x-signature=lLp29XG82YFW4iDuZqkUGTZeuKc%3D" alt="白肉鸡生長與FCR對比" />
-                    <p class="img-caption">圖3：生長與FCR對比｜傳統FCR 1.8→優化1.6</p>
+                    <img class="section-img" style="max-width: 100%;" src="assets/white-broiler-growth-fcr-comparison.png" alt="白肉鸡生長與FCR對比" />
+                    <p class="img-caption" data-translate="img3_caption">圖3：生長與FCR對比｜傳統FCR 1.8→優化1.6</p>
                 </div>
             </div>
 
-            <!-- 圖片3：屠體品質對比 -->
+            <!-- 圖片4：屠體品質對比 -->
             <div style="text-align: center;">
-                <img class="section-img" src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/becae55b535546b78575324993515d73.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=2026020220571128D1901117F3E039138F&rrcfp=8a172a1a&x-expires=1770641832&x-signature=ft2noSTbBntj14ntNz6taJbRaCc%3D" alt="白肉鸡屠體品質對比" />
-                <p class="img-caption">圖4：白肉鸡屠體品質對比｜傳統vs活力旺催肥方案，腹脂減少、胸肉比例提升</p>
+                <img class="section-img" src="assets/white-broiler-carcass-quality-comparison.png" alt="白肉鸡屠體品質對比" />
+                <p class="img-caption" data-translate="img4_caption">圖4：白肉鸡屠體品質對比｜傳統vs活力旺催肥方案，腹脂減少、胸肉比例提升</p>
             </div>
         </section>
 
         <!-- 核心技術機制 -->
         <section>
-            <h2>🔬 核心作用機轉｜全期催肥的科學底層</h2>
+            <h2 data-translate="mechanism_title">🔬 核心作用機轉｜全期催肥的科學底層</h2>
             
             <div class="mechanism-grid">
                 <div class="mechanism-card">
-                    <h5>1. 營養代謝優化機轉</h5>
-                    <p>複合酶系（非澱粉多糖酶+蛋白酶）破解飼料抗營養因子，提升營養吸收率22%；同時調控腸道微生物菌群，強化營養利用效率，實現FCR從1.8→1.65的突破（如圖5）。</p>
-                    <p>針對白羽肉雞後期高採食量特點，減少飼料過渡浪費，每萬隻雞14天節省飼料成本達108,000 NTD。</p>
+                    <h5 data-translate="mechanism1_title">1. 營養代謝優化機轉</h5>
+                    <p data-translate="mechanism1_desc1">複合酶系（非澱粉多糖酶+蛋白酶）破解飼料抗營養因子，提升營養吸收率22%；同時調控腸道微生物菌群，強化營養利用效率，實現FCR從1.8→1.65的突破（如圖5）。</p>
+                    <p data-translate="mechanism1_desc2">針對白羽肉雞後期高採食量特點，減少飼料過渡浪費，每萬隻雞14天節省飼料成本達108,000 NTD。</p>
                 </div>
                 <div class="mechanism-card">
-                    <h5>2. 肌肉生長定向調控</h5>
-                    <p>肌肉特異性小核酸肽靶向激活肌纖維增生通路，同時抑制脂肪合成酶（ACC）活性，實現「增肌減脂」雙重效果：胸肉比例從65%提升至70-72%，腹腔脂肪沉積減少10-15%。</p>
-                    <p>匹配白羽肉雞後期肌肉生長黃金期（28-42天），最大化瘦肉產出與屠體價值。</p>
+                    <h5 data-translate="mechanism2_title">2. 肌肉生長定向調控</h5>
+                    <p data-translate="mechanism2_desc1">肌肉特異性小核酸肽靶向激活肌纖維增生通路，同時抑制脂肪合成酶（ACC）活性，實現「增肌減脂」雙重效果：胸肉比例從65%提升至70-72%，腹腔脂肪沉積減少10-15%。</p>
+                    <p data-translate="mechanism2_desc2">匹配白羽肉雞後期肌肉生長黃金期（28-42天），最大化瘦肉產出與屠體價值。</p>
                 </div>
                 <div class="mechanism-card">
-                    <h5>3. 能量代謝強化</h5>
-                    <p>添加代謝調節因子提升ATP生成效率，加速營養物質向肌肉組織轉運，而非脂肪沉積；後期生長速度提升15-20%，42天出欄體重從2.2kg提升至2.4kg以上。</p>
-                    <p>降低後期生長緩慢問題，縮短養殖週期同時提升單隻收益。</p>
+                    <h5 data-translate="mechanism3_title">3. 能量代謝強化</h5>
+                    <p data-translate="mechanism3_desc1">添加代謝調節因子提升ATP生成效率，加速營養物質向肌肉組織轉運，而非脂肪沉積；後期生長速度提升15-20%，42天出欄體重從2.2kg提升至2.4kg以上。</p>
+                    <p data-translate="mechanism3_desc2">降低後期生長緩慢問題，縮短養殖週期同時提升單隻收益。</p>
                 </div>
                 <div class="mechanism-card">
-                    <h5>4. 抗應激與存活率提升</h5>
-                    <p>植物多酚+免疫肽強化腸道黏膜屏障與整體免疫力，減少後期高密度飼養帶來的應激反應，死淘率降低2-3%，每萬隻雞減少損失達35,200 NTD。</p>
-                    <p>支持無抗養殖模式，符合現代養殖政策與市場需求。</p>
+                    <h5 data-translate="mechanism4_title">4. 抗應激與存活率提升</h5>
+                    <p data-translate="mechanism4_desc1">植物多酚+免疫肽強化腸道黏膜屏障與整體免疫力，減少後期高密度飼養帶來的應激反應，死淘率降低2-3%，每萬隻雞減少損失達35,200 NTD。</p>
+                    <p data-translate="mechanism4_desc2">支持無抗養殖模式，符合現代養殖政策與市場需求。</p>
                 </div>
             </div>
 
-            <!-- 圖片4：FCR優化數據 -->
+            <!-- 圖片5：FCR優化數據 -->
             <div style="text-align: center;">
-                <img class="section-img" src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/a7a8abb6b7fb4a95b05c8d9737405873.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=2026020220571128D1901117F3E039138F&rrcfp=8a172a1a&x-expires=1770641832&x-signature=bCJ22jXDc9NEkRG37nEAps6Gf0s%3D" alt="白肉鸡FCR優化數據" />
-                <p class="img-caption">圖5：白肉鸡FCR優化數據｜傳統1.8kg飼料/1kg增重→優化1.65kg，飼料減少8-12%</p>
+                <img class="section-img" src="assets/white-broiler-fcr-optimization-data.png" alt="白肉鸡FCR優化數據" />
+                <p class="img-caption" data-translate="img5_caption">圖5：白肉鸡FCR優化數據｜傳統1.8kg飼料/1kg增重→優化1.65kg，飼料減少8-12%</p>
             </div>
         </section>
 
         <!-- 經濟效益分析 -->
         <section>
-            <h2>經濟效益分析｜每萬隻雞批次收益（全期催肥方案）</h2>
+            <h2 data-translate="economic_title">經濟效益分析｜每萬隻雞批次收益（全期催肥方案）</h2>
             
             <div class="economic-header">
-                <p><strong>計算基準：</strong>白羽肉雞42天週期｜後期催肥添加量1.5kg/噸｜每萬隻添加成本40,950 NTD｜出欄體重提升15%｜FCR 1.8→1.65</p>
+                <p data-translate="economic_basis"><strong>計算基準：</strong>白羽肉雞42天週期｜後期催肥添加量1.5kg/噸｜每萬隻添加成本40,950 NTD｜出欄體重提升15%｜FCR 1.8→1.65</p>
             </div>
             
             <div class="economic-card">
                 <table class="profit-table">
                     <thead>
                         <tr>
-                            <th>效益項目</th>
-                            <th>改善幅度</th>
-                            <th>每萬隻雞經濟價值(NTD)</th>
+                            <th data-translate="table_header1">效益項目</th>
+                            <th data-translate="table_header2">改善幅度</th>
+                            <th data-translate="table_header3">每萬隻雞經濟價值(NTD)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>體重增益收益</td>
-                            <td>+15-20% 體重</td>
-                            <td>+160,000</td>
+                            <td data-translate="profit1_item">體重增益收益</td>
+                            <td data-translate="profit1_range">+15-20% 體重</td>
+                            <td><span class="stat-value" data-value="160000">+160,000</span></td>
                         </tr>
                         <tr>
-                            <td>FCR優化節省飼料成本</td>
-                            <td>-8-12% FCR</td>
-                            <td>+108,000</td>
+                            <td data-translate="profit2_item">FCR優化節省飼料成本</td>
+                            <td data-translate="profit2_range">-8-12% FCR</td>
+                            <td><span class="stat-value" data-value="108000">+108,000</span></td>
                         </tr>
                         <tr>
-                            <td>屠體溢價收益</td>
-                            <td>胸肉↑5-7% + 屠宰率↑5%</td>
-                            <td>+72,000</td>
+                            <td data-translate="profit3_item">屠體溢價收益</td>
+                            <td data-translate="profit3_range">胸肉↑5-7% + 屠宰率↑5%</td>
+                            <td><span class="stat-value" data-value="72000">+72,000</span></td>
                         </tr>
                         <tr>
-                            <td>存活率提升減少損失</td>
-                            <td>+2-3% 存活率</td>
-                            <td>+35,200</td>
+                            <td data-translate="profit4_item">存活率提升減少損失</td>
+                            <td data-translate="profit4_range">+2-3% 存活率</td>
+                            <td><span class="stat-value" data-value="35200">+35,200</span></td>
                         </tr>
                         <tr>
-                            <td><strong>總效益增加</strong></td>
+                            <td data-translate="profit5_item"><strong>總效益增加</strong></td>
                             <td>&mdash;</td>
-                            <td><strong>+375,200</strong></td>
+                            <td><span class="stat-value" data-value="375200"><strong>+375,200</strong></span></td>
                         </tr>
                         <tr>
-                            <td>飼料添加成本增加</td>
-                            <td>1.5kg/噸 × 方案單價</td>
-                            <td>-40,950</td>
+                            <td data-translate="profit6_item">飼料添加成本增加</td>
+                            <td data-translate="profit6_range">1.5kg/噸 × 方案單價</td>
+                            <td><span class="stat-value" data-value="40950">-40,950</span></td>
                         </tr>
                         <tr class="total-row">
-                            <td>每萬隻雞批次淨利潤增加</td>
+                            <td data-translate="profit7_item">每萬隻雞批次淨利潤增加</td>
                             <td>&mdash;</td>
-                            <td>+334,250</td>
+                            <td><span class="roi-value" data-value="334250">+334,250</span></td>
                         </tr>
                     </tbody>
                 </table>
                 
-                <!-- 圖片1：ROI計算總表 -->
+                <!-- 圖片6：ROI計算總表 -->
                 <div style="text-align: center; margin: 20px 0;">
-                    <img class="section-img" style="max-width: 800px;" src="https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/792fd7ae2ac647e2a84f3b643ae3c38b.png~tplv-a9rns2rl98-24:720:720.png?lk3s=8e244e95&rcl=2026020220571128D1901117F3E039138F&rrcfp=8a172a1a&x-expires=1770641832&x-signature=%2B2AxR63O7NDIdazBgvHDnCJ6v30%3D" alt="白肉鸡催肥ROI計算" />
-                    <p class="img-caption">圖6：白肉鸡後期催肥ROI計算｜每萬隻淨利334,250 NTD，投資報酬率816%</p>
+                    <img class="section-img" style="max-width: 800px;" src="assets/white-broiler-roi-calculation.png" alt="白肉鸡催肥ROI計算" />
+                    <p class="img-caption" data-translate="img6_caption">圖6：白肉鸡後期催肥ROI計算｜每萬隻淨利334,250 NTD，投資報酬率816%</p>
                 </div>
                 
                 <div class="roi-badge">
-                    <div>每萬隻雞批次投資報酬率 (ROI) - 全期催肥方案</div>
-                    <div class="roi-value">816%</div>
-                    <div class="roi-label">每投入1元，創造8.16元淨收益｜投資回收期 &lt;3天</div>
+                    <div data-translate="roi_title">每萬隻雞批次投資報酬率 (ROI) - 全期催肥方案</div>
+                    <div class="roi-value" data-value="816">816%</div>
+                    <div class="roi-label" data-translate="roi_label">每投入1元，創造8.16元淨收益｜投資回收期 &lt;3天</div>
                 </div>
             </div>
         </section>
 
         <!-- 三階段導入方案 -->
         <section>
-            <h2>✅ 快速導入方案｜低風險驗證</h2>
+            <h2 data-translate="steps_title">✅ 快速導入方案｜低風險驗證</h2>
             
             <div class="usage-steps">
                 <div class="step-card" data-step="1">
-                    <h4>小群驗證(1週)</h4>
-                    <p><strong>規模：</strong>500隻AA鸡</p>
-                    <p><strong>投入成本：</strong><span class="cost-highlight">NTD 2,048</span></p>
-                    <p><strong>驗證指標：</strong>採食量、糞便形態、生長速度</p>
+                    <h4 data-translate="step1_title">小群驗證(1週)</h4>
+                    <p data-translate="step1_scale"><strong>規模：</strong>500隻AA鸡</p>
+                    <p><strong data-translate="step1_cost_label">投入成本：</strong><span class="cost-highlight stat-value" data-value="2048">NTD 2,048</span></p>
+                    <p data-translate="step1_metrics"><strong>驗證指標：</strong>採食量、糞便形態、生長速度</p>
                 </div>
                 
                 <div class="step-card" data-step="2">
-                    <h4>批次驗證(2週)</h4>
-                    <p><strong>規模：</strong>2,000隻Ross鸡</p>
-                    <p><strong>投入成本：</strong><span class="cost-highlight">NTD 8,190</span></p>
-                    <p><strong>驗證指標：</strong>體重抽測、FCR計算、屠體品質</p>
+                    <h4 data-translate="step2_title">批次驗證(2週)</h4>
+                    <p data-translate="step2_scale"><strong>規模：</strong>2,000隻Ross鸡</p>
+                    <p><strong data-translate="step2_cost_label">投入成本：</strong><span class="cost-highlight stat-value" data-value="8190">NTD 8,190</span></p>
+                    <p data-translate="step2_metrics"><strong>驗證指標：</strong>體重抽測、FCR計算、屠體品質</p>
                 </div>
                 
                 <div class="step-card" data-step="3">
-                    <h4>全場導入(持續)</h4>
-                    <p><strong>規模：</strong>全場白羽肉雞</p>
-                    <p><strong>投入成本：</strong>每萬隻雞/批次 NTD 40,950</p>
-                    <p><strong>核心效益：</strong>每萬隻雞淨利增加334,250元</p>
+                    <h4 data-translate="step3_title">全場導入(持續)</h4>
+                    <p data-translate="step3_scale"><strong>規模：</strong>全場白羽肉雞</p>
+                    <p><strong data-translate="step3_cost_label">投入成本：</strong><span class="stat-value" data-value="40950">每萬隻雞/批次 NTD 40,950</span></p>
+                    <p data-translate="step3_benefit"><strong>核心效益：</strong>每萬隻雞淨利增加334,250元</p>
                 </div>
             </div>
         </section>
 
         <!-- 傳統vs活力旺方案對比 -->
         <section>
-            <h2>🔄 傳統白肉鸡養殖 vs 活力旺全期催肥方案</h2>
+            <h2 data-translate="comparison_title">🔄 傳統白肉鸡養殖 vs 活力旺全期催肥方案</h2>
             
             <table class="comparison-table">
                 <thead>
                     <tr>
-                        <th>評估項目</th>
-                        <th class="traditional">傳統養殖模式</th>
-                        <th class="innovative">活力旺全期催肥方案</th>
+                        <th data-translate="comparison_header1">評估項目</th>
+                        <th class="traditional" data-translate="comparison_header2">傳統養殖模式</th>
+                        <th class="innovative" data-translate="comparison_header3">活力旺全期催肥方案</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>FCR水準</strong></td>
-                        <td class="traditional">1.8:1</td>
-                        <td class="innovative">1.65:1 (-8-12%)</td>
+                        <td data-translate="comparison1_item"><strong>FCR水準</strong></td>
+                        <td class="traditional" data-translate="comparison1_traditional">1.8:1</td>
+                        <td class="innovative" data-translate="comparison1_innovative">1.65:1 (-8-12%)</td>
                     </tr>
                     <tr>
-                        <td><strong>42天體重</strong></td>
-                        <td class="traditional">2.2kg</td>
-                        <td class="innovative">2.4kg+ (+15-20%)</td>
+                        <td data-translate="comparison2_item"><strong>42天體重</strong></td>
+                        <td class="traditional" data-translate="comparison2_traditional">2.2kg</td>
+                        <td class="innovative" data-translate="comparison2_innovative">2.4kg+ (+15-20%)</td>
                     </tr>
                     <tr>
-                        <td><strong>胸肉比例</strong></td>
-                        <td class="traditional">65%</td>
-                        <td class="innovative">70-72% (+5-7%)</td>
+                        <td data-translate="comparison3_item"><strong>胸肉比例</strong></td>
+                        <td class="traditional" data-translate="comparison3_traditional">65%</td>
+                        <td class="innovative" data-translate="comparison3_innovative">70-72% (+5-7%)</td>
                     </tr>
                     <tr>
-                        <td><strong>屠宰率</strong></td>
-                        <td class="traditional">82%</td>
-                        <td class="innovative">87% (+5%)</td>
+                        <td data-translate="comparison4_item"><strong>屠宰率</strong></td>
+                        <td class="traditional" data-translate="comparison4_traditional">82%</td>
+                        <td class="innovative" data-translate="comparison4_innovative">87% (+5%)</td>
                     </tr>
                     <tr>
-                        <td><strong>每萬隻淨利</strong></td>
-                        <td class="traditional">約10萬元</td>
-                        <td class="innovative">約43.4萬元 (+334%)</td>
+                        <td data-translate="comparison5_item"><strong>每萬隻淨利</strong></td>
+                        <td class="traditional" data-translate="comparison5_traditional">約10萬元</td>
+                        <td class="innovative" data-translate="comparison5_innovative">約43.4萬元 (+334%)</td>
                     </tr>
                 </tbody>
             </table>
@@ -926,33 +991,590 @@
 
         <!-- CTA行動區塊 -->
         <section class="cta-section">
-            <h2>🚀 立即提升白肉鸡養殖獲利效率</h2>
+            <h2 data-translate="cta_title">🚀 立即提升白肉鸡養殖獲利效率</h2>
             
-            <div class="big-number">+334,250</div>
-            <p>每萬隻白肉鸡批次淨利潤增加(NTD)</p>
+            <div class="big-number stat-value" data-value="334250">+334,250</div>
+            <p data-translate="cta_subtitle1">每萬隻白肉鸡批次淨利潤增加(NTD)</p>
             
-            <div class="big-number">816%</div>
-            <p>投資報酬率(ROI) - 全期催肥方案</p>
+            <div class="big-number roi-value" data-value="816">816%</div>
+            <p data-translate="cta_subtitle2">投資報酬率(ROI) - 全期催肥方案</p>
             
-            <div class="highlight-text">年出欄10批次，總淨利增加超334萬元</div>
-            <div class="highlight-text">完全匹配AA/Ross/Cobb等主流白肉鸡品種｜28-42天催肥黃金期專屬優化</div>
+            <div class="highlight-text" data-translate="cta_text1">年出欄10批次，總淨利增加超334萬元</div>
+            <div class="highlight-text" data-translate="cta_text2">完全匹配AA/Ross/Cobb等主流白肉鸡品種｜28-42天催肥黃金期專屬優化</div>
             
             <div class="cta-buttons">
-                <a class="btn btn-primary" href="#">📞 立即技術諮詢</a>
-                <a class="btn btn-secondary" href="#">📋 獲取全期催肥專屬試用方案</a>
+                <a class="btn btn-primary" href="#" data-translate="cta_btn1">📞 立即技術諮詢</a>
+                <a class="btn btn-secondary" href="#" data-translate="cta_btn2">📋 獲取全期催肥專屬試用方案</a>
             </div>
         </section>
 
         <!-- 頁腳 -->
         <footer>
             <div class="footer-content">
-                <p><strong>首池有限公司</strong>｜高效養殖 × 生物技術 × 全期催肥解決方案</p>
-                <p>本技術資料表數據基於白羽肉雞(AA/Ross/Cobb)規模化養殖場實測結果，實際效果因管理條件略有差異</p>
-                <div class="copyright">
+                <p data-translate="footer_text1"><strong>首池有限公司</strong>｜高效養殖 × 生物技術 × 全期催肥解決方案</p>
+                <p data-translate="footer_text2">本技術資料表數據基於白羽肉雞(AA/Ross/Cobb)規模化養殖場實測結果，實際效果因管理條件略有差異</p>
+                <div class="copyright" data-translate="copyright">
                     © 2026 首池有限公司 版權所有｜本技術資料內容為商業機密，未經授權禁止轉載
                 </div>
             </div>
         </footer>
     </div>
+
+    <script>
+        // 多語言翻譯數據
+        const translations = {
+            'zh-TW': {
+                // 封面抬頭
+                'title': '活力旺白肉鸡FCR性能提升方案 TDS',
+                'product_target': '適用：愛拔益加(AA)、樂斯(Ross)、科寶(Cobb)等白羽肉雞品種｜全期催肥專屬優化',
+                'tagline': 'High-Efficiency FCR Optimization · Lean Meat Enhancement · Full-Stage Fattening',
+                'tds_badge': 'Technical Data Sheet｜技術資料表',
+                
+                // 規格區
+                'specs_title': '產品規格與添加參數',
+                'spec1_label': '後期催肥階段添加量',
+                'spec1_unit': '公斤/噸飼料 (28-42天)',
+                'spec2_label': '全期添加量',
+                'spec2_unit': '公斤/噸飼料 (0-42天)',
+                'spec3_label': '後期催肥每萬隻成本',
+                'spec3_unit': 'NTD/1萬隻',
+                'spec4_label': '日採食量(白肉鸡)',
+                'spec4_unit': '公斤/隻/天',
+                'spec5_label': '催肥階段體重提升',
+                'spec5_unit': '42天出欄增重',
+                'spec6_label': '適用階段',
+                'spec6_value': '育雛→出欄全程',
+                'spec6_unit': '28-42天催肥強化',
+                'img1_caption': '圖1：白肉鸡全期催肥實施步驟｜28天啟動後期催肥計畫，飼料添加1.5kg/噸，42天出欄體重提升15%',
+                'usage_instructions': '使用方法：全期添加模式每噸全價飼料均勻添加1公斤；後期催肥強化模式（28-42天）每噸添加1.5公斤，與預混料充分混合後使用。適用於愛拔益加(AA)、樂斯(Ross)、科寶(Cobb)等白羽肉雞品種，無需調整現有飼養流程。',
+                
+                // 核心功效
+                'benefits_title': '全期催肥核心功效｜突破生長與效益天花板',
+                'benefit1_title': '體重增益最大化',
+                'benefit1_desc1': '42天出欄體重顯著提升，傳統2.2kg→優化後2.4kg+',
+                'benefit1_desc2': '實測數據：每萬隻雞增重收益達160,000 NTD',
+                'benefit1_note': '生長曲線加速，後期增重效率提升30%',
+                'benefit2_title': 'FCR極致優化',
+                'benefit2_desc1': '傳統1.8kg飼料/1kg增重→優化後1.65kg，飼料浪費大幅降低',
+                'benefit2_desc2': '實測數據：每萬隻雞14天FCR節省收益達108,000 NTD',
+                'benefit2_note': '每萬隻雞批次節省飼料約1,800公斤',
+                'benefit3_title': '屠體品質升級',
+                'benefit3_metric': '腹脂↓ · 瘦肉率↑',
+                'benefit3_desc1': '胸肉比例從65%提升至70-72%，屠宰率從82%提升至87%',
+                'benefit3_desc2': '實測數據：每萬隻雞屠體溢價收益達72,000 NTD',
+                'benefit3_note': '屠體等級提升，市場溢價達$3.0/lb',
+                'benefit4_title': '存活率與穩定性提升',
+                'benefit4_metric': '存活率↑',
+                'benefit4_desc1': '後期應激抵抗力增強，減少死淘率',
+                'benefit4_desc2': '實測數據：每萬隻雞存活率收益達35,200 NTD',
+                'benefit4_note': '全程成活率從94%提升至96-97%',
+                'img2_caption': '圖2：白肉鸡生長曲線對比｜42天體重提升15-20%',
+                'img3_caption': '圖3：生長與FCR對比｜傳統FCR 1.8→優化1.6',
+                'img4_caption': '圖4：白肉鸡屠體品質對比｜傳統vs活力旺催肥方案，腹脂減少、胸肉比例提升',
+                
+                // 技術機制
+                'mechanism_title': '🔬 核心作用機轉｜全期催肥的科學底層',
+                'mechanism1_title': '1. 營養代謝優化機轉',
+                'mechanism1_desc1': '複合酶系（非澱粉多糖酶+蛋白酶）破解飼料抗營養因子，提升營養吸收率22%；同時調控腸道微生物菌群，強化營養利用效率，實現FCR從1.8→1.65的突破（如圖5）。',
+                'mechanism1_desc2': '針對白羽肉雞後期高採食量特點，減少飼料過渡浪費，每萬隻雞14天節省飼料成本達108,000 NTD。',
+                'mechanism2_title': '2. 肌肉生長定向調控',
+                'mechanism2_desc1': '肌肉特異性小核酸肽靶向激活肌纖維增生通路，同時抑制脂肪合成酶（ACC）活性，實現「增肌減脂」雙重效果：胸肉比例從65%提升至70-72%，腹腔脂肪沉積減少10-15%。',
+                'mechanism2_desc2': '匹配白羽肉雞後期肌肉生長黃金期（28-42天），最大化瘦肉產出與屠體價值。',
+                'mechanism3_title': '3. 能量代謝強化',
+                'mechanism3_desc1': '添加代謝調節因子提升ATP生成效率，加速營養物質向肌肉組織轉運，而非脂肪沉積；後期生長速度提升15-20%，42天出欄體重從2.2kg提升至2.4kg以上。',
+                'mechanism3_desc2': '降低後期生長緩慢問題，縮短養殖週期同時提升單隻收益。',
+                'mechanism4_title': '4. 抗應激與存活率提升',
+                'mechanism4_desc1': '植物多酚+免疫肽強化腸道黏膜屏障與整體免疫力，減少後期高密度飼養帶來的應激反應，死淘率降低2-3%，每萬隻雞減少損失達35,200 NTD。',
+                'mechanism4_desc2': '支持無抗養殖模式，符合現代養殖政策與市場需求。',
+                'img5_caption': '圖5：白肉鸡FCR優化數據｜傳統1.8kg飼料/1kg增重→優化1.65kg，飼料減少8-12%',
+                
+                // 經濟效益
+                'economic_title': '經濟效益分析｜每萬隻雞批次收益（全期催肥方案）',
+                'economic_basis': '計算基準：白羽肉雞42天週期｜後期催肥添加量1.5kg/噸｜每萬隻添加成本40,950 NTD｜出欄體重提升15%｜FCR 1.8→1.65',
+                'table_header1': '效益項目',
+                'table_header2': '改善幅度',
+                'table_header3': '每萬隻雞經濟價值(NTD)',
+                'profit1_item': '體重增益收益',
+                'profit1_range': '+15-20% 體重',
+                'profit2_item': 'FCR優化節省飼料成本',
+                'profit2_range': '-8-12% FCR',
+                'profit3_item': '屠體溢價收益',
+                'profit3_range': '胸肉↑5-7% + 屠宰率↑5%',
+                'profit4_item': '存活率提升減少損失',
+                'profit4_range': '+2-3% 存活率',
+                'profit5_item': '總效益增加',
+                'profit6_item': '飼料添加成本增加',
+                'profit6_range': '1.5kg/噸 × 方案單價',
+                'profit7_item': '每萬隻雞批次淨利潤增加',
+                'img6_caption': '圖6：白肉鸡後期催肥ROI計算｜每萬隻淨利334,250 NTD，投資報酬率816%',
+                'roi_title': '每萬隻雞批次投資報酬率 (ROI) - 全期催肥方案',
+                'roi_label': '每投入1元，創造8.16元淨收益｜投資回收期 <3天',
+                
+                // 導入方案
+                'steps_title': '✅ 快速導入方案｜低風險驗證',
+                'step1_title': '小群驗證(1週)',
+                'step1_scale': '規模：500隻AA鸡',
+                'step1_cost_label': '投入成本：',
+                'step1_metrics': '驗證指標：採食量、糞便形態、生長速度',
+                'step2_title': '批次驗證(2週)',
+                'step2_scale': '規模：2,000隻Ross鸡',
+                'step2_cost_label': '投入成本：',
+                'step2_metrics': '驗證指標：體重抽測、FCR計算、屠體品質',
+                'step3_title': '全場導入(持續)',
+                'step3_scale': '規模：全場白羽肉雞',
+                'step3_cost_label': '投入成本：',
+                'step3_benefit': '核心效益：每萬隻雞淨利增加334,250元',
+                
+                // 對比表格
+                'comparison_title': '🔄 傳統白肉鸡養殖 vs 活力旺全期催肥方案',
+                'comparison_header1': '評估項目',
+                'comparison_header2': '傳統養殖模式',
+                'comparison_header3': '活力旺全期催肥方案',
+                'comparison1_item': 'FCR水準',
+                'comparison1_traditional': '1.8:1',
+                'comparison1_innovative': '1.65:1 (-8-12%)',
+                'comparison2_item': '42天體重',
+                'comparison2_traditional': '2.2kg',
+                'comparison2_innovative': '2.4kg+ (+15-20%)',
+                'comparison3_item': '胸肉比例',
+                'comparison3_traditional': '65%',
+                'comparison3_innovative': '70-72% (+5-7%)',
+                'comparison4_item': '屠宰率',
+                'comparison4_traditional': '82%',
+                'comparison4_innovative': '87% (+5%)',
+                'comparison5_item': '每萬隻淨利',
+                'comparison5_traditional': '約10萬元',
+                'comparison5_innovative': '約43.4萬元 (+334%)',
+                
+                // CTA
+                'cta_title': '🚀 立即提升白肉鸡養殖獲利效率',
+                'cta_subtitle1': '每萬隻白肉鸡批次淨利潤增加(NTD)',
+                'cta_subtitle2': '投資報酬率(ROI) - 全期催肥方案',
+                'cta_text1': '年出欄10批次，總淨利增加超334萬元',
+                'cta_text2': '完全匹配AA/Ross/Cobb等主流白肉鸡品種｜28-42天催肥黃金期專屬優化',
+                'cta_btn1': '📞 立即技術諮詢',
+                'cta_btn2': '📋 獲取全期催肥專屬試用方案',
+                
+                // 頁腳
+                'footer_text1': '首池有限公司｜高效養殖 × 生物技術 × 全期催肥解決方案',
+                'footer_text2': '本技術資料表數據基於白羽肉雞(AA/Ross/Cobb)規模化養殖場實測結果，實際效果因管理條件略有差異',
+                'copyright': '© 2026 首池有限公司 版權所有｜本技術資料內容為商業機密，未經授權禁止轉載'
+            },
+            'zh-CN': {
+                // 封面抬頭
+                'title': '活力旺白肉鸡FCR性能提升方案 TDS',
+                'product_target': '适用：爱拔益加(AA)、乐斯(Ross)、科宝(Cobb)等白羽肉鸡品种｜全期催肥专属优化',
+                'tagline': '高效FCR优化 · 瘦肉提升 · 全程催肥',
+                'tds_badge': '技术资料表｜Technical Data Sheet',
+                
+                // 規格區
+                'specs_title': '产品规格与添加参数',
+                'spec1_label': '后期催肥阶段添加量',
+                'spec1_unit': '公斤/吨饲料 (28-42天)',
+                'spec2_label': '全期添加量',
+                'spec2_unit': '公斤/吨饲料 (0-42天)',
+                'spec3_label': '后期催肥每万只成本',
+                'spec3_unit': 'CNY/1万只',
+                'spec4_label': '日采食量(白肉鸡)',
+                'spec4_unit': '公斤/只/天',
+                'spec5_label': '催肥阶段体重提升',
+                'spec5_unit': '42天出栏增重',
+                'spec6_label': '适用阶段',
+                'spec6_value': '育雏→出栏全程',
+                'spec6_unit': '28-42天催肥强化',
+                'img1_caption': '图1：白肉鸡全期催肥实施步骤｜28天启动后期催肥计划，饲料添加1.5kg/吨，42天出栏体重提升15%',
+                'usage_instructions': '使用方法：全期添加模式每吨全价饲料均匀添加1公斤；后期催肥强化模式（28-42天）每吨添加1.5公斤，与预混料充分混合后使用。适用于爱拔益加(AA)、乐斯(Ross)、科宝(Cobb)等白羽肉鸡品种，无需调整现有饲养流程。',
+                
+                // 核心功效
+                'benefits_title': '全期催肥核心功效｜突破生长与效益天花板',
+                'benefit1_title': '体重增益最大化',
+                'benefit1_desc1': '42天出栏体重显著提升，传统2.2kg→优化后2.4kg+',
+                'benefit1_desc2': '实测数据：每万只鸡增重收益达35,072 CNY',
+                'benefit1_note': '生长曲线加速，后期增重效率提升30%',
+                'benefit2_title': 'FCR极致优化',
+                'benefit2_desc1': '传统1.8kg饲料/1kg增重→优化后1.65kg，饲料浪费大幅降低',
+                'benefit2_desc2': '实测数据：每万只鸡14天FCR节省收益达23,674 CNY',
+                'benefit2_note': '每万只鸡批次节省饲料约1,800公斤',
+                'benefit3_title': '胴体品质升级',
+                'benefit3_metric': '腹脂↓ · 瘦肉率↑',
+                'benefit3_desc1': '胸肉比例从65%提升至70-72%，屠宰率从82%提升至87%',
+                'benefit3_desc2': '实测数据：每万只鸡胴体溢价收益达15,782 CNY',
+                'benefit3_note': '胴体等级提升，市场溢价达$3.0/lb',
+                'benefit4_title': '存活率与稳定性提升',
+                'benefit4_metric': '存活率↑',
+                'benefit4_desc1': '后期应激抵抗力增强，减少死淘率',
+                'benefit4_desc2': '实测数据：每万只鸡存活率收益达7,716 CNY',
+                'benefit4_note': '全程成活率从94%提升至96-97%',
+                'img2_caption': '图2：白肉鸡生长曲线对比｜42天体重提升15-20%',
+                'img3_caption': '图3：生长与FCR对比｜传统FCR 1.8→优化1.6',
+                'img4_caption': '图4：白肉鸡胴体品质对比｜传统vs活力旺催肥方案，腹脂减少、胸肉比例提升',
+                
+                // 技術機制
+                'mechanism_title': '🔬 核心作用机转｜全期催肥的科学底层',
+                'mechanism1_title': '1. 营养代谢优化机转',
+                'mechanism1_desc1': '复合酶系（非淀粉多糖酶+蛋白酶）破解饲料抗营养因子，提升营养吸收率22%；同时调控肠道微生物菌群，强化营养利用效率，实现FCR从1.8→1.65的突破（如图5）。',
+                'mechanism1_desc2': '针对白羽肉鸡后期高采食量特点，减少饲料过渡浪费，每万只鸡14天节省饲料成本达23,674 CNY。',
+                'mechanism2_title': '2. 肌肉生长定向调控',
+                'mechanism2_desc1': '肌肉特异性小核酸肽靶向激活肌纤维增生通路，同时抑制脂肪合成酶（ACC）活性，实现"增肌减脂"双重效果：胸肉比例从65%提升至70-72%，腹腔脂肪沉积减少10-15%。',
+                'mechanism2_desc2': '匹配白羽肉鸡后期肌肉生长黄金期（28-42天），最大化瘦肉产出与胴体价值。',
+                'mechanism3_title': '3. 能量代谢强化',
+                'mechanism3_desc1': '添加代谢调节因子提升ATP生成效率，加速营养物质向肌肉组织转运，而非脂肪沉积；后期生长速度提升15-20%，42天出栏体重从2.2kg提升至2.4kg以上。',
+                'mechanism3_desc2': '降低后期生长缓慢问题，缩短养殖周期同时提升单只收益。',
+                'mechanism4_title': '4. 抗应激与存活率提升',
+                'mechanism4_desc1': '植物多酚+免疫肽强化肠道黏膜屏障与整体免疫力，减少后期高密度饲养带来的应激反应，死淘率降低2-3%，每万只鸡减少损失达7,716 CNY。',
+                'mechanism4_desc2': '支持无抗养殖模式，符合现代养殖政策与市场需求。',
+                'img5_caption': '图5：白肉鸡FCR优化数据｜传统1.8kg饲料/1kg增重→优化1.65kg，饲料减少8-12%',
+                
+                // 經濟效益
+                'economic_title': '经济效益分析｜每万只鸡批次收益（全期催肥方案）',
+                'economic_basis': '计算基准：白羽肉鸡42天周期｜后期催肥添加量1.5kg/吨｜每万只添加成本8,976 CNY｜出栏体重提升15%｜FCR 1.8→1.65',
+                'table_header1': '效益项目',
+                'table_header2': '改善幅度',
+                'table_header3': '每万只鸡经济价值(CNY)',
+                'profit1_item': '体重增益收益',
+                'profit1_range': '+15-20% 体重',
+                'profit2_item': 'FCR优化节省饲料成本',
+                'profit2_range': '-8-12% FCR',
+                'profit3_item': '胴体溢价收益',
+                'profit3_range': '胸肉↑5-7% + 屠宰率↑5%',
+                'profit4_item': '存活率提升减少损失',
+                'profit4_range': '+2-3% 存活率',
+                'profit5_item': '总效益增加',
+                'profit6_item': '饲料添加成本增加',
+                'profit6_range': '1.5kg/吨 × 方案单价',
+                'profit7_item': '每万只鸡批次净利润增加',
+                'img6_caption': '图6：白肉鸡后期催肥ROI计算｜每万只净利润73,250 CNY，投资报酬率816%',
+                'roi_title': '每万只鸡批次投资报酬率 (ROI) - 全期催肥方案',
+                'roi_label': '每投入1元，创造8.16元净收益｜投资回收期 <3天',
+                
+                // 導入方案
+                'steps_title': '✅ 快速导入方案｜低风险验证',
+                'step1_title': '小群验证(1周)',
+                'step1_scale': '规模：500只AA鸡',
+                'step1_cost_label': '投入成本：',
+                'step1_metrics': '验证指标：采食量、粪便形态、生长速度',
+                'step2_title': '批次验证(2周)',
+                'step2_scale': '规模：2,000只Ross鸡',
+                'step2_cost_label': '投入成本：',
+                'step2_metrics': '验证指标：体重抽测、FCR计算、胴体品质',
+                'step3_title': '全场导入(持续)',
+                'step3_scale': '规模：全场白羽肉鸡',
+                'step3_cost_label': '投入成本：',
+                'step3_benefit': '核心效益：每万只鸡净利润增加73,250元',
+                
+                // 對比表格
+                'comparison_title': '🔄 传统白肉鸡养殖 vs 活力旺全期催肥方案',
+                'comparison_header1': '评估项目',
+                'comparison_header2': '传统养殖模式',
+                'comparison_header3': '活力旺全期催肥方案',
+                'comparison1_item': 'FCR水准',
+                'comparison1_traditional': '1.8:1',
+                'comparison1_innovative': '1.65:1 (-8-12%)',
+                'comparison2_item': '42天体重',
+                'comparison2_traditional': '2.2kg',
+                'comparison2_innovative': '2.4kg+ (+15-20%)',
+                'comparison3_item': '胸肉比例',
+                'comparison3_traditional': '65%',
+                'comparison3_innovative': '70-72% (+5-7%)',
+                'comparison4_item': '屠宰率',
+                'comparison4_traditional': '82%',
+                'comparison4_innovative': '87% (+5%)',
+                'comparison5_item': '每万只净利润',
+                'comparison5_traditional': '约2.2万元',
+                'comparison5_innovative': '约9.5万元 (+334%)',
+                
+                // CTA
+                'cta_title': '🚀 立即提升白肉鸡养殖获利效率',
+                'cta_subtitle1': '每万只白肉鸡批次净利润增加(CNY)',
+                'cta_subtitle2': '投资报酬率(ROI) - 全期催肥方案',
+                'cta_text1': '年出栏10批次，总净利增加超73万元',
+                'cta_text2': '完全匹配AA/Ross/Cobb等主流白肉鸡品种｜28-42天催肥黄金期专属优化',
+                'cta_btn1': '📞 立即技术咨询',
+                'cta_btn2': '📋 获取全期催肥专属试用方案',
+                
+                // 頁腳
+                'footer_text1': '首池有限公司｜高效养殖 × 生物技术 × 全期催肥解决方案',
+                'footer_text2': '本技术资料表数据基于白羽肉鸡(AA/Ross/Cobb)规模化养殖场实测结果，实际效果因管理条件略有差异',
+                'copyright': '© 2026 首池有限公司 版权所有｜本技术资料内容为商业机密，未经授权禁止转载'
+            },
+            'en': {
+                // 封面抬頭
+                'title': 'Vigor White Broiler FCR Performance Enhancement Solution TDS',
+                'product_target': 'Applicable: Arbor Acres(AA), Ross, Cobb and other white-feathered broiler breeds｜Full-stage fattening optimization',
+                'tagline': 'High-Efficiency FCR Optimization · Lean Meat Enhancement · Full-Stage Fattening',
+                'tds_badge': 'Technical Data Sheet｜技术资料表',
+                
+                // 規格區
+                'specs_title': 'Product Specifications & Dosage Parameters',
+                'spec1_label': 'Late-stage fattening dosage',
+                'spec1_unit': 'kg/ton feed (28-42 days)',
+                'spec2_label': 'Full-cycle dosage',
+                'spec2_unit': 'kg/ton feed (0-42 days)',
+                'spec3_label': 'Cost per 10,000 birds (late fattening)',
+                'spec3_unit': 'USD/10,000 birds',
+                'spec4_label': 'Daily feed intake (broiler)',
+                'spec4_unit': 'kg/bird/day',
+                'spec5_label': 'Weight gain during fattening',
+                'spec5_unit': '42-day market weight increase',
+                'spec6_label': 'Applicable stage',
+                'spec6_value': 'Chick → Market weight',
+                'spec6_unit': '28-42 day fattening enhancement',
+                'img1_caption': 'Figure 1: White broiler full-stage fattening implementation steps｜28-day start of late fattening program, feed addition 1.5kg/ton, 42-day market weight increase 15%',
+                'usage_instructions': 'Usage: Full-cycle addition mode: uniformly add 1 kg per ton of complete feed; Late fattening enhancement mode (28-42 days): add 1.5 kg per ton, mix thoroughly with premix before use. Suitable for Arbor Acres(AA), Ross, Cobb and other white-feathered broiler breeds, no adjustment to existing feeding procedures required.',
+                
+                // 核心功效
+                'benefits_title': 'Full-Stage Fattening Core Benefits｜Breakthrough Growth & Profit Ceiling',
+                'benefit1_title': 'Maximized Weight Gain',
+                'benefit1_desc1': 'Significant 42-day market weight increase, traditional 2.2kg→optimized 2.4kg+',
+                'benefit1_desc2': 'Field data: Weight gain profit per 10,000 birds reaches 5,120 USD',
+                'benefit1_note': 'Accelerated growth curve, late-stage weight gain efficiency increased by 30%',
+                'benefit2_title': 'Ultimate FCR Optimization',
+                'benefit2_desc1': 'Traditional 1.8kg feed/1kg gain→optimized 1.65kg, feed waste significantly reduced',
+                'benefit2_desc2': 'Field data: 14-day FCR saving profit per 10,000 birds reaches 3,456 USD',
+                'benefit2_note': 'Approximately 1,800 kg feed saved per 10,000 birds per batch',
+                'benefit3_title': 'Carcass Quality Upgrade',
+                'benefit3_metric': 'Abdominal fat↓ · Lean meat rate↑',
+                'benefit3_desc1': 'Breast meat ratio increased from 65% to 70-72%, slaughter rate from 82% to 87%',
+                'benefit3_desc2': 'Field data: Carcass premium profit per 10,000 birds reaches 2,304 USD',
+                'benefit3_note': 'Carcass grade improvement, market premium reaches $3.0/lb',
+                'benefit4_title': 'Survival Rate & Stability Enhancement',
+                'benefit4_metric': 'Survival rate↑',
+                'benefit4_desc1': 'Enhanced stress resistance in late stage, reduced mortality',
+                'benefit4_desc2': 'Field data: Survival rate profit per 10,000 birds reaches 1,126 USD',
+                'benefit4_note': 'Whole-cycle survival rate increased from 94% to 96-97%',
+                'img2_caption': 'Figure 2: White broiler growth curve comparison｜42-day weight increased by 15-20%',
+                'img3_caption': 'Figure 3: Growth & FCR comparison｜Traditional FCR 1.8→Optimized 1.6',
+                'img4_caption': 'Figure 4: White broiler carcass quality comparison｜Traditional vs Vigor fattening solution, reduced abdominal fat, increased breast meat ratio',
+                
+                // 技術機制
+                'mechanism_title': '🔬 Core Mechanism｜Scientific Foundation of Full-Stage Fattening',
+                'mechanism1_title': '1. Nutrient Metabolism Optimization',
+                'mechanism1_desc1': 'Compound enzyme system (non-starch polysaccharide enzymes + proteases) breaks down anti-nutritional factors, increasing nutrient absorption by 22%; regulates gut microbiota, enhancing nutrient utilization efficiency, achieving FCR breakthrough from 1.8→1.65 (Figure 5).',
+                'mechanism1_desc2': 'Targeting high feed intake characteristics of white broilers in late stage, reduces excessive feed waste, saving 3,456 USD per 10,000 birds in 14 days.',
+                'mechanism2_title': '2. Muscle Growth Targeted Regulation',
+                'mechanism2_desc1': 'Muscle-specific small nucleic acid peptides activate myofiber proliferation pathways while inhibiting fat synthase (ACC) activity, achieving "muscle gain & fat reduction" dual effect: breast meat ratio increased from 65% to 70-72%, abdominal fat deposition reduced by 10-15%.',
+                'mechanism2_desc2': 'Matches golden period of muscle growth in white broilers (28-42 days), maximizes lean meat output and carcass value.',
+                'mechanism3_title': '3. Energy Metabolism Enhancement',
+                'mechanism3_desc1': 'Added metabolic regulators improve ATP generation efficiency, accelerating nutrient transport to muscle tissue rather than fat deposition; late-stage growth rate increased by 15-20%, 42-day market weight increased from 2.2kg to 2.4kg+.',
+                'mechanism3_desc2': 'Reduces late-stage growth slowdown, shortens farming cycle while increasing per-bird profit.',
+                'mechanism4_title': '4. Anti-Stress & Survival Rate Improvement',
+                'mechanism4_desc1': 'Plant polyphenols + immune peptides strengthen intestinal mucosal barrier and overall immunity, reduce stress from high-density farming in late stage, mortality reduced by 2-3%, saving 1,126 USD per 10,000 birds.',
+                'mechanism4_desc2': 'Supports antibiotic-free farming model, complies with modern farming policies and market demands.',
+                'img5_caption': 'Figure 5: White broiler FCR optimization data｜Traditional 1.8kg feed/1kg gain→Optimized 1.65kg, feed reduced by 8-12%',
+                
+                // 經濟效益
+                'economic_title': 'Economic Benefit Analysis｜Profit per 10,000 Birds Batch (Full-Stage Fattening Solution)',
+                'economic_basis': 'Calculation basis: White broiler 42-day cycle｜Late fattening dosage 1.5kg/ton｜Cost per 10,000 birds 1,310 USD｜Market weight increase 15%｜FCR 1.8→1.65',
+                'table_header1': 'Benefit Item',
+                'table_header2': 'Improvement Range',
+                'table_header3': 'Economic Value per 10,000 Birds(USD)',
+                'profit1_item': 'Weight Gain Profit',
+                'profit1_range': '+15-20% Weight',
+                'profit2_item': 'FCR Optimization Feed Cost Saving',
+                'profit2_range': '-8-12% FCR',
+                'profit3_item': 'Carcass Premium Profit',
+                'profit3_range': 'Breast meat↑5-7% + Slaughter rate↑5%',
+                'profit4_item': 'Survival Rate Increase Loss Reduction',
+                'profit4_range': '+2-3% Survival Rate',
+                'profit5_item': 'Total Benefit Increase',
+                'profit6_item': 'Feed Additive Cost Increase',
+                'profit6_range': '1.5kg/ton × Solution price',
+                'profit7_item': 'Net Profit Increase per 10,000 Birds Batch',
+                'img6_caption': 'Figure 6: White broiler late fattening ROI calculation｜Net profit 10,696 USD per 10,000 birds, ROI 816%',
+                'roi_title': 'Return on Investment (ROI) per 10,000 Birds Batch - Full-Stage Fattening Solution',
+                'roi_label': 'Every $1 invested generates $8.16 net profit｜Payback period <3 days',
+                
+                // 導入方案
+                'steps_title': '✅ Quick Implementation Solution｜Low-Risk Validation',
+                'step1_title': 'Small Group Test(1 week)',
+                'step1_scale': 'Scale: 500 AA birds',
+                'step1_cost_label': 'Investment cost:',
+                'step1_metrics': 'Validation metrics: Feed intake, fecal morphology, growth rate',
+                'step2_title': 'Batch Test(2 weeks)',
+                'step2_scale': 'Scale: 2,000 Ross birds',
+                'step2_cost_label': 'Investment cost:',
+                'step2_metrics': 'Validation metrics: Weight sampling, FCR calculation, carcass quality',
+                'step3_title': 'Full Farm Implementation(Ongoing)',
+                'step3_scale': 'Scale: Entire white broiler farm',
+                'step3_cost_label': 'Investment cost:',
+                'step3_benefit': 'Core benefit: Net profit increase of 10,696 USD per 10,000 birds',
+                
+                // 對比表格
+                'comparison_title': '🔄 Traditional White Broiler Farming vs Vigor Full-Stage Fattening Solution',
+                'comparison_header1': 'Evaluation Item',
+                'comparison_header2': 'Traditional Farming Model',
+                'comparison_header3': 'Vigor Full-Stage Fattening Solution',
+                'comparison1_item': 'FCR Level',
+                'comparison1_traditional': '1.8:1',
+                'comparison1_innovative': '1.65:1 (-8-12%)',
+                'comparison2_item': '42-Day Weight',
+                'comparison2_traditional': '2.2kg',
+                'comparison2_innovative': '2.4kg+ (+15-20%)',
+                'comparison3_item': 'Breast Meat Ratio',
+                'comparison3_traditional': '65%',
+                'comparison3_innovative': '70-72% (+5-7%)',
+                'comparison4_item': 'Slaughter Rate',
+                'comparison4_traditional': '82%',
+                'comparison4_innovative': '87% (+5%)',
+                'comparison5_item': 'Net Profit per 10,000 Birds',
+                'comparison5_traditional': 'Approx. 3,200 USD',
+                'comparison5_innovative': 'Approx. 13,750 USD (+334%)',
+                
+                // CTA
+                'cta_title': '🚀 Immediately Enhance White Broiler Farming Profit Efficiency',
+                'cta_subtitle1': 'Net profit increase per 10,000 white broilers batch(USD)',
+                'cta_subtitle2': 'Return on Investment (ROI) - Full-Stage Fattening Solution',
+                'cta_text1': '10 batches annually, total net profit increase exceeds 106,960 USD',
+                'cta_text2': 'Fully compatible with mainstream white broiler breeds like AA/Ross/Cobb｜28-42 day golden fattening period exclusive optimization',
+                'cta_btn1': '📞 Immediate Technical Consultation',
+                'cta_btn2': '📋 Get Full-Stage Fattening Exclusive Trial Solution',
+                
+                // 頁腳
+                'footer_text1': 'First Pond Co., Ltd.｜Efficient Farming × Biotechnology × Full-Stage Fattening Solutions',
+                'footer_text2': 'This technical data sheet is based on field test results from white broiler (AA/Ross/Cobb) large-scale farms, actual effects may vary slightly due to management conditions',
+                'copyright': '© 2026 First Pond Co., Ltd. All Rights Reserved｜This technical data content is confidential, unauthorized reproduction prohibited'
+            }
+        };
+
+        // 貨幣轉換和語言切換功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 滾動淡入效果
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            // 觀察所有section
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+            
+            // 語言切換功能
+            const langButtons = document.querySelectorAll('.lang-btn');
+            let currentLang = 'zh-TW';
+            let currentRate = 1.0000;
+            
+            // 點擊卡片功能
+            document.querySelectorAll('.spec-card, .benefit-card, .step-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('lang-btn')) {
+                        this.style.transform = 'scale(0.98)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                    }
+                });
+            });
+            
+            // 更新貨幣數值
+            function updateCurrencyValues() {
+                // 更新統計數值（需要貨幣轉換）
+                document.querySelectorAll('.stat-value').forEach(element => {
+                    const originalValue = parseFloat(element.getAttribute('data-value')) || 0;
+                    let convertedValue;
+                    
+                    if (currentLang === 'zh-TW') {
+                        convertedValue = originalValue;
+                    } else if (currentLang === 'zh-CN') {
+                        convertedValue = originalValue * currentRate; // NTD to CNY
+                    } else { // en
+                        convertedValue = originalValue * currentRate; // NTD to USD
+                    }
+                    
+                    // 格式化數字
+                    let formattedValue;
+                    if (currentLang === 'zh-TW') {
+                        formattedValue = convertedValue.toLocaleString('zh-TW');
+                    } else if (currentLang === 'zh-CN') {
+                        formattedValue = convertedValue.toLocaleString('zh-CN');
+                    } else {
+                        formattedValue = convertedValue.toLocaleString('en-US');
+                    }
+                    
+                    // 更新顯示值（保留正負號）
+                    const currentText = element.textContent;
+                    const isNegative = currentText.includes('-');
+                    const isPositive = currentText.includes('+') && !currentText.includes('-');
+                    
+                    if (isNegative) {
+                        element.textContent = '-' + formattedValue;
+                    } else if (isPositive) {
+                        element.textContent = '+' + formattedValue;
+                    } else {
+                        element.textContent = formattedValue;
+                    }
+                });
+                
+                // 更新ROI數值（百分比，不需要貨幣轉換）
+                document.querySelectorAll('.roi-value').forEach(element => {
+                    const originalValue = element.getAttribute('data-value');
+                    // ROI保持原值顯示（百分比）
+                    element.textContent = originalValue + '%';
+                });
+            }
+            
+            // 切換語言
+            function switchLanguage(lang) {
+                currentLang = lang;
+                currentRate = parseFloat(document.querySelector(`.lang-btn[data-lang="${lang}"]`).getAttribute('data-rate'));
+                
+                // 更新按鈕狀態
+                langButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-lang') === lang) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                // 更新所有文本
+                const elements = document.querySelectorAll('[data-translate]');
+                elements.forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+                
+                // 更新貨幣單位
+                document.querySelectorAll('.spec-card .unit').forEach(unit => {
+                    const index = Array.from(unit.parentElement.parentElement.children).indexOf(unit.parentElement);
+                    if (index === 2) { // 成本單位
+                        if (lang === 'zh-TW') {
+                            unit.textContent = 'NTD/1萬隻';
+                        } else if (lang === 'zh-CN') {
+                            unit.textContent = 'CNY/1萬只';
+                        } else {
+                            unit.textContent = 'USD/10,000 birds';
+                        }
+                    }
+                });
+                
+                // 更新貨幣數值
+                updateCurrencyValues();
+                
+                // 更新頁面語言屬性
+                document.documentElement.lang = lang;
+            }
+            
+            // 綁定語言切換按鈕事件
+            langButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    switchLanguage(lang);
+                });
+            });
+            
+            // 初始化頁面為繁體中文
+            switchLanguage('zh-TW');
+        });
+    </script>
 </body>
 </html>
