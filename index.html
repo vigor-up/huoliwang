@@ -132,7 +132,7 @@
             }
         }
 
-        /* === 頁頭區域 (行動裝置優先) === */
+        /* === 頁頭區域 (行動裝置優先) - LOGO 優化 === */
         header {
             background: linear-gradient(135deg, var(--primary-green) 0%, #1b5e20 100%);
             color: white;
@@ -160,8 +160,8 @@
 
         .logo-icon {
             background: white;
-            width: clamp(72px, 18vw, 96px);
-            height: clamp(72px, 18vw, 96px);
+            width: clamp(90px, 22vw, 120px);  /* 增大Logo尺寸 */
+            height: clamp(90px, 22vw, 120px);  /* 增大Logo尺寸 */
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -169,13 +169,14 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
             overflow: hidden;
             will-change: transform;
+            border: 4px solid rgba(255, 255, 255, 0.3); /* 添加邊框增強視覺效果 */
         }
 
         .logo-icon img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 12px;
+            padding: clamp(10px, 3vw, 14px); /* 根據螢幕調整內邊距 */
         }
 
         h1 {
@@ -560,7 +561,7 @@
             }
         }
 
-        /* === 頁尾區域 === */
+        /* === 頁尾區域 - LOGO 優化 === */
         footer {
             background: linear-gradient(135deg, var(--primary-dark) 0%, #1a202c 100%);
             color: rgba(255,255,255,0.85);
@@ -619,8 +620,8 @@
         }
 
         .footer-logo-img {
-            width: clamp(80px, 20vw, 100px);
-            height: clamp(80px, 20vw, 100px);
+            width: clamp(100px, 24vw, 140px);  /* 增大頁尾Logo尺寸 */
+            height: clamp(100px, 24vw, 140px);  /* 增大頁尾Logo尺寸 */
             background: white;
             border-radius: 50%;
             display: flex;
@@ -629,13 +630,14 @@
             margin-bottom: clamp(12px, 3vw, 20px);
             overflow: hidden;
             box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            border: 4px solid rgba(255, 255, 255, 0.2); /* 添加邊框增強視覺效果 */
         }
 
         .footer-logo-img img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 12px;
+            padding: clamp(12px, 3vw, 16px); /* 根據螢幕調整內邊距 */
         }
 
         .footer-section h3 {
