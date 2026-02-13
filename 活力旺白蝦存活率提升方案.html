@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes, viewport-fit=cover">
     <title>活力旺®白蝦存活率提升方案 - 首池有限公司</title>
     <style>
-        /* ----- 全域變數 手機優先 (取自育肥豬版型，主色調整為海洋色系) ----- */
+        /* ----- 全域變數 手機優先 (主色海洋色系) ----- */
         :root {
             --primary: #00a8a8;
             --secondary: #007d7d;
@@ -17,10 +17,10 @@
             --gray-100: #f8f9fc;
             --gray-200: #e9ecef;
             --gray-300: #dee2e6;
-            --border-radius: 20px;
+            --border-radius: 18px;
             --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
-            --shadow-lg: 0 16px 32px rgba(0,0,0,0.12);
+            --shadow-md: 0 8px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 28px rgba(0,0,0,0.12);
             --safe-area-inset-top: env(safe-area-inset-top);
             --safe-area-inset-bottom: env(safe-area-inset-bottom);
         }
@@ -33,7 +33,7 @@
         }
 
         html {
-            font-size: 16px;
+            font-size: 15px; /* 略微縮小基礎字體 */
             scroll-behavior: smooth;
             -webkit-text-size-adjust: 100%;
         }
@@ -41,7 +41,7 @@
         body {
             background: linear-gradient(145deg, #e6f3f3, #d9e9e9);
             color: #1e2b3c;
-            line-height: 1.6;
+            line-height: 1.4; /* 縮小行距 */
             width: 100%;
             overflow-x: hidden;
         }
@@ -49,27 +49,27 @@
         /* ----- 靜態頂部工具列 ----- */
         .top-bar-static {
             background: white;
-            padding: 16px 5%;
+            padding: 12px 4%; /* 減小間距 */
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 3px solid var(--primary);
             box-shadow: var(--shadow-sm);
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 12px;
         }
 
         .home-link {
             background: var(--light);
-            padding: 10px 24px;
+            padding: 8px 20px; /* 減小按鈕 */
             border-radius: 40px;
             text-decoration: none;
             color: var(--dark);
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             border: 1px solid var(--gray-300);
             transition: 0.2s;
         }
@@ -77,24 +77,24 @@
 
         .language-switcher {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             background: white;
-            padding: 6px;
+            padding: 4px;
             border-radius: 48px;
             border: 1px solid var(--gray-300);
         }
 
         .lang-btn {
-            padding: 10px 20px;
+            padding: 8px 16px; /* 減小 */
             border: none;
             border-radius: 40px;
             background: transparent;
             color: var(--dark);
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 700;
             transition: 0.2s;
-            min-width: 80px;
+            min-width: 70px;
         }
         .lang-btn.active {
             background: var(--primary);
@@ -109,8 +109,8 @@
             box-shadow: var(--shadow-lg);
             border-radius: var(--border-radius);
             overflow: hidden;
-            margin-top: 20px;
-            margin-bottom: 30px;
+            margin-top: 15px;
+            margin-bottom: 20px;
         }
 
         /* ----- 頁首：滿版底圖＋深色覆蓋層 (白蝦養殖場) ----- */
@@ -119,7 +119,7 @@
             background-image: url('assets/shrimp-farm-header.jpg');
             background-size: cover;
             background-position: center 40%;
-            padding: 80px 5%;
+            padding: 60px 4%; /* 減小 padding */
             text-align: center;
             color: white;
         }
@@ -133,37 +133,37 @@
         .hero-header > * { position: relative; z-index: 2; }
 
         .hero-header h1 {
-            font-size: 2.8rem;
+            font-size: 2.2rem; /* 稍微縮小 */
             font-weight: 900;
-            margin-bottom: 16px;
-            text-shadow: 0 4px 16px rgba(0,0,0,0.5);
-            letter-spacing: 1px;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            letter-spacing: 0.5px;
         }
         .hero-header p {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             max-width: 900px;
-            margin: 0 auto 24px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            margin: 0 auto 18px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.5);
             font-weight: 600;
             opacity: 0.95;
         }
         .hero-badge {
             background: linear-gradient(145deg, var(--warning), #ffa726);
             color: var(--dark);
-            padding: 18px 40px;
+            padding: 14px 30px;
             border-radius: 60px;
             font-weight: 900;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             display: inline-block;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
             border: 2px solid rgba(255,255,255,0.3);
-            margin-top: 16px;
+            margin-top: 12px;
         }
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-top: 40px;
+            gap: 12px;
+            margin-top: 30px;
             max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
@@ -171,44 +171,44 @@
         .feature-grid .badge {
             background: rgba(255,255,255,0.15);
             backdrop-filter: blur(8px);
-            padding: 16px 20px;
+            padding: 12px 16px;
             border-radius: 60px;
             border: 1px solid rgba(255,255,255,0.3);
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         /* ----- 內文容器 ----- */
         .content {
-            padding: 40px 5%;
+            padding: 30px 4%; /* 減小 padding */
         }
 
         /* ----- 章節標題 ----- */
         .section-title {
-            font-size: 2rem;
+            font-size: 1.8rem; /* 縮小 */
             font-weight: 800;
             color: var(--dark);
-            margin-bottom: 30px;
+            margin-bottom: 20px; /* 減小 */
             border-bottom: 4px solid var(--primary);
-            padding-bottom: 16px;
+            padding-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         /* ----- 效能卡片網格 (用於關鍵指標) ----- */
         .metrics-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 24px;
-            margin: 30px 0;
+            gap: 16px; /* 減小 */
+            margin: 20px 0;
         }
         .metric-card {
             background: linear-gradient(145deg, #fff, #f0fafa);
-            padding: 28px 20px;
-            border-radius: 24px;
+            padding: 20px 16px; /* 減小 */
+            border-radius: 20px;
             border-left: 8px solid var(--primary);
             box-shadow: var(--shadow-md);
             text-align: center;
@@ -216,18 +216,18 @@
             cursor: pointer;
         }
         .metric-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-        .metric-icon { font-size: 2.8rem; margin-bottom: 8px; }
-        .metric-title { font-size: 1.3rem; font-weight: 800; color: var(--dark); margin-bottom: 10px; }
-        .metric-value { font-size: 2.4rem; font-weight: 900; color: var(--primary); line-height: 1.2; }
-        .metric-old { font-size: 1.1rem; color: #aaa; text-decoration: line-through; margin-right: 8px; }
-        .metric-improve { font-size: 1.3rem; font-weight: 800; color: var(--success); margin: 12px 0 6px; }
-        .metric-desc { font-size: 1rem; color: #555; }
+        .metric-icon { font-size: 2.4rem; margin-bottom: 6px; }
+        .metric-title { font-size: 1.2rem; font-weight: 800; color: var(--dark); margin-bottom: 8px; }
+        .metric-value { font-size: 2rem; font-weight: 900; color: var(--primary); line-height: 1.2; }
+        .metric-old { font-size: 1rem; color: #aaa; text-decoration: line-through; margin-right: 6px; }
+        .metric-improve { font-size: 1.2rem; font-weight: 800; color: var(--success); margin: 8px 0 4px; }
+        .metric-desc { font-size: 0.95rem; color: #555; }
 
-        /* ----- 圖片/影片區塊 (完整顯示) ----- */
+        /* ----- 圖片/影片區塊 (放大圖片，減少間距) ----- */
         .image-block, .video-block {
             width: 100%;
-            margin: 30px 0;
-            border-radius: 24px;
+            margin: 20px 0; /* 減小上下邊距 */
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: var(--shadow-md);
             background: #f5f5f5;
@@ -237,8 +237,6 @@
         .image-block img {
             width: 100%;
             height: auto;
-            max-height: none;
-            object-fit: contain;
             display: block;
             background: #f5f5f5;
         }
@@ -249,9 +247,9 @@
             background: #000;
         }
         .image-caption, .video-caption {
-            padding: 16px 24px;
+            padding: 12px 16px; /* 減小 */
             background: #f9f9f9;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #2c3e50;
             text-align: center;
             border-top: 1px solid var(--gray-300);
@@ -263,51 +261,51 @@
         .ingredient-banner {
             background: linear-gradient(145deg, #1e4a5a, #0f3a45);
             color: white;
-            padding: 40px 35px;
-            border-radius: 32px;
-            margin: 40px 0;
-            border-left: 10px solid var(--warning);
+            padding: 30px 20px; /* 減小 */
+            border-radius: 28px;
+            margin: 30px 0;
+            border-left: 8px solid var(--warning);
             box-shadow: var(--shadow-lg);
         }
         .ingredient-item {
             background: rgba(255,255,255,0.08);
-            padding: 28px;
-            border-radius: 24px;
-            margin-bottom: 24px;
+            padding: 20px; /* 減小 */
+            border-radius: 20px;
+            margin-bottom: 20px;
             border-left: 8px solid;
             display: flex;
             align-items: flex-start;
-            gap: 24px;
+            gap: 16px;
             flex-wrap: wrap;
             backdrop-filter: blur(4px);
         }
-        .ingredient-icon { font-size: 2.8rem; }
-        .ingredient-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; }
-        .ingredient-desc { font-size: 1.05rem; opacity: 0.95; line-height: 1.6; }
+        .ingredient-icon { font-size: 2.4rem; }
+        .ingredient-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+        .ingredient-desc { font-size: 1rem; opacity: 0.95; line-height: 1.4; }
 
-        /* 關鍵實證小卡 (新增) */
+        /* 關鍵實證小卡 */
         .key-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin: 20px 0;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 16px 0;
         }
         .metric-card-small {
             background: rgba(255,255,255,0.12);
-            padding: 15px 8px;
-            border-radius: 16px;
+            padding: 12px 6px;
+            border-radius: 14px;
             text-align: center;
             backdrop-filter: blur(4px);
             border-bottom: 3px solid var(--warning);
         }
         .metric-card-small .metric-value {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 800;
             color: var(--warning);
             line-height: 1.2;
         }
         .metric-card-small .metric-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: white;
         }
 
@@ -316,21 +314,21 @@
             width: 100%;
             border-collapse: collapse;
             background: white;
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: var(--shadow-md);
-            margin: 25px 0;
-            font-size: 1rem;
+            margin: 20px 0;
+            font-size: 0.95rem;
         }
         .data-table th {
             background: var(--dark);
             color: white;
-            padding: 18px 16px;
-            font-size: 1.1rem;
+            padding: 14px 12px;
+            font-size: 1rem;
             font-weight: 700;
         }
         .data-table td {
-            padding: 16px;
+            padding: 12px 10px;
             border-bottom: 1px solid var(--gray-200);
             vertical-align: middle;
         }
@@ -341,84 +339,84 @@
         .roi-badge {
             background: linear-gradient(145deg, var(--primary), var(--secondary));
             color: white;
-            padding: 35px 30px;
-            border-radius: 32px;
+            padding: 25px 20px;
+            border-radius: 28px;
             text-align: center;
             box-shadow: var(--shadow-lg);
         }
-        .roi-value { font-size: 3.5rem; font-weight: 900; margin: 15px 0; text-shadow: 0 6px 16px rgba(0,0,0,0.3); }
+        .roi-value { font-size: 3rem; font-weight: 900; margin: 10px 0; text-shadow: 0 6px 16px rgba(0,0,0,0.3); }
 
         /* ----- 產品規格卡片 ----- */
         .spec-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin: 30px 0;
+            gap: 16px;
+            margin: 20px 0;
         }
         .spec-card {
             background: var(--gray-100);
-            padding: 24px 16px;
-            border-radius: 20px;
+            padding: 18px 12px;
+            border-radius: 18px;
             border: 1px solid var(--gray-300);
             box-shadow: var(--shadow-sm);
             text-align: center;
             transition: 0.2s;
         }
         .spec-card:hover { background: white; box-shadow: var(--shadow-md); border-color: var(--primary); }
-        .spec-label { color: #555; font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; }
-        .spec-value { font-size: 1.6rem; font-weight: 900; color: var(--primary); }
-        .spec-note { font-size: 0.85rem; color: var(--secondary); margin-top: 8px; font-weight: 600; }
+        .spec-label { color: #555; font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+        .spec-value { font-size: 1.4rem; font-weight: 900; color: var(--primary); }
+        .spec-note { font-size: 0.8rem; color: var(--secondary); margin-top: 6px; font-weight: 600; }
 
         /* ----- 見證卡片 ----- */
         .testimonial-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 30px;
-            margin: 40px 0;
+            gap: 20px;
+            margin: 30px 0;
         }
         .testimonial-card {
             background: white;
-            padding: 35px;
-            border-radius: 28px;
+            padding: 25px 20px; /* 減小 */
+            border-radius: 24px;
             box-shadow: var(--shadow-md);
             border: 1px solid var(--gray-200);
             position: relative;
         }
         .testimonial-card::before {
             content: "“";
-            font-size: 6rem;
+            font-size: 5rem;
             color: var(--primary);
             opacity: 0.1;
             position: absolute;
             top: -5px;
-            left: 20px;
+            left: 15px;
             font-family: serif;
         }
-        .testimonial-author { font-weight: 800; margin-top: 20px; font-size: 1.1rem; color: var(--dark); }
-        .testimonial-meta { color: #777; font-size: 0.9rem; }
+        .testimonial-author { font-weight: 800; margin-top: 16px; font-size: 1rem; color: var(--dark); }
+        .testimonial-meta { color: #777; font-size: 0.85rem; }
 
         /* ----- CTA 行動呼籲 ----- */
         .cta-block {
             background: linear-gradient(145deg, #1e4a5a, #0f3a45);
             color: white;
-            padding: 60px 40px;
-            border-radius: 36px;
+            padding: 40px 20px; /* 減小 */
+            border-radius: 30px;
             text-align: center;
-            margin: 50px 0;
+            margin: 40px 0;
         }
-        .big-number { font-size: 3.2rem; font-weight: 900; color: var(--warning); margin: 16px 0; text-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        .big-number { font-size: 2.8rem; font-weight: 900; color: var(--warning); margin: 12px 0; text-shadow: 0 4px 12px rgba(0,0,0,0.4); }
         .btn {
-            padding: 18px 36px;
+            padding: 14px 28px;
             border-radius: 60px;
             font-weight: 800;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
             transition: 0.25s;
-            margin: 8px;
+            margin: 6px;
             border: none;
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
@@ -430,24 +428,24 @@
         footer {
             background: linear-gradient(145deg, var(--dark), #0a2a30);
             color: white;
-            padding: 50px 5%;
+            padding: 40px 4%;
             text-align: center;
         }
         .product-links {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 16px;
-            margin: 30px 0;
+            gap: 12px;
+            margin: 20px 0;
             list-style: none;
         }
         .product-links a {
             color: white;
             text-decoration: none;
-            padding: 12px 24px;
+            padding: 10px 18px;
             background: rgba(255,255,255,0.12);
             border-radius: 40px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 700;
             transition: 0.2s;
         }
@@ -457,34 +455,24 @@
         .fade-in { opacity: 0; transform: translateY(20px); transition: 0.6s; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-        /* ----- 響應式設計 ----- */
+        /* ----- 響應式設計 (手機優先，平板/桌機適當放大) ----- */
+        @media (min-width: 768px) {
+            .hero-header h1 { font-size: 2.6rem; }
+            .hero-header p { font-size: 1.3rem; }
+            .section-title { font-size: 2rem; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .spec-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
         @media (min-width: 992px) {
-            .content { padding: 50px 6%; }
+            .content { padding: 40px 5%; }
             .metrics-grid { grid-template-columns: repeat(4, 1fr); }
             .spec-grid { grid-template-columns: repeat(3, 1fr); }
             .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
             .feature-grid { grid-template-columns: repeat(4, 1fr); }
-            .hero-header h1 { font-size: 3.2rem; }
-            .hero-header p { font-size: 1.5rem; }
+            .hero-header h1 { font-size: 3rem; }
+            .hero-header p { font-size: 1.4rem; }
             .section-title { font-size: 2.2rem; }
-        }
-
-        @media (min-width: 768px) and (max-width: 991px) {
-            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-            .spec-grid { grid-template-columns: repeat(3, 1fr); }
-            .feature-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-
-        @media (max-width: 767px) {
-            .top-bar-static { flex-direction: column; align-items: flex-start; }
-            .language-switcher { align-self: flex-end; }
-            .hero-header { padding: 60px 20px; }
-            .hero-header h1 { font-size: 1.8rem; }
-            .hero-header p { font-size: 1.1rem; }
-            .hero-badge { font-size: 1.1rem; padding: 14px 24px; }
-            .feature-grid { grid-template-columns: repeat(2, 1fr); }
-            .section-title { font-size: 1.6rem; }
-            .ingredient-title { font-size: 1.3rem; }
         }
 
         /* 圖片點擊放大 (Lightbox) */
@@ -543,7 +531,7 @@
         <div class="content">
             <!-- ========== 1. 三大機密載體 (完整白蝦內容) ========== -->
             <section class="ingredient-banner fade-in">
-                <h2 style="font-size:2rem; color:var(--warning); margin-bottom:20px;" data-translate="confidential_title">🔬 活力旺® 白蝦專利配方 – 三大機密載體</h2>
+                <h2 style="font-size:1.8rem; color:var(--warning); margin-bottom:16px;" data-translate="confidential_title">🔬 活力旺® 白蝦專利配方 – 三大機密載體</h2>
                 
                 <!-- 重組蛋白酶 (原力素) -->
                 <div class="ingredient-item" style="border-left-color:#ffb74d;">
@@ -561,7 +549,7 @@
                             <img src="assets/shrimp-growth-comparison.jpg" alt="生長對比" loading="lazy">
                             <p class="image-caption" data-translate="protease_caption">重組蛋白酶 · 促進白蝦快速生長</p>
                         </div>
-                        <div class="image-pair" style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:15px;">
+                        <div class="image-pair" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;">
                             <div class="image-block" onclick="openLightbox(this)">
                                 <img src="assets/shrimp-wssv-survival-chart.jpg" alt="WSSV攻毒" loading="lazy">
                                 <p class="image-caption" data-translate="wssv_chart_title">WSSV攻毒 · 存活率+10%</p>
@@ -617,7 +605,7 @@
                 </div>
 
                 <!-- 效能總表 (文獻對照) -->
-                <div style="overflow-x:auto; margin-top:30px;">
+                <div style="overflow-x:auto; margin-top:20px;">
                     <table class="data-table" style="background:rgba(0,0,0,0.2); color:white;">
                         <thead><tr><th style="color:white;" data-translate="benefit_item">效能項目</th><th style="color:white;" data-translate="mechanism">對應載體</th><th style="color:white;" data-translate="performance">實證績效</th><th style="color:white;" data-translate="literature">文獻來源</th></tr></thead>
                         <tbody>
@@ -634,8 +622,8 @@
             <!-- ========== 2. 養殖實證數據（台灣/華南） ========== -->
             <section>
                 <h2 class="section-title" data-translate="farm_title">📋 台灣/華南地區養殖場實證數據（2025-2026）</h2>
-                <div style="background:var(--gray-100); padding:24px; border-radius:20px; margin-bottom:20px; border-left:6px solid var(--success);">
-                    <p style="font-weight:700; font-size:1.1rem;" data-translate="farm_scope">📍 嘉義東石 · 台南七股 · 屏東林邊 共12場 · 有效樣本1,200萬尾</p>
+                <div style="background:var(--gray-100); padding:18px; border-radius:18px; margin-bottom:16px; border-left:6px solid var(--success);">
+                    <p style="font-weight:700; font-size:1rem;" data-translate="farm_scope">📍 嘉義東石 · 台南七股 · 屏東林邊 共12場 · 有效樣本1,200萬尾</p>
                 </div>
                 <div class="image-block" onclick="openLightbox(this)">
                     <img src="assets/shrimp-farm-aerial.jpg" alt="養殖場空拍" loading="lazy">
@@ -651,7 +639,7 @@
                         </tbody>
                     </table>
                 </div>
-                <p style="margin-top:20px; background:#e3f2fd; padding:18px; border-radius:16px; font-weight:600;" data-translate="farm_conclusion">🔬 平均存活率提升14-16%，FCR降低0.17-0.19，每萬尾淨利增加2.4-3.8萬元</p>
+                <p style="margin-top:16px; background:#e3f2fd; padding:14px; border-radius:14px; font-weight:600;" data-translate="farm_conclusion">🔬 平均存活率提升14-16%，FCR降低0.17-0.19，每萬尾淨利增加2.4-3.8萬元</p>
             </section>
 
             <!-- ========== 3. 核心規格對比 (四項指標) ========== -->
@@ -690,10 +678,10 @@
             </section>
 
             <!-- ========== 4. 經濟效益精算 ========== -->
-            <section style="background:white; padding:30px; border-radius:28px; box-shadow:var(--shadow-md); margin:40px 0;">
+            <section style="background:white; padding:24px; border-radius:24px; box-shadow:var(--shadow-md); margin:30px 0;">
                 <h2 class="section-title" data-translate="profit_title">💰 單造效益精算｜飼料節省＋存活率提升＋生長加速</h2>
-                <div style="background:#fff3e0; padding:24px; border-radius:20px; margin-bottom:25px;">
-                    <p style="font-size:1rem;"><strong data-translate="calc_basis">📐 基準：</strong><span data-translate="calc_detail">南美白對蝦 · 放養密度6萬尾/畝 · 養殖80天 · 對蝦飼料45元/kg · 出蝦均價150元/kg · 添加量1kg/噸飼料</span></p>
+                <div style="background:#fff3e0; padding:18px; border-radius:18px; margin-bottom:20px;">
+                    <p style="font-size:0.95rem;"><strong data-translate="calc_basis">📐 基準：</strong><span data-translate="calc_detail">南美白對蝦 · 放養密度6萬尾/畝 · 養殖80天 · 對蝦飼料45元/kg · 出蝦均價150元/kg · 添加量1kg/噸飼料</span></p>
                 </div>
                 <div style="overflow-x:auto;">
                     <table class="data-table">
@@ -710,9 +698,9 @@
                     </table>
                 </div>
                 <div class="roi-badge">
-                    <div style="font-size:1.8rem; font-weight:800;" data-translate="roi_title">投資報酬率 ROI —— 1,850%</div>
+                    <div style="font-size:1.6rem; font-weight:800;" data-translate="roi_title">投資報酬率 ROI —— 1,850%</div>
                     <div class="roi-value"><span class="roi-percent" data-base-value="1850">1,850%</span></div>
-                    <div style="font-size:1.3rem;" data-translate="roi_desc">💰 每投入1元，創造19.5元淨收益 · 回收期<8天</div>
+                    <div style="font-size:1.2rem;" data-translate="roi_desc">💰 每投入1元，創造19.5元淨收益 · 回收期<8天</div>
                 </div>
             </section>
 
@@ -736,33 +724,33 @@
             <!-- ========== 6. 見證與CTA ========== -->
             <div class="testimonial-grid">
                 <div class="testimonial-card">
-                    <p data-translate="testimonial1" style="font-size:1.05rem; line-height:1.7;">「嘉義東石小棚場，連續兩造使用活力旺，FCR從1.32降到1.09，存活率突破80%，每萬尾多賺2.2萬元，今年擴池一倍！」</p>
+                    <p data-translate="testimonial1" style="font-size:1rem; line-height:1.5;">「嘉義東石小棚場，連續兩造使用活力旺，FCR從1.32降到1.09，存活率突破80%，每萬尾多賺2.2萬元，今年擴池一倍！」</p>
                     <div class="testimonial-author" data-translate="testimonial1_author">嘉義 · 陳水產</div>
                     <div class="testimonial-meta" data-translate="testimonial1_meta">6畝小棚 · 2026.02結算</div>
                 </div>
                 <div class="testimonial-card">
-                    <p data-translate="testimonial2" style="font-size:1.05rem; line-height:1.7;">「屏東林邊生物絮團池，以往弧菌總是壓不住，活力旺添加後肝胰腺白膜清晰，送驗弧菌零檢出，料比0.96，滿意！」</p>
+                    <p data-translate="testimonial2" style="font-size:1rem; line-height:1.5;">「屏東林邊生物絮團池，以往弧菌總是壓不住，活力旺添加後肝胰腺白膜清晰，送驗弧菌零檢出，料比0.96，滿意！」</p>
                     <div class="testimonial-author" data-translate="testimonial2_author">屏東 · 林育蝦</div>
                     <div class="testimonial-meta" data-translate="testimonial2_meta">生物絮團養殖 · 年產5批</div>
                 </div>
             </div>
 
             <div class="cta-block">
-                <h2 style="font-size:2rem; color:white;" data-translate="cta_title">🚀 試算您蝦場的1,850% ROI</h2>
+                <h2 style="font-size:1.8rem; color:white;" data-translate="cta_title">🚀 試算您蝦場的1,850% ROI</h2>
                 <div class="big-number"><span class="currency" data-base-value="21577">NTD 21,577</span></div>
-                <p style="font-size:1.3rem;" data-translate="cta_sub1">每萬尾額外淨利 × 您的規模</p>
+                <p style="font-size:1.2rem;" data-translate="cta_sub1">每萬尾額外淨利 × 您的規模</p>
                 <div class="big-number"><span class="roi-percent" data-base-value="1850">1,850%</span></div>
-                <p style="font-size:1.3rem;" data-translate="cta_sub2">養殖業最高 · 8天回本</p>
-                <div style="margin:30px 0;">
+                <p style="font-size:1.2rem;" data-translate="cta_sub2">養殖業最高 · 8天回本</p>
+                <div style="margin:20px 0;">
                     <a class="btn btn-primary" href="tel:+886912345678" data-translate="cta_btn1">📞 免費ROI試算｜限場8折</a>
                     <a class="btn btn-secondary" href="#" data-translate="cta_btn2">📋 領取白蝦實證手冊</a>
                 </div>
-                <p style="opacity:0.9; font-size:0.95rem;" data-translate="cta_footnote">* 50萬尾田間實證 · 12養殖場 · 首池無效退費</p>
+                <p style="opacity:0.9; font-size:0.9rem;" data-translate="cta_footnote">* 50萬尾田間實證 · 12養殖場 · 首池無效退費</p>
             </div>
         </div><!-- end content -->
 
         <footer>
-            <p style="font-size:1.2rem; margin-bottom:16px;"><strong data-translate="footer_company">首池有限公司</strong>｜<span data-translate="footer_slogan">白蝦高效養殖 · 免疫與生長領導品牌</span></p>
+            <p style="font-size:1.1rem; margin-bottom:12px;"><strong data-translate="footer_company">首池有限公司</strong>｜<span data-translate="footer_slogan">白蝦高效養殖 · 免疫與生長領導品牌</span></p>
             <ul class="product-links">
                 <li><a href="index.html">🏠 <span data-translate="home">主頁</span></a></li>
                 <li><a href="活力旺種公豬精液品質提升方案.html">🐗 <span data-translate="boar">種公豬</span></a></li>
@@ -776,7 +764,7 @@
                 <li><a href="活力旺白肉雞FCR性能提升方案.html">🍗 <span data-translate="broiler">白肉雞</span></a></li>
                 <li><a href="活力旺白蝦存活率提升方案.html">🦐 <span data-translate="shrimp">白蝦</span></a></li>
             </ul>
-            <p style="opacity:0.8; font-size:0.9rem; margin-top:25px;" data-translate="footer_copyright">© 2026 首池有限公司 · 引用PubMed/水生生物學報 · 實拍圖片</p>
+            <p style="opacity:0.8; font-size:0.85rem; margin-top:20px;" data-translate="footer_copyright">© 2026 首池有限公司 · 引用PubMed/水生生物學報 · 實拍圖片</p>
         </footer>
     </div><!-- end container -->
 
