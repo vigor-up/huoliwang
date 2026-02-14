@@ -16,15 +16,15 @@ jobs:
       # 輸出目錄通常是 _site （請確認）
       # ------------------------------------------------------------
 
-      - name: 增量上傳至 OSS
-        uses: Menci/upload-to-oss@beta-v3  # [citation:4]
-        with:
-          access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
-          access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
-          bucket: ${{ secrets.OSS_BUCKET }}
-          endpoint: ${{ secrets.OSS_ENDPOINT }}
-          local-path: ./       # ⚠️ GitHub Pages 輸出目錄，若純靜態倉庫請改為 ./
-          remote-path: /             # ⚠️ 上傳至 Bucket 根目錄，若要子資料夾填 my-folder/
-          increment: true           # ✅ 啟用增量模式
-          no-delete-remote-files: true  # ✅ 絕不刪除 OSS 既有檔案
-          delay-html-file-upload: true  # ✅ HTML 最後上傳（減少用戶看到殘缺版）
+  - name: 增量上傳至 OSS
+  uses: Menci/upload-to-oss@beta-v3
+  with:
+    access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
+    access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+    bucket: ${{ secrets.OSS_BUCKET }}
+    endpoint: ${{ secrets.OSS_ENDPOINT }}
+    local-path: ./_site        # 確認你的輸出目錄
+    remote-path: /             # 若要上傳至子目錄，如 /blog/
+    # ⚠️ 移除了 increment 參數（不再需要）
+    no-delete-remote-files: true    # 保留，作用同增量
+    delay-html-file-upload: true    # 保留
