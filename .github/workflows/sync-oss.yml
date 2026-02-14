@@ -1,0 +1,30 @@
+name: 增量同步至阿里雲 OSS
+
+on:
+  push:
+    branches: [ main ]  # ⚠️ 若你用 master 請修改
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 檢出程式碼
+        uses: actions/checkout@v4
+
+      # --- 如果你的 GitHub Pages 需要編譯（Jekyll/Hugo），在此插入建置步驟 ---
+      # 例如 Jekyll： bundle exec jekyll build
+      # 輸出目錄通常是 _site （請確認）
+      # ------------------------------------------------------------
+
+      - name: 增量上傳至 OSS
+        uses: Menci/upload-to-oss@beta-v3  # [citation:4]
+        with:
+          access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+          bucket: ${{ secrets.OSS_BUCKET }}
+          endpoint: ${{ secrets.OSS_ENDPOINT }}
+          local-path: ./       # ⚠️ GitHub Pages 輸出目錄，若純靜態倉庫請改為 ./
+          remote-path: /             # ⚠️ 上傳至 Bucket 根目錄，若要子資料夾填 my-folder/
+          increment: true           # ✅ 啟用增量模式
+          no-delete-remote-files: true  # ✅ 絕不刪除 OSS 既有檔案
+          delay-html-file-upload: true  # ✅ HTML 最後上傳（減少用戶看到殘缺版）
