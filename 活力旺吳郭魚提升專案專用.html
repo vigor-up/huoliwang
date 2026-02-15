@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes, viewport-fit=cover">
-    <title>活力旺®吳郭魚存活率提升方案 - 首池有限公司</title>
+    <title>活力旺®吳郭魚（羅非魚）存活率提升方案 - 首池有限公司</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -82,7 +82,7 @@
             color: white;
         }
         
-        /* 返回主頁按鈕 (回到頂部) */
+        /* 返回頂部按鈕 */
         .back-to-top {
             position: fixed;
             bottom: 20px;
@@ -203,6 +203,7 @@
             width: 100%;
             margin: 20px 0;
             text-align: center;
+            cursor: pointer;
         }
         .responsive-img {
             width: 100%;
@@ -217,7 +218,7 @@
             box-shadow: var(--shadow-lg);
         }
         .img-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             margin: 12px 0 6px;
             color: var(--dark-text);
@@ -229,6 +230,13 @@
             flex-direction: column;
             gap: 15px;
             margin-top: 20px;
+        }
+        @media (min-width: 769px) {
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+            }
         }
         
         .table-container {
@@ -419,7 +427,6 @@
                 margin-bottom: 30px;
             }
             .grid {
-                display: grid;
                 grid-template-columns: repeat(3, 1fr);
                 gap: 30px;
                 margin-top: 30px;
@@ -460,13 +467,13 @@
         <button class="lang-btn" data-lang="en" data-rate="0.0320">EN(USD)</button>
     </div>
 
-    <!-- 返回主頁按鈕 (回到頂部) -->
+    <!-- 返回頂部按鈕 -->
     <a href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">↑</a>
 
     <!-- 頁頭 -->
     <header>
         <div class="container">
-            <h1 data-translate="title">🐟 活力旺®吳郭魚 · 尼羅吳郭魚專用</h1>
+            <h1 data-translate="title">🐟 活力旺®吳郭魚（羅非魚）存活率提升方案</h1>
             <p class="subtitle" data-translate="subtitle">三大機密載體｜重組蛋白酶‧小核酸‧褐藻素 · 發酵豆粕/枯草芽孢桿菌/發酵紙莎草葉技術</p>
             <div class="tagline" data-translate="tagline">飼料轉換率 ↓0.12-0.18 · 存活率 ↑18%+ · 投資報酬率 1,250%</div>
         </div>
@@ -525,7 +532,7 @@
         </div>
     </section>
 
-    <!-- ========== 2. 三大機密載體 (已刪除原力素及AI圖片提示詞) ========== -->
+    <!-- ========== 2. 三大機密載體 ========== -->
     <section style="background-color: #f0f7ff;">
         <div class="container">
             <h2 class="section-title" data-translate="confidential_title">🔬 活力旺® 吳郭魚專利配方 – 三大機密載體</h2>
@@ -548,9 +555,10 @@
                     <div class="gene-highlight" style="text-align: center; background: rgba(0,168,168,0.1);"><span style="font-size:1.6rem;">-14d</span><br><span data-translate="cycle_short">養殖天數</span></div>
                 </div>
                 
-                <div class="img-container">
-                    <img src="assets/tilapia-growth-comparison.jpg" alt="生長對比" class="responsive-img" loading="lazy">
-                    <div class="img-title" data-translate="protease_caption">重組蛋白酶 · 促進吳郭魚快速增重</div>
+                <!-- 生長對比圖 -->
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="assets/tilapia-growth-comparison.jpg" alt="生長對比圖" class="responsive-img" loading="lazy">
+                    <div class="img-title" data-translate="img_growth_comparison">圖1：重組蛋白酶促進吳郭魚快速增重（左對照 / 右活力旺）</div>
                 </div>
             </div>
             
@@ -572,9 +580,15 @@
                     <div class="gene-highlight" style="text-align: center; background: rgba(0,168,168,0.1);"><span style="font-size:1.6rem;">↓60%</span><br><span data-translate="mortality">死亡率</span></div>
                 </div>
                 
-                <div class="img-container">
-                    <img src="assets/tilapia-head-kidney-macrophage.jpg" alt="免疫細胞" class="responsive-img" loading="lazy">
-                    <div class="img-title" data-translate="immune_cells_title">頭腎巨噬細胞 · 吞噬活性提升65%</div>
+                <!-- 頭腎巨噬細胞圖 -->
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="assets/tilapia-head-kidney-macrophage.jpg" alt="頭腎巨噬細胞" class="responsive-img" loading="lazy">
+                    <div class="img-title" data-translate="img_head_kidney">圖2：頭腎巨噬細胞 · 吞噬活性提升65%</div>
+                </div>
+                <!-- 免疫基因表達圖 -->
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="assets/tilapia-immune-gene-expression.jpg" alt="免疫基因表達" class="responsive-img" loading="lazy">
+                    <div class="img-title" data-translate="img_immune_gene">圖3：免疫相關基因表達 (IgM, IL-1β, TNF-α) 顯著上調</div>
                 </div>
             </div>
             
@@ -596,9 +610,15 @@
                     <div class="gene-highlight" style="text-align: center; background: rgba(0,168,168,0.1);"><span style="font-size:1.6rem;">Hsp70↑</span><br><span data-translate="hsp">抗緊迫</span></div>
                 </div>
                 
-                <div class="img-container">
-                    <img src="assets/tilapia-gut-barrier.jpg" alt="腸道組織學" class="responsive-img" loading="lazy">
-                    <div class="img-title" data-translate="gut_histology_title">腸道絨毛組織切片 · 緊密連接增強</div>
+                <!-- 腸道絨毛圖 -->
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="assets/tilapia-gut-villi.jpg" alt="腸道絨毛組織" class="responsive-img" loading="lazy">
+                    <div class="img-title" data-translate="img_gut_villi">圖4：腸道絨毛組織切片 · 絨毛高度與密度提升</div>
+                </div>
+                <!-- Nrf2路徑圖 -->
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="assets/tilapia-nrf2-pathway.jpg" alt="Nrf2抗氧化路徑" class="responsive-img" loading="lazy">
+                    <div class="img-title" data-translate="img_nrf2">圖5：褐藻素激活Nrf2路徑，提升抗氧化酶活性</div>
                 </div>
             </div>
             
@@ -627,6 +647,12 @@
                 <p style="font-weight:700;" data-translate="farm_scope">📍 雲林口湖 · 嘉義義竹 · 屏東佳冬 · 泰國猜納 共18場 · 有效樣本800萬尾</p>
             </div>
             
+            <!-- 高密度存活率圖 -->
+            <div class="img-container" onclick="openLightbox(this)">
+                <img src="assets/tilapia-survival-high-density.jpg" alt="高密度存活率" class="responsive-img" loading="lazy">
+                <div class="img-title" data-translate="img_survival_highdensity">圖6：高密度養殖條件下，活力旺組存活率達85-92%</div>
+            </div>
+            
             <div class="table-container">
                 <table class="data-table">
                     <thead><tr><th data-translate="region">養殖模式</th><th data-translate="control">對照組<br>存活率/FCR</th><th data-translate="vitality">活力旺組<br>存活率/FCR</th><th data-translate="improvement">改善幅度</th><th data-translate="benefit">收益提升</th></tr></thead>
@@ -648,7 +674,6 @@
             <h2 class="section-title" data-translate="profit_title">💰 單造效益精算｜飼料節省＋存活率提升＋生長加速</h2>
             
             <div class="card">
-                <!-- 三重協同效應說明 -->
                 <div style="background:#e8f4fd; padding:15px; border-radius:12px; margin-bottom:20px;">
                     <p><strong data-translate="synergy_title">🔁 三重協同效應：</strong> <span data-translate="synergy_desc">「消化效率提升 × 免疫強化 × 抗氧化穩定」三軸同步作用，帶來存活率↑15–20%、生長速率↑12–16%、FCR↓0.15左右，每萬尾淨利增加17,000–30,000元，最終形成1,250%投資報酬率，12天內回本。</span></p>
                 </div>
@@ -693,6 +718,16 @@
                 <div class="param-card"><div class="param-label" data-translate="spec_stage_label">適用階段</div><div class="param-value" data-translate="spec_stage_value">全程</div><div>魚苗至成魚</div></div>
                 <div class="param-card"><div class="param-label" data-translate="spec_feed_label">每萬尾耗料</div><div class="param-value">~450</div><div>kg</div><div class="spec-note" data-translate="spec_feed_note">FCR 1.22基準</div></div>
                 <div class="param-card"><div class="param-label" data-translate="spec_addcost_label">每萬尾成本</div><div class="param-value stat-value" data-value="432">NTD 432</div><div>/萬尾</div></div>
+            </div>
+            
+            <!-- 收穫與包裝圖 -->
+            <div class="img-container" onclick="openLightbox(this)">
+                <img src="assets/tilapia-harvest.jpg" alt="收穫場景" class="responsive-img" loading="lazy">
+                <div class="img-title" data-translate="img_harvest">圖7：活力旺養殖吳郭魚豐收場景</div>
+            </div>
+            <div class="img-container" onclick="openLightbox(this)">
+                <img src="assets/tilapia-harvest-boxing.jpg" alt="裝箱出貨" class="responsive-img" loading="lazy">
+                <div class="img-title" data-translate="img_harvest_boxing">圖8：整齊規格的成魚裝箱，出肉率提升</div>
             </div>
         </div>
     </section>
@@ -742,11 +777,17 @@
         </div>
     </footer>
 
+    <!-- Lightbox 結構 -->
+    <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; justify-content:center; align-items:center; cursor:zoom-out; flex-direction:column;" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="" alt="" style="max-width:90%; max-height:80%; object-fit:contain; border-radius:12px; box-shadow:0 0 40px rgba(0,0,0,0.5);">
+        <div id="lightbox-caption" class="caption" style="color:white; margin-top:20px; font-size:1rem; max-width:80%; text-align:center;"></div>
+    </div>
+
     <script>
         // ========== 完整多語言翻譯物件 ==========
         const translations = {
             'zh-TW': {
-                'title': '🐟 活力旺®吳郭魚 · 尼羅吳郭魚專用',
+                'title': '🐟 活力旺®吳郭魚（羅非魚）存活率提升方案',
                 'subtitle': '三大機密載體｜重組蛋白酶‧小核酸‧褐藻素 · 發酵豆粕/枯草芽孢桿菌/發酵紙莎草葉技術',
                 'tagline': '飼料轉換率 ↓0.12-0.18 · 存活率 ↑18%+ · 投資報酬率 1,250%',
                 'cost_label': '成本',
@@ -762,7 +803,7 @@
                 'villi_short': '絨毛高度',
                 'fcr_short': 'FCR',
                 'cycle_short': '養殖天數',
-                'protease_caption': '重組蛋白酶 · 促進吳郭魚快速增重',
+                'img_growth_comparison': '圖1：重組蛋白酶促進吳郭魚快速增重（左對照 / 右活力旺）',
                 'rna_title': '2. 「小核酸」—— 免疫調控肽',
                 'rna_desc': '<strong>抗鏈球菌、提高存活率</strong> · 枯草芽孢桿菌+發酵紙莎草葉 · 鏈球菌感染存活率 52%→82%',
                 'rna_mechanism_text': '活力旺小核酸片段靶向免疫調控基因，上調 IgM（↑3倍）、IL-1β/TNF-α 表達、溶菌酶活性↑2倍、補體系統 C3 啟動。搭配 Bacillus subtilis 發酵技術，增強頭腎巨噬細胞吞噬能力與呼吸爆發反應。',
@@ -771,7 +812,8 @@
                 'igm': '抗體提升',
                 'strep_surv': '鏈球菌存活',
                 'mortality': '死亡率',
-                'immune_cells_title': '頭腎巨噬細胞 · 吞噬活性提升65%',
+                'img_head_kidney': '圖2：頭腎巨噬細胞 · 吞噬活性提升65%',
+                'img_immune_gene': '圖3：免疫相關基因表達 (IgM, IL-1β, TNF-α) 顯著上調',
                 'fucoxanthin_title': '3. 「褐藻素」—— 藻源性抗氧化複合物',
                 'fucoxanthin_desc': '<strong>抗氧化、抗緊迫、腸道健康</strong> · Nrf2路徑 · 總抗氧化能力↑41%',
                 'fucoxanthin_mechanism_text': '褐藻素活化 Nrf2/KEAP1 抗氧化路徑，提升 SOD ↑41%、CAT/GPx 活性上升、肝臟MDA下降、Hsp70上調（抗緊迫蛋白）。同時改善腸道緊密連接蛋白表達，降低腸道通透性，減少內毒素滲漏。',
@@ -780,7 +822,8 @@
                 'sod': '超氧化物歧化酶',
                 'aeromonas_surv': '嗜水氣單胞菌存活',
                 'hsp': '抗緊迫',
-                'gut_histology_title': '腸道絨毛組織切片 · 緊密連接增強',
+                'img_gut_villi': '圖4：腸道絨毛組織切片 · 絨毛高度與密度提升',
+                'img_nrf2': '圖5：褐藻素激活Nrf2路徑，提升抗氧化酶活性',
                 'benefit_item': '效能項目',
                 'mechanism': '對應載體',
                 'performance': '實證績效',
@@ -795,6 +838,7 @@
                 'carrier3': '褐藻素',
                 'farm_title': '📋 台灣/東南亞養殖場實證數據（2025-2026）',
                 'farm_scope': '📍 雲林口湖 · 嘉義義竹 · 屏東佳冬 · 泰國猜納 共18場 · 有效樣本800萬尾',
+                'img_survival_highdensity': '圖6：高密度養殖條件下，活力旺組存活率達85-92%',
                 'region': '養殖模式',
                 'control': '對照組<br>存活率/FCR',
                 'vitality': '活力旺組<br>存活率/FCR',
@@ -845,6 +889,8 @@
                 'spec_feed_label': '每萬尾耗料',
                 'spec_feed_note': 'FCR 1.22基準',
                 'spec_addcost_label': '每萬尾成本',
+                'img_harvest': '圖7：活力旺養殖吳郭魚豐收場景',
+                'img_harvest_boxing': '圖8：整齊規格的成魚裝箱，出肉率提升',
                 'testimonial1': '「雲林口湖循環水場，連續兩批使用活力旺，FCR從1.42降到1.20，存活率從71%衝到89%，每萬尾多賺1.8萬元，今年打算全場導入！」',
                 'testimonial1_author': '雲林 · 張養殖',
                 'testimonial1_meta': '循環水RAS · 2026.03結算',
@@ -863,8 +909,8 @@
                 'footer_sub': '分子保護機制基於最新科學研究｜實際效益可能因管理條件而異'
             },
             'zh-CN': {
-                // 簡體翻譯此處省略，實際使用時應包含所有對應鍵值，與繁體結構相同但內容簡體化
-                'title': '🐟 活力旺®罗非鱼 · 尼罗罗非鱼专用',
+                // 簡體翻譯（內容與繁體對應，此處僅列出新增圖片鍵值，其餘與上版相同）
+                'title': '🐟 活力旺®罗非鱼（吴郭鱼）存活率提升方案',
                 'subtitle': '三大机密载体｜重组蛋白酶‧小核酸‧褐藻素 · 发酵豆粕/枯草芽孢杆菌/发酵纸莎草叶技术',
                 'tagline': '饲料转换率 ↓0.12-0.18 · 存活率 ↑18%+ · 投资报酬率 1,250%',
                 'cost_label': '成本',
@@ -880,7 +926,7 @@
                 'villi_short': '绒毛高度',
                 'fcr_short': 'FCR',
                 'cycle_short': '养殖天数',
-                'protease_caption': '重组蛋白酶 · 促进罗非鱼快速增重',
+                'img_growth_comparison': '图1：重组蛋白酶促进罗非鱼快速增重（左对照 / 右活力旺）',
                 'rna_title': '2. 「小核酸」—— 免疫调控肽',
                 'rna_desc': '<strong>抗链球菌、提高存活率</strong> · 枯草芽孢杆菌+发酵纸莎草叶 · 链球菌感染存活率 52%→82%',
                 'rna_mechanism_text': '活力旺小核酸片段靶向免疫调控基因，上调 IgM（↑3倍）、IL-1β/TNF-α 表达、溶菌酶活性↑2倍、补体系统 C3 启动。搭配 Bacillus subtilis 发酵技术，增强头肾巨噬细胞吞噬能力与呼吸爆发反应。',
@@ -889,7 +935,8 @@
                 'igm': '抗体提升',
                 'strep_surv': '链球菌存活',
                 'mortality': '死亡率',
-                'immune_cells_title': '头肾巨噬细胞 · 吞噬活性提升65%',
+                'img_head_kidney': '图2：头肾巨噬细胞 · 吞噬活性提升65%',
+                'img_immune_gene': '图3：免疫相关基因表达 (IgM, IL-1β, TNF-α) 显著上调',
                 'fucoxanthin_title': '3. 「褐藻素」—— 藻源性抗氧化复合物',
                 'fucoxanthin_desc': '<strong>抗氧化、抗紧迫、肠道健康</strong> · Nrf2路径 · 总抗氧化能力↑41%',
                 'fucoxanthin_mechanism_text': '褐藻素活化 Nrf2/KEAP1 抗氧化路径，提升 SOD ↑41%、CAT/GPx 活性上升、肝脏MDA下降、Hsp70上调（抗紧迫蛋白）。同时改善肠道紧密连接蛋白表达，降低肠道通透性，减少内毒素渗漏。',
@@ -898,7 +945,8 @@
                 'sod': '超氧化物歧化酶',
                 'aeromonas_surv': '嗜水气单胞菌存活',
                 'hsp': '抗紧迫',
-                'gut_histology_title': '肠道绒毛组织切片 · 紧密连接增强',
+                'img_gut_villi': '图4：肠道绒毛组织切片 · 绒毛高度与密度提升',
+                'img_nrf2': '图5：褐藻素激活Nrf2路径，提升抗氧化酶活性',
                 'benefit_item': '效能项目',
                 'mechanism': '对应载体',
                 'performance': '实证绩效',
@@ -913,6 +961,7 @@
                 'carrier3': '褐藻素',
                 'farm_title': '📋 台湾/东南亚养殖场实证数据（2025-2026）',
                 'farm_scope': '📍 云林口湖 · 嘉义义竹 · 屏东佳冬 · 泰国猜纳 共18场 · 有效样本800万尾',
+                'img_survival_highdensity': '图6：高密度养殖条件下，活力旺组存活率达85-92%',
                 'region': '养殖模式',
                 'control': '对照组<br>存活率/FCR',
                 'vitality': '活力旺组<br>存活率/FCR',
@@ -963,6 +1012,8 @@
                 'spec_feed_label': '每万尾耗料',
                 'spec_feed_note': 'FCR 1.22基准',
                 'spec_addcost_label': '每万尾成本',
+                'img_harvest': '图7：活力旺养殖罗非鱼丰收场景',
+                'img_harvest_boxing': '图8：整齐规格的成鱼装箱，出肉率提升',
                 'testimonial1': '「云林口湖循环水场，连续两批使用活力旺，FCR从1.42降到1.20，存活率从71%冲到89%，每万尾多赚1.8万元，今年打算全场导入！」',
                 'testimonial1_author': '云林 · 张养殖',
                 'testimonial1_meta': '循环水RAS · 2026.03结算',
@@ -981,8 +1032,8 @@
                 'footer_sub': '分子保护机制基于最新科学研究｜实际效益可能因管理条件而异'
             },
             'en': {
-                // 英文翻譯此處省略，實際使用時應包含所有對應鍵值
-                'title': '🐟 Vitality Booster® Tilapia · Nile Tilapia Specific',
+                // 英文翻譯（僅列出新增圖片鍵值，其餘與上版相同）
+                'title': '🐟 Vitality Booster® Tilapia (Nile Tilapia) Survival Enhancement Program',
                 'subtitle': 'Three Confidential Carriers | Recombinant Protease · Small Nucleic Acid · Fucoxanthin · Fermented SBM/B. subtilis/Fermented Broussonetia',
                 'tagline': 'FCR ↓0.12-0.18 · Survival ↑18%+ · ROI 1,250%',
                 'cost_label': 'Cost',
@@ -998,7 +1049,7 @@
                 'villi_short': 'Villus height',
                 'fcr_short': 'FCR',
                 'cycle_short': 'Days saved',
-                'protease_caption': 'Recombinant Protease · Accelerates tilapia growth',
+                'img_growth_comparison': 'Figure 1: Recombinant protease accelerates tilapia growth (left control / right Vitality)',
                 'rna_title': '2. "Small Nucleic Acid" – Immune Regulatory Peptide',
                 'rna_desc': '<strong>Anti-Streptococcus, survival↑</strong> · B. subtilis + FBL · Strep. survival 52%→82%',
                 'rna_mechanism_text': 'Vitality small nucleic acid fragments target immune regulatory genes, upregulating IgM (↑3x), IL-1β/TNF-α expression, lysozyme activity↑2x, complement C3 activation. Combined with B. subtilis fermentation, enhances head kidney macrophage phagocytosis and respiratory burst.',
@@ -1007,7 +1058,8 @@
                 'igm': 'IgM boost',
                 'strep_surv': 'Strep. survival',
                 'mortality': 'Mortality',
-                'immune_cells_title': 'Head kidney macrophages · phagocytosis↑65%',
+                'img_head_kidney': 'Figure 2: Head kidney macrophages · phagocytosis↑65%',
+                'img_immune_gene': 'Figure 3: Immune-related gene expression (IgM, IL-1β, TNF-α) significantly upregulated',
                 'fucoxanthin_title': '3. "Fucoxanthin" – Algal Antioxidant Complex',
                 'fucoxanthin_desc': '<strong>Antioxidant, anti-stress, gut health</strong> · Nrf2 pathway · T-AOC ↑41%',
                 'fucoxanthin_mechanism_text': 'Fucoxanthin activates Nrf2/KEAP1 antioxidant pathway, increasing SOD ↑41%, CAT/GPx activities, decreasing liver MDA, upregulating Hsp70 (stress protein). Also improves intestinal tight junction protein expression, reducing gut permeability and endotoxin leakage.',
@@ -1016,7 +1068,8 @@
                 'sod': 'SOD',
                 'aeromonas_surv': 'Aeromonas survival',
                 'hsp': 'Hsp70',
-                'gut_histology_title': 'Gut histology · tight junction enhanced',
+                'img_gut_villi': 'Figure 4: Gut histology · villus height & density increased',
+                'img_nrf2': 'Figure 5: Fucoxanthin activates Nrf2 pathway, boosting antioxidant enzymes',
                 'benefit_item': 'Efficacy',
                 'mechanism': 'Carrier',
                 'performance': 'Performance',
@@ -1031,6 +1084,7 @@
                 'carrier3': 'Fucoxanthin',
                 'farm_title': '📋 Taiwan/Southeast Asia Farm Trials (2025-2026)',
                 'farm_scope': '📍 18 farms (Yunlin, Chiayi, Pingtung, Thailand) · 8M fish',
+                'img_survival_highdensity': 'Figure 6: Under high-density culture, Vitality group survival rate 85-92%',
                 'region': 'System',
                 'control': 'Control<br>Survival/FCR',
                 'vitality': 'Vitality<br>Survival/FCR',
@@ -1081,6 +1135,8 @@
                 'spec_feed_label': 'Feed/10k',
                 'spec_feed_note': 'FCR 1.22 basis',
                 'spec_addcost_label': 'Cost/10k',
+                'img_harvest': 'Figure 7: Harvest scene of Vitality-fed tilapia',
+                'img_harvest_boxing': 'Figure 8: Uniform-sized fish packed for market, fillet yield increased',
                 'testimonial1': '"Yunlin RAS farm, two consecutive crops with Vitality, FCR 1.42→1.20, survival 71%→89%, earned +NTD18k/10k, plan to apply to all ponds!"',
                 'testimonial1_author': 'Mr. Chang, Yunlin',
                 'testimonial1_meta': 'RAS · Mar 2026',
@@ -1106,6 +1162,19 @@
             'en':    { rate: 0.0320, symbol: '$', format: 'USD {value}' }
         };
         let currentLang = 'zh-TW';
+
+        // Lightbox 功能
+        function openLightbox(element) {
+            const img = element.querySelector('img');
+            if (!img) return;
+            const caption = element.querySelector('.img-title')?.innerText || '';
+            const lb = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lightbox-img');
+            const lbCaption = document.getElementById('lightbox-caption');
+            lbImg.src = img.src;
+            lbCaption.innerText = caption;
+            lb.style.display = 'flex';
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             const observerOptions = { threshold: 0.1 };
