@@ -611,6 +611,61 @@
             padding-top: 15px; 
             border-top: 1px solid rgba(255, 255, 255, 0.1); 
         }
+
+        /* 新增：產品連結清單（頁尾導航） */
+        .product-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 25px 0;
+            list-style: none;
+        }
+        .product-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .product-links a:hover {
+            background: var(--secondary);
+        }
+        
+        /* 返回頂部按鈕 */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 999;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            border: none;
+            outline: none;
+        }
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            background-color: var(--accent);
+            color: var(--dark);
+        }
         
         /* 圖片樣式優化 */
         .section-img {
@@ -1029,23 +1084,42 @@
             <div class="highlight-text" data-translate="cta_highlight2">飼料添加成本僅增加 7.39 萬元</div>
             
             <div class="cta-buttons">
-                <a class="btn btn-primary" href="#" data-translate="cta_btn1">📞 立即技術諮詢</a>
-                <a class="btn btn-secondary" href="#+886913866080" data-translate="cta_btn2">📋 獲取試用方案</a>
+                <!-- 修改電話按鈕 href 為 tel:+886913866080 -->
+                <a class="btn btn-primary" href="tel:+886913866080" data-translate="cta_btn1">📞 立即技術諮詢</a>
+                <a class="btn btn-secondary" href="#" data-translate="cta_btn2">📋 獲取試用方案</a>
             </div>
         </section>
 
-        <!-- Footer -->
+        <!-- Footer (已修改：加入產品連結清單、返回頂部按鈕) -->
         <footer>
             <div class="footer-content">
                 <p data-translate="footer_company"><strong>首池有限公司</strong>｜精密營養 &times; 生物技術 &times; 永續畜牧</p>
+                
+                <!-- 新增產品連結清單（包含首頁及其他方案） -->
+                <ul class="product-links">
+                    <li><a href="index.html" data-translate="home">🏠 首頁</a></li>
+                    <li><a href="活力旺種公豬精液品質提升方案.html" data-translate="boar">🐗 種公豬</a></li>
+                    <li><a href="活力旺懷孕期母豬生產性能優化方案.html" data-translate="preg_sow">🤰 懷孕母豬</a></li>
+                    <li><a href="活力旺哺乳母豬性能提升方案.html" data-translate="lact_sow">🍼 哺乳母豬</a></li>
+                    <li><a href="活力旺仔豬人工乳性能提升方案.html" data-translate="piglet">🐷 仔豬</a></li>
+                    <li><a href="活力旺育肥豬性能提升方案.html" data-translate="finisher">📈 育肥豬</a></li>
+                    <li><a href="活力旺種雞性能提升方案.html" data-translate="breeder">🐔 種雞</a></li>
+                    <li><a href="活力旺蛋雞性能提升方案.html" data-translate="layer">🥚 蛋雞</a></li>
+                    <li><a href="活力旺土雞性能提升方案.html" data-translate="native">🌾 土雞</a></li>
+                    <li><a href="活力旺白肉雞FCR性能提升方案.html" data-translate="broiler">🍗 白肉雞</a></li>
+                </ul>
+                
                 <p data-translate="footer_disclaimer">本技術資料表數據基於台灣土雞養殖場實測結果，實際效果因管理條件略有差異</p>
                 <p class="copyright" data-translate="footer_copyright">&copy; 2024 首池有限公司 版權所有｜本技術資料內容為商業機密，未經授權禁止轉載</p>
             </div>
         </footer>
     </div>
 
+    <!-- 返回頂部按鈕 -->
+    <div class="back-to-top" id="backToTop" title="返回頂部">↑</div>
+
     <script>
-        // 多語言翻譯數據
+        // 多語言翻譯數據 (已補齊新增的產品連結鍵值)
         const translations = {
             'zh-TW': {
                 // 標題和副標題
@@ -1192,10 +1266,20 @@
                 'cta_btn1': '📞 立即技術諮詢',
                 'cta_btn2': '📋 獲取試用方案',
                 
-                // 頁腳
-                'footer_company': '首池有限公司｜精密營養 &times; 生物技術 &times; 永續畜牧',
+                // 頁腳及產品連結
+                'footer_company': '首池有限公司｜精密營養 × 生物技術 × 永續畜牧',
                 'footer_disclaimer': '本技術資料表數據基於台灣土雞養殖場實測結果，實際效果因管理條件略有差異',
-                'footer_copyright': '© 2024 首池有限公司 版權所有｜本技術資料內容為商業機密，未經授權禁止轉載'
+                'footer_copyright': '© 2024 首池有限公司 版權所有｜本技術資料內容為商業機密，未經授權禁止轉載',
+                'home': '🏠 首頁',
+                'boar': '🐗 種公豬',
+                'preg_sow': '🤰 懷孕母豬',
+                'lact_sow': '🍼 哺乳母豬',
+                'piglet': '🐷 仔豬',
+                'finisher': '📈 育肥豬',
+                'breeder': '🐔 種雞',
+                'layer': '🥚 蛋雞',
+                'native': '🌾 土雞',
+                'broiler': '🍗 白肉雞'
             },
             'zh-CN': {
                 // 標題和副標題
@@ -1207,7 +1291,7 @@
                 // 圖片說明
                 'caption1': '图1：活力旺产品添加比例示意图｜每吨饲料添加1公斤活力旺',
                 'caption2': '图2：活力旺土鸡性能提升效益对比｜增重+5-8%、料肉比-3-5%、成活率+2-3%',
-                'caption3': '图3：活力旺土鸡投资报酬率分析｜每只净利+22.96元、ROI达310%',
+                'caption3': '图3：活力旺土鸡投资报酬率分析｜每只净利+5.03元、ROI达310%',
                 'caption4': '图4：活力旺核心技术三层协同作用｜消化吸收、免疫调控、代谢优化',
                 'caption5': '图5：传统饲养 vs 活力旺方案｜养殖模式转型带来价值提升',
                 
@@ -1342,10 +1426,20 @@
                 'cta_btn1': '📞 立即技术咨询',
                 'cta_btn2': '📋 获取试用方案',
                 
-                // 頁腳
-                'footer_company': '首池有限公司｜精准营养 &times; 生物技术 &times; 可持续畜牧',
+                // 頁腳及產品連結
+                'footer_company': '首池有限公司｜精准营养 × 生物技术 × 可持续畜牧',
                 'footer_disclaimer': '本技术资料表数据基于台湾土鸡养殖场实测结果，实际效果因管理条件略有差异',
-                'footer_copyright': '© 2024 首池有限公司 版权所有｜本技术资料内容为商业机密，未经授权禁止转载'
+                'footer_copyright': '© 2024 首池有限公司 版权所有｜本技术资料内容为商业机密，未经授权禁止转载',
+                'home': '🏠 首页',
+                'boar': '🐗 种公猪',
+                'preg_sow': '🤰 怀孕母猪',
+                'lact_sow': '🍼 哺乳母猪',
+                'piglet': '🐷 仔猪',
+                'finisher': '📈 育肥猪',
+                'breeder': '🐔 种鸡',
+                'layer': '🥚 蛋鸡',
+                'native': '🌾 土鸡',
+                'broiler': '🍗 白肉鸡'
             },
             'en': {
                 // 標題和副標題
@@ -1492,10 +1586,20 @@
                 'cta_btn1': '📞 Get Technical Consultation',
                 'cta_btn2': '📋 Request Trial Program',
                 
-                // 頁腳
+                // 頁腳及產品連結
                 'footer_company': 'Shou Chi Co., Ltd.｜Precision Nutrition × Biotechnology × Sustainable Livestock',
                 'footer_disclaimer': 'This technical data sheet is based on field test results from Taiwan native chicken farms, actual effects may vary slightly due to management conditions',
-                'footer_copyright': '© 2024 Shou Chi Co., Ltd. All Rights Reserved｜This technical data content is confidential, unauthorized reproduction prohibited'
+                'footer_copyright': '© 2024 Shou Chi Co., Ltd. All Rights Reserved｜This technical data content is confidential, unauthorized reproduction prohibited',
+                'home': '🏠 Home',
+                'boar': '🐗 Boar',
+                'preg_sow': '🤰 Pregnant Sow',
+                'lact_sow': '🍼 Lactating Sow',
+                'piglet': '🐷 Piglet',
+                'finisher': '📈 Finisher',
+                'breeder': '🐔 Breeder',
+                'layer': '🥚 Layer',
+                'native': '🌾 Native Chicken',
+                'broiler': '🍗 Broiler'
             }
         };
 
@@ -1645,6 +1749,19 @@
             
             // 設置默認語言
             switchLanguage('zh-TW');
+
+            // 返回頂部按鈕邏輯
+            const backToTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
+                }
+            });
+            backToTop.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
     </script>
 </body>
