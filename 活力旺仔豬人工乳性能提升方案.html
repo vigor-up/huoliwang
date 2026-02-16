@@ -674,6 +674,38 @@
         .container, .card, .step, .param-card {
             will-change: transform;
         }
+
+        /* 新增：返回頂部按鈕樣式 */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 999;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            border: none;
+            outline: none;
+        }
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            background-color: var(--accent-yellow);
+            color: var(--dark-text);
+        }
     </style>
 </head>
 <body>
@@ -1119,20 +1151,32 @@
         </div>
     </section>
 
-    <!-- 頁尾 -->
+    <!-- 頁尾 (已修改：加入可點擊電話與ROI試算按鍵) -->
     <footer>
         <div class="container">
             <div style="margin-bottom: 25px;">
                 <h3 style="font-size: 1.4rem; margin-bottom: 12px;" data-translate="footer_title">首池有限公司｜SHOU CHI Co., Ltd.</h3>
                 <p style="font-size: 1rem; opacity: 0.9;" data-translate="footer_subtitle">Precision Nutrition · Molecular Protection · Sustainable Agriculture</p>
             </div>
+            <!-- 修改後的聯繫方式：電話改為 0913-866-080 並加上 tel 連結 -->
+            <p style="margin-top: 8px; font-weight: 500;">
+                <span data-translate="contact">技術諮詢專線：</span>
+                <a href="tel:+886913866080" style="color:white; text-decoration:underline;">0913-866-080</a>
+                ｜ service@shouchi.com.tw
+            </p>
+            <!-- 新增 ROI 試算按鍵 (可點擊撥打) -->
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="tel:+886913866080" class="roi-call-button" style="display: inline-block; background: linear-gradient(135deg, var(--accent-yellow), #e6b800); color: var(--dark-text); padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;">📞 ROI試算 立即諮詢 0913-866-080</a>
+            </div>
             <div style="padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.9rem; opacity: 0.85; line-height: 1.6;">
                 <p data-translate="copyright1">© 2026 首池有限公司 版權所有｜活力旺仔豬人工乳專用配方方案</p>
                 <p data-translate="copyright2">分子保護機制基於最新科學研究｜實際效益可能因管理條件而異</p>
-                <p style="margin-top: 8px; font-weight: 500;" data-translate="contact">技術諮詢專線：0800-xxx-xxx｜service@shouchi.com.tw</p>
+                <!-- 保留原聯繫文字，但已在上方獨立處理，此處可省略或保留 (為了不重複，我們移除原本的靜態文字) -->
             </div>
         </div>
     </footer>
+
+    <!-- 返回頂部按鈕 (將由 JavaScript 動態生成並控制) -->
 
     <!-- 多語言翻譯數據（保持原樣） -->
     <script>
@@ -1324,7 +1368,7 @@
                 'footer_subtitle': 'Precision Nutrition · Molecular Protection · Sustainable Agriculture',
                 'copyright1': '© 2026 首池有限公司 版權所有｜活力旺仔豬人工乳專用配方方案',
                 'copyright2': '分子保護機制基於最新科學研究｜實際效益可能因管理條件而異',
-                'contact': '技術諮詢專線：0800-xxx-xxx｜service@shouchi.com.tw'
+                'contact': '技術諮詢專線：'
             },
             'zh-CN': {
                 // 頁頭
@@ -1512,7 +1556,7 @@
                 'footer_subtitle': '精准营养 · 分子保护 · 可持续农业',
                 'copyright1': '© 2026 首池有限公司 版权所有｜活力旺仔猪人工乳专用配方方案',
                 'copyright2': '分子保护机制基于最新科学研究｜实际效益可能因管理条件而异',
-                'contact': '技术咨询专线：0800-xxx-xxx｜service@shouchi.com.tw'
+                'contact': '技术咨询专线：'
             },
             'en': {
                 // 頁頭
@@ -1700,7 +1744,7 @@
                 'footer_subtitle': 'Precision Nutrition · Molecular Protection · Sustainable Agriculture',
                 'copyright1': '© 2026 First Pond Co., Ltd. All Rights Reserved｜Vigor Piglet Milk Replacer Special Formula Solution',
                 'copyright2': 'Molecular protection mechanism based on latest scientific research｜Actual benefits may vary due to management conditions',
-                'contact': 'Technical Consultation Hotline: 0800-xxx-xxx｜service@shouchi.com.tw'
+                'contact': 'Technical Consultation Hotline:'
             }
         };
 
@@ -1876,6 +1920,26 @@
             
             // 初始化頁面為繁體中文
             switchLanguage('zh-TW');
+
+            // ---------- 新增：返回頂部按鈕功能 ----------
+            const backToTop = document.createElement('div');
+            backToTop.className = 'back-to-top';
+            backToTop.innerHTML = '↑';
+            backToTop.setAttribute('aria-label', '返回頂部');
+            document.body.appendChild(backToTop);
+
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
+                }
+            });
+
+            backToTop.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            // -------------------------------------------
         });
     </script>
 </body>
