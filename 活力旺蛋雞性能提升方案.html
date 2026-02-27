@@ -1,663 +1,916 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <style>
-    /* 防止文字選取 */
-    body {
-        -webkit-user-select: none;  /* Safari */
-        -moz-user-select: none;     /* Firefox */
-        -ms-user-select: none;      /* IE/Edge */
-        user-select: none;           /* 標準語法 */
-    }
-
-    /* 針對圖片：禁止拖曳、禁止長按菜單，但保留點擊事件（由父層處理） */
-    img {
-        -webkit-touch-callout: none; /* iOS 長按選單 */
-        -webkit-user-drag: none;     /* Chrome 拖曳 */
-        user-drag: none;
-        pointer-events: none;         /* 讓圖片本身無法被點擊，但父容器可接收點擊 */
-    }
-
-    /* 圖片的容器需設定 cursor: pointer 提示可點擊 */
-    .img-container {
-        cursor: pointer;
-    }
-</style>
-
-<!-- 簡易 Lightbox 結構 -->
-<div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column;" onclick="this.style.display='none'">
-    <img id="lightbox-img" src="" style="max-width:90%; max-height:80%; object-fit:contain; border-radius:8px;">
-    <div id="lightbox-caption" style="color:white; margin-top:16px; font-size:1rem;"></div>
-</div>
-
-<script>
-    // 1. 禁止右鍵選單 (含手機長按)
-    document.addEventListener('contextmenu', e => e.preventDefault());
-
-    // 2. 禁止複製快捷鍵 (Ctrl+C, Ctrl+X)
-    document.addEventListener('copy', e => e.preventDefault());
-    document.addEventListener('cut', e => e.preventDefault());
-
-    // 3. 禁止選取事件 (滑鼠拖曳選取)
-    document.addEventListener('selectstart', e => e.preventDefault());
-
-    // 4. 輕量 Lightbox 功能：所有 .img-container 內的圖片點擊放大
-    function openLightbox(element) {
-        const img = element.querySelector('img');
-        if (!img) return;
-        const caption = element.querySelector('.img-title')?.innerText || '';
-        const lb = document.getElementById('lightbox');
-        const lbImg = document.getElementById('lightbox-img');
-        const lbCaption = document.getElementById('lightbox-caption');
-        lbImg.src = img.src;
-        lbCaption.innerText = caption;
-        lb.style.display = 'flex';
-    }
-
-    // 為所有 .img-container 綁定點擊事件
-    document.querySelectorAll('.img-container').forEach(container => {
-        container.addEventListener('click', function() {
-            openLightbox(this);
-        });
-    });
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>活力旺蛋雞性能提升方案 TDS - 首池有限公司 · 即時語言切換</title>
+    <title>活力旺蛋雞性能提升方案 TDS - 首池有限公司</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ----- 全域變數與重置 (手機優先 · 完全保留原始設計) ----- */
+        /* ===== 淺色農業風格變數 ===== */
         :root {
-            --primary: #e67e22;
-            --secondary: #d35400;
-            --dark: #2c3e50;
-            --light: #f8f9fa;
-            --warning: #f1c40f;
-            --danger: #e74c3c;
-            --success: #27ae60;
-            --blue: #3498db;
-            --border-radius: 12px;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
-            --safe-area-inset-top: env(safe-area-inset-top);
-            --safe-area-inset-bottom: env(safe-area-inset-bottom);
-            --safe-area-inset-left: env(safe-area-inset-left);
-            --safe-area-inset-right: env(safe-area-inset-right);
+            --primary-green: #2a7a2a;
+            --secondary-green: #1b5e1b;
+            --accent-gold: #d4a017;
+            --accent-light: #f5f0e1;
+            --primary-dark: #2e3b2e;
+            --secondary-dark: #4a5a4a;
+            --light-bg: #f9fff9;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.05);
+            --border-dark: rgba(0, 0, 0, 0.1);
+            --header-gradient-start: rgba(42, 122, 42, 0.95);
+            --header-gradient-end: rgba(27, 94, 27, 0.95);
+            --footer-gradient-start: #2e3b2e;
+            --footer-gradient-end: #1a2b1a;
+            --stat-item-bg: rgba(255, 255, 255, 0.15);
+            --stat-border: rgba(255, 255, 255, 0.2);
+            --btn-gradient-start: var(--primary-green);
+            --btn-gradient-end: var(--secondary-green);
+            --footer-text: rgba(255, 255, 255, 0.85);
+            --footer-link: rgba(255, 255, 255, 0.75);
+            --footer-link-hover: var(--accent-gold);
+            --copyright-text: rgba(255, 255, 255, 0.6);
+
+            /* 字體 */
+            --font-heading: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+            --font-body: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+
+            /* 字級 */
+            --fs-base: 16px;
+            --fs-h1: clamp(2rem, 6vw, 3.5rem);
+            --fs-tagline: clamp(1.1rem, 2.8vw, 1.4rem);
+            --fs-section-title: clamp(1.8rem, 4.5vw, 2.8rem);
+            --fs-product-title: clamp(1.2rem, 3vw, 1.5rem);
+            --fs-btn: clamp(0.95rem, 2.3vw, 1.05rem);
+            --fs-footer-heading: clamp(1.2rem, 3vw, 1.4rem);
+            --fs-footer-link: clamp(0.95rem, 2.3vw, 1.05rem);
+            --fs-copyright: clamp(0.85rem, 2.2vw, 0.95rem);
+
+            /* 字重 */
+            --fw-light: 300;
+            --fw-normal: 400;
+            --fw-medium: 500;
+            --fw-semibold: 600;
+            --fw-bold: 700;
+            --fw-extrabold: 800;
+
+            /* 圓角 */
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-pill: 30px;
+            --radius-circle: 50%;
+
+            /* 陰影 */
+            --shadow-card: 0 8px 30px rgba(0, 40, 0, 0.08);
+            --shadow-card-hover: 0 12px 40px rgba(42, 122, 42, 0.15);
+            --shadow-header: 0 4px 20px rgba(0, 30, 0, 0.1);
+            --shadow-btn: 0 6px 20px rgba(42, 122, 42, 0.2);
+
+            /* 間距 */
+            --space-xs: 8px;
+            --space-sm: 12px;
+            --space-md: 16px;
+            --space-lg: 20px;
+            --space-xl: 24px;
+            --space-2xl: 28px;
+            --space-3xl: 32px;
+            --space-4xl: 40px;
+
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
-            font-family: -apple-system, BlinkMacSystemFont, 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
+
         html {
-            font-size: 14px;
+            font-size: var(--fs-base);
             scroll-behavior: smooth;
         }
+
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-            color: #333;
-            line-height: 1.6;
-            margin: 0 auto;
-            width: 100%;
+            font-family: var(--font-body);
+            background: var(--light-bg);
+            color: var(--primary-dark);
+            line-height: 1.7;
             overflow-x: hidden;
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            padding-top: var(--safe-top);
+            padding-bottom: var(--safe-bottom);
+            position: relative;
         }
-        /* ----- 語言切換器 (黏貼 · 觸控優化) ----- */
-        .language-switcher {
+
+        body::before {
+            content: '';
             position: fixed;
-            top: max(10px, var(--safe-area-inset-top));
-            right: max(10px, var(--safe-area-inset-right));
-            z-index: 1000;
-            display: flex;
-            gap: 4px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(212, 160, 23, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(42, 122, 42, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 40px);
+        }
+
+        /* ===== 頂部導航列 ===== */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
             background: rgba(255, 255, 255, 0.95);
-            padding: 6px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(230, 126, 34, 0.2);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-header);
+            border-bottom: 1px solid var(--border-dark);
         }
-        .lang-btn {
+
+        .home-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-green);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            text-decoration: none;
+            font-weight: var(--fw-semibold);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .home-btn:hover {
+            background: var(--secondary-green);
+            transform: scale(1.02);
+        }
+
+        /* 語言切換器（調整位置，避免與頂部導航重疊） */
+        .language-switcher {
+            position: fixed;
+            top: calc(70px + var(--safe-top));
+            right: clamp(20px, 5vw, 40px);
+            z-index: 1000;
+            display: flex;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.95);
             padding: 8px 12px;
-            border: none;
-            border-radius: 16px;
+            border-radius: var(--radius-pill);
+            box-shadow: var(--shadow-header);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-dark);
+        }
+
+        .lang-btn {
             background: transparent;
-            color: var(--dark);
+            border: 1px solid transparent;
+            padding: 10px 16px;
+            border-radius: var(--radius-pill);
             cursor: pointer;
+            font-weight: var(--fw-semibold);
             font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            min-height: 44px;
-            min-width: 44px;
+            transition: var(--transition);
+            color: var(--secondary-dark);
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+            box-shadow: 0 4px 12px rgba(42, 122, 42, 0.2);
+        }
+
+        /* 回到頂部按鈕 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-circle);
+            background: var(--primary-green);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-btn);
+            transition: var(--transition);
+            opacity: 0.8;
         }
-        .lang-btn:active { transform: scale(0.95); }
-        .lang-btn.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 2px 8px rgba(230,126,34,0.3);
+
+        .back-to-top:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            background: var(--secondary-green);
         }
-        /* ----- 主容器 ----- */
-        .container {
-            width: 100%;
-            margin: 0 auto;
-            background: white;
-            padding: 15px;
-            position: relative;
-            overflow-x: hidden;
-            box-shadow: 0 0 30px rgba(0,0,0,0.08);
-        }
-        /* ----- 表頭 (純色漸層，無背景圖片) ----- */
+
+        /* ===== 頁頭 ===== */
         header {
-            text-align: center;
-            padding: 15px 0 20px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--primary);
-            padding-top: calc(60px + var(--safe-area-inset-top, 0px));
-            border-radius: var(--border-radius);
-            margin: 15px 15px 25px;
-            padding: 25px 15px;
-            box-shadow: var(--shadow);
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            color: white;
             position: relative;
-            background: linear-gradient(135deg, #2c3e50, #1a252f);
-            color: white;
+            overflow: hidden;
+            padding: clamp(60px, 15vw, 120px) 0 clamp(80px, 15vw, 120px);
+            padding-top: calc(clamp(60px, 15vw, 120px) + 70px); /* 增加頂部導航高度 */
+            margin-bottom: var(--space-4xl);
+            text-align: center;
         }
-        header .company-info h1 {
-            color: white;
-            -webkit-text-fill-color: white;
-            background: none;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(212, 160, 23, 0.1) 0%, transparent 20%);
+            pointer-events: none;
         }
-        header .company-info > p,
-        header .tagline,
-        header .highlight-badge {
-            color: white;
-            background: rgba(0,0,0,0.2);
-            backdrop-filter: blur(4px);
+
+        .header-content {
+            position: relative;
+            z-index: 2;
         }
-        .company-info h1 {
-            font-size: 1.6rem;
-            margin-bottom: 10px;
-            line-height: 1.3;
+
+        h1 {
+            font-size: var(--fs-h1);
+            font-weight: var(--fw-extrabold);
+            margin-bottom: var(--space-md);
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #ffffff, var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .company-info > p {
-            font-size: 1rem;
-            margin-bottom: 12px;
-            font-weight: 500;
+
+        .subtitle {
+            font-size: var(--fs-tagline);
+            font-weight: var(--fw-light);
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto var(--space-lg);
+            line-height: 1.6;
         }
+
         .tagline {
-            font-style: italic;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            padding: 8px 12px;
-            border-radius: 8px;
+            background: linear-gradient(90deg, var(--accent-gold), #e67e22);
+            color: var(--primary-dark);
+            padding: var(--space-sm) var(--space-xl);
+            border-radius: var(--radius-pill);
             display: inline-block;
+            font-weight: var(--fw-bold);
+            box-shadow: var(--shadow-btn);
+            font-size: var(--fs-btn);
+            letter-spacing: 0.5px;
+            margin-bottom: var(--space-lg);
         }
-        .highlight-badge {
-            background: linear-gradient(135deg, var(--warning), var(--primary));
-            color: white;
-            padding: 12px 16px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            display: inline-block;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 4px 15px rgba(241,196,15,0.3);
-        }
+
         .feature-badges {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-top: 15px;
+            gap: var(--space-sm);
+            margin-top: var(--space-xl);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
+
+        @media (min-width: 640px) {
+            .feature-badges {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
         .feature-badge {
-            background: rgba(255,255,255,0.9);
-            padding: 12px 10px;
-            border-radius: 16px;
-            border: 2px solid var(--primary);
-            color: var(--dark);
-            font-weight: 600;
-            font-size: 0.85rem;
+            background: var(--stat-item-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: var(--space-sm) var(--space-xs);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--stat-border);
+            color: white;
+            font-weight: var(--fw-medium);
+            font-size: 0.9rem;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: var(--transition);
         }
-        /* ----- 區塊標題 ----- */
-        h2 {
-            font-size: 1.4rem;
-            color: var(--dark);
-            margin: 30px 0 20px;
-            padding: 12px 15px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #f8f9fa, #fff);
-            border-left: 4px solid var(--primary);
-            line-height: 1.3;
-            box-shadow: var(--shadow);
+
+        .feature-badge:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-3px);
         }
-        /* ----- 卡片通用設計 (整張可點擊) ----- */
-        .egg-card, .quality-card, .benefit-card, .spec-card {
+
+        /* ===== 章節標題 ===== */
+        .section-title {
+            text-align: center;
+            font-size: var(--fs-section-title);
+            color: var(--primary-dark);
+            margin-bottom: var(--space-4xl);
+            position: relative;
+            font-weight: var(--fw-bold);
+            letter-spacing: -0.5px;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: clamp(80px, 20vw, 120px);
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--accent-gold));
+            margin: var(--space-md) auto 0;
+            border-radius: var(--radius-sm);
+        }
+
+        /* ===== 卡片通用 ===== */
+        .card, .egg-card, .quality-card, .benefit-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-green);
             cursor: pointer;
-            transition: all 0.3s;
-            will-change: transform;
-            -webkit-tap-highlight-color: transparent;
+            margin-bottom: var(--space-md);
         }
-        .egg-card:active, .quality-card:active, .benefit-card:active {
-            transform: scale(0.98);
+
+        .card:hover, .egg-card:hover, .quality-card:hover, .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-card-hover);
         }
-        /* ----- 產蛋率專區 ----- */
-        .egg-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .egg-card {
-            background: linear-gradient(135deg, #fff, #fef6ec);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            border-left: 4px solid var(--primary);
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(230,126,34,0.1);
-        }
-        .egg-card h4 {
-            font-size: 1.1rem;
-            color: var(--secondary);
-            margin-bottom: 8px;
+
+        .egg-card h4, .quality-card h4, .benefit-card h4 {
+            font-size: var(--fs-product-title);
+            margin-bottom: var(--space-xs);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: var(--space-xs);
         }
-        .egg-metric {
+
+        .egg-metric, .quality-card div[style*="font-size: 2rem"], .benefit-metric {
             font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin: 8px 0;
-            text-shadow: 0 2px 4px rgba(230,126,34,0.1);
+            font-weight: var(--fw-bold);
+            color: var(--primary-green);
+            margin: var(--space-xs) 0;
         }
-        .egg-card p { color: #666; font-size: 0.9rem; margin-bottom: 6px; line-height: 1.5; }
-        /* ----- 產品規格 (響應式網格) ----- */
+
+        /* 網格 */
+        .egg-grid, .quality-grid, .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+
+        @media (min-width: 640px) {
+            .egg-grid, .quality-grid, .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .egg-grid, .quality-grid, .benefits-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* 規格網格 */
         .specs-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 15px 0;
+            gap: var(--space-md);
+            margin: var(--space-xl) 0;
         }
+
+        @media (min-width: 640px) {
+            .specs-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .specs-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
         .spec-card {
-            background: linear-gradient(135deg, #fff, #f8f9fa);
-            padding: 15px 10px;
-            border-radius: var(--border-radius);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
             text-align: center;
-            border: 1px solid #eee;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-card);
+            border-top: 3px solid var(--accent-gold);
+            transition: var(--transition);
+            cursor: pointer;
         }
-        .spec-card .label { color: #777; font-size: 0.8rem; margin-bottom: 8px; font-weight: 500; }
-        .spec-card .value { font-size: 1.5rem; font-weight: bold; color: var(--primary); margin-bottom: 4px; }
-        .spec-card .unit { color: #666; font-size: 0.8rem; font-weight: 500; }
-        /* ----- 蛋品品質專區 ----- */
-        .quality-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
+
+        .spec-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-card-hover);
         }
-        .quality-card {
-            background: linear-gradient(135deg, #fff, #fef0ec);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            border-left: 4px solid var(--danger);
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(231,76,60,0.1);
+
+        .spec-card .label {
+            font-size: 0.85rem;
+            color: var(--secondary-dark);
+            margin-bottom: var(--space-xs);
         }
-        .quality-card h4 {
-            font-size: 1.1rem;
-            color: var(--danger);
-            margin-bottom: 8px;
-            display: flex;
-            gap: 8px;
+
+        .spec-card .value {
+            font-size: 1.5rem;
+            font-weight: var(--fw-bold);
+            color: var(--primary-green);
+            margin: var(--space-xs) 0;
         }
-        /* ----- 健康度提升專區 ----- */
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
+
+        .spec-card .unit {
+            font-size: 0.8rem;
+            color: var(--secondary-dark);
         }
-        .benefit-card {
-            background: linear-gradient(135deg, #fff, #ecf9f0);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            border-left: 4px solid var(--success);
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(39,174,96,0.1);
-        }
-        .benefit-card h4 {
-            font-size: 1.1rem;
-            color: var(--success);
-            margin-bottom: 8px;
-            display: flex;
-            gap: 8px;
-        }
-        .benefit-metric {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--success);
-            margin: 8px 0;
-            display: block;
-            text-shadow: 0 2px 4px rgba(39,174,96,0.1);
-        }
-        /* ----- 經濟效益表格 ----- */
-        .economic-card {
-            background: linear-gradient(135deg, #fff, #fef9ec);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 15px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            border: 1px solid rgba(241,196,15,0.2);
-        }
-        .profit-table-container {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: 1px solid #eee;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .profit-table {
+
+        /* 圖片容器 */
+        .img-container {
             width: 100%;
-            min-width: 500px;
-            border-collapse: collapse;
+            margin: var(--space-xl) 0;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            overflow: hidden;
         }
-        .profit-table th, .profit-table td {
-            padding: 14px 12px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-            font-size: 0.9rem;
+
+        .img-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.8s ease;
+            background: #e0e0e0;
+            min-height: 200px;
+            object-fit: cover;
         }
-        .profit-table th {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            position: sticky;
-            left: 0;
-            font-weight: 600;
+
+        .img-container:hover img {
+            transform: scale(1.02);
         }
-        .profit-table tr:nth-child(even) { background: #f9f9f9; }
-        .profit-table tr:hover { background: #fff8e1; }
-        .roi-badge {
+
+        .image-caption {
             text-align: center;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 25px 20px;
-            border-radius: var(--border-radius);
-            font-weight: bold;
-            margin-top: 20px;
-            box-shadow: 0 4px 20px rgba(230,126,34,0.3);
+            padding: var(--space-sm);
+            color: var(--secondary-dark);
+            font-style: italic;
+            font-size: 0.9rem;
+            background: var(--accent-light);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
         }
-        .roi-value { font-size: 2.8rem; margin: 15px 0; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        /* ----- 高峰機制區塊 ----- */
+
+        /* 機制區塊 */
         .peak-mechanism {
-            background: linear-gradient(135deg, #fdf2e9, #fff);
-            padding: 25px 20px;
-            border-radius: var(--border-radius);
-            margin: 25px 0;
-            border-left: 4px solid var(--secondary);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(211,84,0,0.1);
+            background: linear-gradient(135deg, #fef9e7, #fff8e1);
+            border-left: 4px solid var(--primary-green);
+            padding: var(--space-lg);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: var(--space-xl) 0;
+            box-shadow: var(--shadow-card);
         }
-        .peak-mechanism.visible { opacity: 1; transform: translateY(0); }
+
         .peak-mechanism h3 {
-            color: var(--secondary);
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
+            font-size: var(--fs-product-title);
+            color: var(--primary-green);
+            margin-bottom: var(--space-md);
         }
-        .mechanism-list { list-style: none; margin-left: 0; }
+
+        .mechanism-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
         .mechanism-list li {
-            margin-bottom: 12px;
+            margin-bottom: var(--space-sm);
+            padding-left: var(--space-xl);
             position: relative;
-            padding-left: 32px;
-            font-size: 0.95rem;
-            line-height: 1.6;
         }
+
         .mechanism-list li::before {
             content: "✅";
             position: absolute;
             left: 0;
             top: 2px;
-            font-size: 1.1rem;
         }
-        /* ----- 圖片容器 (佔位背景) ----- */
-        .egg-image-container {
+
+        /* 表格 */
+        .table-container {
             width: 100%;
-            margin: 20px 0;
-            border-radius: var(--border-radius);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: var(--space-lg) 0;
+            border-radius: var(--radius-md);
+        }
+
+        .profit-table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+            background: white;
+            border-radius: var(--radius-md);
             overflow: hidden;
-            box-shadow: var(--shadow);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            border: 1px solid #eee;
-            background: #f5f5f5;
-            min-height: 200px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .profit-table th {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            padding: var(--space-md) var(--space-sm);
+            text-align: center;
+            font-weight: var(--fw-semibold);
+            font-size: 0.9rem;
+        }
+
+        .profit-table td {
+            padding: var(--space-sm) var(--space-xs);
+            border-bottom: 1px solid var(--border-light);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .profit-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .profit-table tr:hover td {
+            background-color: rgba(212, 160, 23, 0.05);
+        }
+
+        .economic-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-card);
+            margin-bottom: var(--space-xl);
+        }
+
+        .roi-badge {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            padding: var(--space-2xl) var(--space-xl);
+            border-radius: var(--radius-xl);
+            margin-top: var(--space-xl);
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .roi-value {
+            font-size: 3rem;
+            font-weight: var(--fw-extrabold);
+            margin: var(--space-md) 0;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            background: linear-gradient(90deg, #ffeb3b, #ffc107, #ffeb3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 按鈕 */
+        .btn {
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-pill);
+            font-weight: var(--fw-bold);
+            font-size: var(--fs-btn);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            text-decoration: none;
+            transition: var(--transition);
+            margin: var(--space-xs);
+            border: none;
+            cursor: pointer;
+            min-width: 200px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            box-shadow: var(--shadow-btn);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, var(--secondary-green), var(--primary-green));
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.9);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.05);
+        }
+
+        /* CTA 區塊 */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-dark), #1a2b1a);
+            color: white;
+            padding: var(--space-4xl) var(--space-xl);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            margin: var(--space-4xl) 0;
+        }
+
+        .cta-section .big-number {
+            font-size: 3rem;
+            font-weight: var(--fw-extrabold);
+            color: var(--accent-gold);
+            margin: var(--space-md) 0;
+        }
+
+        .cta-buttons {
+            margin-top: var(--space-xl);
             display: flex;
             flex-direction: column;
+            gap: var(--space-md);
+            align-items: center;
         }
-        .egg-image-container.visible { opacity: 1; transform: translateY(0); }
-        .egg-image-container img {
+
+        @media (min-width: 640px) {
+            .cta-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        /* 頁尾 */
+        footer {
+            background: linear-gradient(135deg, var(--footer-gradient-start), var(--footer-gradient-end));
+            color: var(--footer-text);
+            padding: var(--space-4xl) 0 var(--space-2xl);
+            margin-top: var(--space-4xl);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--accent-gold));
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-4xl);
+            margin-bottom: var(--space-4xl);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (min-width: 640px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-content {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
+        }
+
+        .footer-section {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-            background: #ddd url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23cccccc"/><text x="10" y="55" font-family="Arial" font-size="14" fill="%23666666">示意圖</text></svg>') center/contain no-repeat;
-            background-blend-mode: normal;
         }
-        .image-caption {
+
+        .footer-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            padding: 12px 15px;
-            color: #666;
-            font-style: italic;
-            background: #f9f9f9;
-            font-size: 0.85rem;
-            border-top: 1px solid #eee;
         }
-        /* ----- 動畫淡入 ----- */
+
+        @media (min-width: 640px) {
+            .footer-logo {
+                align-items: flex-start;
+                text-align: left;
+            }
+        }
+
+        .footer-logo-img {
+            width: clamp(120px, 25vw, 160px);
+            height: clamp(120px, 25vw, 160px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-md);
+            filter: drop-shadow(0 4px 16px rgba(0,0,0,0.3));
+        }
+
+        .footer-logo-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .footer-section h3 {
+            font-size: var(--fs-footer-heading);
+            margin-bottom: var(--space-lg);
+            color: white;
+            font-weight: var(--fw-bold);
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: var(--space-sm);
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-gold), transparent);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: var(--space-sm);
+            transition: var(--transition);
+        }
+
+        .footer-links li:hover {
+            transform: translateX(5px);
+        }
+
+        .footer-links a {
+            color: var(--footer-link);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 8px 0;
+            min-height: 40px;
+            font-size: var(--fs-footer-link);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-links a::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 0;
+            background: var(--accent-gold);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .footer-links a:hover::before {
+            height: 70%;
+        }
+
+        .footer-links a:hover {
+            color: var(--footer-link-hover);
+            padding-left: 10px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: var(--space-3xl);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: var(--fs-copyright);
+            color: var(--copyright-text);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: zoom-out;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+        }
+
+        .lightbox .caption {
+            color: white;
+            margin-top: var(--space-md);
+            font-size: var(--fs-product-subtitle);
+            text-align: center;
+            max-width: 80%;
+        }
+
+        /* 動畫 */
         .fade-in {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.6s ease, transform 0.6s ease;
-            will-change: transform, opacity;
         }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-        /* ----- CTA 區塊 ----- */
-        .cta-section {
-            background: linear-gradient(135deg, var(--dark), #2a4365);
-            color: white;
-            padding: 35px 20px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            margin: 35px 0;
-            padding-bottom: max(35px, var(--safe-area-inset-bottom, 35px));
-            box-shadow: 0 10px 30px rgba(44,62,80,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        .big-number {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--warning);
-            margin: 8px 0;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        .cta-buttons {
-            margin-top: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .btn {
-            padding: 16px 24px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: all 0.3s;
-            display: block;
-            text-align: center;
-            min-height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            will-change: transform;
-            gap: 10px;
-            cursor: pointer;
-        }
-        .btn:active { transform: scale(0.98); }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--warning), #f39c12);
-            color: var(--dark);
-            box-shadow: 0 4px 15px rgba(241,196,15,0.4);
-        }
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid rgba(255,255,255,0.8);
-            color: white;
-            backdrop-filter: blur(10px);
-        }
-        /* ----- 頁腳 ----- */
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            border-radius: var(--border-radius);
-            margin-top: 35px;
-            background: linear-gradient(135deg, var(--dark), #1a252f);
-            color: rgba(255,255,255,0.9);
-            padding-bottom: max(30px, var(--safe-area-inset-bottom, 30px));
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        footer p { margin-bottom: 12px; font-size: 0.9rem; line-height: 1.6; }
-        /* ----- 響應式 (平板/桌機/超小手機/橫向) 完全保留原始設計 ----- */
-        @media (min-width: 768px) {
-            html { font-size: 16px; }
-            .container { padding: 25px; max-width: 100%; border-radius: 20px; margin: 15px auto; }
-            header { padding-top: calc(70px + var(--safe-area-inset-top, 0px)); margin: 20px; padding: 30px; }
-            .company-info h1 { font-size: 2rem; }
-            .highlight-badge { width: auto; padding: 15px 30px; font-size: 1.1rem; }
-            .feature-badges { grid-template-columns: repeat(4, 1fr); gap: 12px; }
-            .egg-grid, .quality-grid, .benefits-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-            .specs-grid { grid-template-columns: repeat(3, 1fr); gap: 15px; }
-            .cta-buttons { flex-direction: row; justify-content: center; gap: 20px; }
-            .btn { width: auto; min-width: 220px; padding: 18px 30px; }
-            .profit-table { min-width: auto; }
-            h2 { font-size: 1.6rem; margin: 35px 0 25px; }
-            .egg-image-container img { height: 250px; }
-        }
-        @media (min-width: 992px) {
-            .container { max-width: 1200px; padding: 35px; margin: 20px auto; border-radius: 25px; }
-            .egg-grid, .quality-grid, .benefits-grid { grid-template-columns: repeat(4, 1fr); }
-            .specs-grid { grid-template-columns: repeat(6, 1fr); }
-            .company-info h1 { font-size: 2.2rem; }
-            .big-number { font-size: 4rem; }
-            .roi-value { font-size: 3.5rem; }
-            .egg-card:hover, .quality-card:hover, .benefit-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-            .btn:hover { transform: scale(1.05); }
-            .btn-secondary:hover { background: white; color: var(--dark); }
-            .btn-primary:hover { background: linear-gradient(135deg, #f39c12, #e67e22); }
-            .egg-image-container img { height: 300px; }
-            header { margin: 25px; padding: 40px; }
-        }
-        @media (max-width: 360px) {
-            html { font-size: 13px; }
-            .container { padding: 12px; border-radius: 15px; }
-            header { margin: 10px; padding: 20px 15px; }
-            .company-info h1 { font-size: 1.4rem; }
-            .highlight-badge { font-size: 0.9rem; padding: 10px 15px; }
-            .feature-badges { grid-template-columns: 1fr; }
-            .specs-grid { grid-template-columns: 1fr; }
-            .big-number { font-size: 2.5rem; }
-            .egg-metric { font-size: 1.8rem; }
-            .language-switcher { flex-direction: column; border-radius: 15px; }
-            .lang-btn { padding: 10px; font-size: 0.8rem; }
-            h2 { padding: 10px 12px; font-size: 1.2rem; }
-        }
-        @media (max-height: 500px) and (orientation: landscape) {
-            header { padding-top: 20px; }
-            .language-switcher { top: 5px; right: 5px; }
-            .egg-grid, .quality-grid, .benefits-grid { grid-template-columns: repeat(2, 1fr); }
-            .container { padding: 15px; }
-        }
-        /* ----- 暗色模式 (純色背景) ----- */
-        @media (prefers-color-scheme: dark) {
-            body { background: linear-gradient(135deg, #121212, #1a1a1a); color: #e0e0e0; }
-            .container { background: #1e1e1e; }
-            .egg-card, .quality-card, .benefit-card, .spec-card, .economic-card, .peak-mechanism { background: #2a2a2a; color: #e0e0e0; border-color: rgba(255,255,255,0.1); }
-            .egg-card p, .quality-card p, .benefit-card p, .spec-card .label, .spec-card .unit, .image-caption { color: #b0b0b0; }
-            .profit-table th { background: linear-gradient(135deg, #333, #444); }
-            .profit-table td { color: #e0e0e0; }
-            h2 { color: #e0e0e0; background: #2a2a2a; }
-            header {
-                background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
-                color: white;
-            }
-            header .company-info h1 {
-                color: white;
-                -webkit-text-fill-color: white;
-            }
-            header .company-info > p,
-            header .tagline,
-            header .highlight-badge {
-                color: white;
-                background: rgba(0,0,0,0.3);
-            }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-            .fade-in, .egg-image-container, .peak-mechanism { opacity: 1; transform: none; transition: none; }
-        }
+
+        /* 輔助 */
+        .bg-light { background: var(--accent-light); }
+        .p-3 { padding: var(--space-md); }
+        .rounded { border-radius: var(--radius-md); }
+        .border-left-primary { border-left: 4px solid var(--primary-green); }
+        .mb-3 { margin-bottom: var(--space-md); }
+        .mt-4 { margin-top: var(--space-xl); }
     </style>
 </head>
 <body>
-    <!-- ========== 語言切換器 (即時切換繁/簡/英，完整翻譯) ========= -->
-    <div class="language-switcher">
-        <button class="lang-btn active" data-lang="zh-TW">繁(NTD)</button>
-        <button class="lang-btn" data-lang="zh-CN">简(CNY)</button>
-        <button class="lang-btn" data-lang="en">EN(USD)</button>
+    <!-- 頂部導航列 (返回首頁) -->
+    <div class="top-nav">
+        <a href="index.html" class="home-btn">
+            <i class="fas fa-home"></i> <span data-translate="home">首頁</span>
+        </a>
+        <div style="width: 200px;"></div> <!-- 佔位保持對稱 -->
     </div>
 
-    <div class="container">
-        <!-- 封面抬頭 (純色漸層，無背景圖片 · 無返回主頁按鈕) -->
-        <header>
-            <div class="company-info">
-                <h1 data-translate="title">活力旺蛋雞性能提升方案 TDS</h1>
-                <p data-translate="subtitle">產蛋率提升・蛋黃品質優化・暗斑蛋減少・產卵發炎降低</p>
-                <div class="tagline" data-translate="tagline">Egg Production Enhancement · Yolk Quality Improvement · Shell Strength Optimization</div>
-                <div class="highlight-badge" data-translate="highlight">🥚 產蛋率提升5-8%｜蛋黃品質提升3-4級｜暗斑蛋減少70-80%</div>
-                <div class="feature-badges">
-                    <!-- 為每個feature badge加上data-translate，並保留貨幣使用data-value動態切換 -->
-                    <div class="feature-badge" data-translate="feature1_label">成本：<span class="currency" data-value="600">NTD 600</span>/公斤</div>
-                    <div class="feature-badge" data-translate="feature2_label">添加量：1公斤/噸飼料</div>
-                    <div class="feature-badge" data-translate="feature3_label">發炎指數降低40%</div>
-                    <div class="feature-badge" data-translate="feature4_label">投資報酬率：<span class="currency" data-value="580">580%</span></div>
-                </div>
-            </div>
-        </header>
+    <!-- 語言切換器 -->
+    <div class="language-switcher">
+        <button class="lang-btn active" data-lang="zh-TW" data-rate="1.000">繁(NTD)</button>
+        <button class="lang-btn" data-lang="zh-CN" data-rate="0.2192">简(CNY)</button>
+        <button class="lang-btn" data-lang="en" data-rate="0.0320">EN(USD)</button>
+    </div>
 
+    <!-- 回到頂部按鈕 -->
+    <a href="#" class="back-to-top" aria-label="回到頂部" title="回到頂部">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- 頁頭 -->
+    <header>
+        <div class="container header-content">
+            <h1 data-translate="title">活力旺蛋雞性能提升方案 TDS</h1>
+            <p class="subtitle" data-translate="subtitle">產蛋率提升・蛋黃品質優化・暗斑蛋減少・產卵發炎降低</p>
+            <div class="tagline" data-translate="tagline">Egg Production Enhancement · Yolk Quality Improvement · Shell Strength Optimization</div>
+            <div class="feature-badges">
+                <div class="feature-badge" data-translate="feature1_label">成本：<span class="currency" data-value="600">NTD 600</span>/公斤</div>
+                <div class="feature-badge" data-translate="feature2_label">添加量：1公斤/噸飼料</div>
+                <div class="feature-badge" data-translate="feature3_label">發炎指數降低40%</div>
+                <div class="feature-badge" data-translate="feature4_label">投資報酬率：<span class="currency" data-value="580">580%</span></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
         <!-- 產蛋率提升專區 -->
-        <section class="egg-production-section">
-            <h2 style="border-left-color: #d35400;" data-translate="section1_title">🥚 產蛋率提升專區｜高產穩定持久</h2>
-            <p style="font-size: 1rem; margin-bottom: 15px; font-weight: 600; color: #666;" data-translate="section1_desc">專為蛋雞設計的營養調控方案，顯著提升產蛋率，延長產蛋高峰，改善蛋品品質，創造更高經濟價值。</p>
+        <section>
+            <h2 class="section-title" data-translate="section1_title">🥚 產蛋率提升專區｜高產穩定持久</h2>
+            <p class="fs-5 mb-3" data-translate="section1_desc">專為蛋雞設計的營養調控方案，顯著提升產蛋率，延長產蛋高峰，改善蛋品品質，創造更高經濟價值。</p>
             <div class="egg-grid">
                 <div class="egg-card fade-in" onclick="alert('產蛋率提升詳細數據諮詢請洽首池業務')">
                     <h4>📈 <span data-translate="egg_card1_title">產蛋率提升</span></h4>
@@ -684,7 +937,8 @@
                     <p><strong data-translate="egg_card4_data_label">實測數據：</strong><span data-translate="egg_card4_data">72週齡產蛋率從78%提升至82-84%</span></p>
                 </div>
             </div>
-            <div class="peak-mechanism">
+
+            <div class="peak-mechanism fade-in">
                 <h3>📈 <span data-translate="peak_mechanism_title">延長產蛋高峰期核心作用機制</span></h3>
                 <ul class="mechanism-list">
                     <li data-translate="mechanism1">調節下丘腦-垂體-卵巢軸 (HPO軸)，維持促卵泡素(FSH)與黃體生成素(LH)穩定分泌，延緩卵巢功能衰退</li>
@@ -694,15 +948,16 @@
                     <li data-translate="mechanism5">調控生殖激素分泌節律，維持90%以上產蛋率的時間窗口延長4-6週</li>
                 </ul>
             </div>
-            <div class="egg-image-container">
+
+            <div class="img-container" onclick="openLightbox(this)">
                 <img src="assets/egg-production-chart.png" alt="產蛋率提升與高峰期延長示意圖" data-translate="image1_alt" loading="lazy">
-                <p class="image-caption" data-translate="image1_caption">圖1：活力旺方案產蛋率提升與高峰期延長對比 (92% → 97-98%，高峰期延長4-6週)</p>
+                <div class="image-caption" data-translate="image1_caption">圖1：活力旺方案產蛋率提升與高峰期延長對比 (92% → 97-98%，高峰期延長4-6週)</div>
             </div>
         </section>
 
         <!-- 產品規格 -->
         <section>
-            <h2 data-translate="specs_title">📋 產品規格與添加參數</h2>
+            <h2 class="section-title" data-translate="specs_title">📋 產品規格與添加參數</h2>
             <div class="specs-grid">
                 <div class="spec-card" onclick="alert('添加量規格')">
                     <span class="label" data-translate="spec1_label">每噸飼料添加量</span>
@@ -731,66 +986,66 @@
                 </div>
                 <div class="spec-card" onclick="alert('適用階段')">
                     <span class="label" data-translate="spec6_label">適用階段</span>
-                    <span class="value" style="color: var(--primary); font-size: 1.2rem;" data-translate="spec6_value">產蛋全程</span>
+                    <span class="value" data-translate="spec6_value">產蛋全程</span>
                     <span class="unit" data-translate="spec6_unit">18-72週齡</span>
                 </div>
             </div>
-            <div style="background: #fff8e1; padding: 18px; border-radius: 12px; margin-top: 18px; border-left: 4px solid var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05);" class="fade-in">
+            <div class="bg-light p-3 rounded border-left-primary mb-4 fade-in">
                 <p><strong data-translate="usage_label">使用方法：</strong><span data-translate="usage_desc">每噸蛋雞全價飼料均勻添加活力旺蛋雞專用配方1公斤，從產蛋開始全程使用，無需調整現有飼養管理流程。</span></p>
             </div>
-            <div class="egg-image-container">
+            <div class="img-container" onclick="openLightbox(this)">
                 <img src="assets/feed-system.png" alt="現代化蛋雞場添加活力旺飼料示意圖" data-translate="image2_alt" loading="lazy">
-                <p class="image-caption" data-translate="image2_caption">圖2：現代化蛋雞場自動化飼料添加系統 (活力旺專用添加模組)</p>
+                <div class="image-caption" data-translate="image2_caption">圖2：現代化蛋雞場自動化飼料添加系統 (活力旺專用添加模組)</div>
             </div>
         </section>
 
         <!-- 蛋品品質提升專區 -->
-        <section class="egg-quality-section">
-            <h2 style="border-left-color: #c0392b;" data-translate="section2_title">⭐ 蛋品品質提升專區｜內外品質全面優化</h2>
-            <p style="font-size: 1rem; margin-bottom: 15px; font-weight: 600; color: #666;" data-translate="section2_desc">全面改善蛋品內外品質，提升蛋黃顏色、蛋殼強度，大幅減少暗斑蛋，創造市場差異化競爭優勢。</p>
+        <section>
+            <h2 class="section-title" data-translate="section2_title">⭐ 蛋品品質提升專區｜內外品質全面優化</h2>
+            <p class="fs-5 mb-3" data-translate="section2_desc">全面改善蛋品內外品質，提升蛋黃顏色、蛋殼強度，大幅減少暗斑蛋，創造市場差異化競爭優勢。</p>
             <div class="quality-grid">
                 <div class="quality-card fade-in" onclick="alert('蛋黃品質提升數據')">
                     <h4>🎨 <span data-translate="quality_card1_title">蛋黃品質提升</span></h4>
-                    <div style="font-size: 2rem; font-weight: bold; color: #e74c3c; margin: 8px 0;" data-translate="quality_card1_metric">+3-4級</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary-green);" data-translate="quality_card1_metric">+3-4級</div>
                     <p data-translate="quality_card1_desc1">天然色素沉積提升蛋黃顏色，胡蘿蔔素含量增加</p>
                     <p><strong data-translate="quality_card1_data_label">實測數據：</strong><span data-translate="quality_card1_data">羅氏比色計從8級提升至11-12級</span></p>
                     <p><strong data-translate="quality_card1_mechanism_label">作用機制：</strong><span data-translate="quality_card1_mechanism">促進類胡蘿蔔素吸收與沉積，提升卵黃腺色素結合能力</span></p>
                 </div>
                 <div class="quality-card fade-in" onclick="alert('暗斑蛋減少技術')">
                     <h4>🔍 <span data-translate="quality_card2_title">暗斑蛋減少</span></h4>
-                    <div style="font-size: 2rem; font-weight: bold; color: #e74c3c; margin: 8px 0;" data-translate="quality_card2_metric">-70-80%</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary-green);" data-translate="quality_card2_metric">-70-80%</div>
                     <p data-translate="quality_card2_desc1">改善蛋殼腺功能，減少鈣質沉積異常</p>
                     <p><strong data-translate="quality_card2_data_label">實測數據：</strong><span data-translate="quality_card2_data">暗斑蛋比例從15%降低至3-5%</span></p>
                     <p><strong data-translate="quality_card2_mechanism_label">作用機制：</strong><span data-translate="quality_card2_mechanism">調節蛋殼腺碳酸酐酶活性，優化鈣質晶體排列結構</span></p>
                 </div>
                 <div class="quality-card fade-in" onclick="alert('蛋殼強度提升報告')">
                     <h4>🛡️ <span data-translate="quality_card3_title">蛋殼強度提升</span></h4>
-                    <div style="font-size: 2rem; font-weight: bold; color: #e74c3c; margin: 8px 0;" data-translate="quality_card3_metric">+25-30%</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary-green);" data-translate="quality_card3_metric">+25-30%</div>
                     <p data-translate="quality_card3_desc1">優化鈣磷代謝，提升蛋殼厚度與均勻度</p>
                     <p><strong data-translate="quality_card3_data_label">實測數據：</strong><span data-translate="quality_card3_data">蛋殼厚度從0.33mm提升至0.40-0.42mm</span></p>
                     <p><strong data-translate="quality_card3_mechanism_label">作用機制：</strong><span data-translate="quality_card3_mechanism">提升維生素D3活化效率，促進小腸鈣吸收與蛋殼腺沉積</span></p>
                 </div>
                 <div class="quality-card fade-in" onclick="alert('哈氏單位提升')">
                     <h4>📏 <span data-translate="quality_card4_title">哈氏單位提升</span></h4>
-                    <div style="font-size: 2rem; font-weight: bold; color: #e74c3c; margin: 8px 0;" data-translate="quality_card4_metric">+15-20</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary-green);" data-translate="quality_card4_metric">+15-20</div>
                     <p data-translate="quality_card4_desc1">蛋白濃稠度改善，提升蛋品新鮮度與保存性</p>
                     <p><strong data-translate="quality_card4_data_label">實測數據：</strong><span data-translate="quality_card4_data">哈氏單位從80提升至95-100</span></p>
                     <p><strong data-translate="quality_card4_mechanism_label">作用機制：</strong><span data-translate="quality_card4_mechanism">維持卵白蛋白合成效率，減少蛋白水分流失</span></p>
                 </div>
             </div>
-            <div class="egg-image-container">
+            <div class="img-container" onclick="openLightbox(this)">
                 <img src="assets/yolk-quality.png" alt="蛋黃品質對比圖" data-translate="image3_alt" loading="lazy">
-                <p class="image-caption" data-translate="image3_caption">圖3：蛋黃品質對比 (左：傳統蛋黃8級｜右：活力旺優化蛋黃11-12級，提升3-4級)</p>
+                <div class="image-caption" data-translate="image3_caption">圖3：蛋黃品質對比 (左：傳統蛋黃8級｜右：活力旺優化蛋黃11-12級，提升3-4級)</div>
             </div>
-            <div class="egg-image-container">
+            <div class="img-container" onclick="openLightbox(this)">
                 <img src="assets/shell-spots.png" alt="暗斑蛋減少示意圖" data-translate="image4_alt" loading="lazy">
-                <p class="image-caption" data-translate="image4_caption">圖4：暗斑蛋比例減少 (傳統15% → 過渡8% → 優化3-5%，降幅70-80%)</p>
+                <div class="image-caption" data-translate="image4_caption">圖4：暗斑蛋比例減少 (傳統15% → 過渡8% → 優化3-5%，降幅70-80%)</div>
             </div>
         </section>
 
         <!-- 健康度提升專區 -->
         <section>
-            <h2 data-translate="section3_title">🩺 健康度提升專區｜產卵發炎降低與免疫力增強</h2>
+            <h2 class="section-title" data-translate="section3_title">🩺 健康度提升專區｜產卵發炎降低與免疫力增強</h2>
             <div class="benefits-grid">
                 <div class="benefit-card fade-in" onclick="alert('產卵發炎降低機制')">
                     <h4>🔥 <span data-translate="benefit_card1_title">產卵發炎降低</span></h4>
@@ -817,20 +1072,20 @@
                     <p><strong data-translate="benefit_card4_mechanism_label">作用機制：</strong><span data-translate="benefit_card4_mechanism">維生素D代謝調控，改善鈣質沉積，提升骨鈣素合成效率</span></p>
                 </div>
             </div>
-            <div class="egg-image-container">
+            <div class="img-container" onclick="openLightbox(this)">
                 <img src="assets/health-improvement.png" alt="蛋雞健康改善圖" data-translate="image5_alt" loading="lazy">
-                <p class="image-caption" data-translate="image5_caption">圖5：蛋雞健康指標改善 (輸卵管發炎-40-50%｜脂肪肝-60%｜骨密度+20%｜免疫力+30-40%)</p>
+                <div class="image-caption" data-translate="image5_caption">圖5：蛋雞健康指標改善 (輸卵管發炎-40-50%｜脂肪肝-60%｜骨密度+20%｜免疫力+30-40%)</div>
             </div>
         </section>
 
-        <!-- 經濟效益分析 (每個貨幣數字已添加 data-value 屬性) -->
+        <!-- 經濟效益分析 -->
         <section>
-            <h2 data-translate="section4_title">💰 經濟效益分析｜每隻蛋雞淨利提升</h2>
-            <div style="background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%); padding: 18px; border-radius: 12px; margin-bottom: 22px; border-left: 4px solid var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.05);" class="fade-in">
+            <h2 class="section-title" data-translate="section4_title">💰 經濟效益分析｜每隻蛋雞淨利提升</h2>
+            <div class="bg-light p-3 rounded border-left-primary mb-4 fade-in">
                 <p><strong data-translate="calc_basis_label">計算基準：</strong><span data-translate="calc_basis">蛋雞產蛋期40週(280天)｜產蛋率92%→97%｜料蛋比2.2→2.05｜蛋價6元/顆｜每隻雞日採食量115克｜添加成本0.069元/天</span></p>
             </div>
             <div class="economic-card fade-in">
-                <div class="profit-table-container">
+                <div class="table-container">
                     <table class="profit-table">
                         <thead>
                             <tr>
@@ -845,9 +1100,9 @@
                             <tr><td data-translate="row3_col1">蛋品品質溢價</td><td data-translate="row3_col2">價格+15%</td><td><span class="currency" data-value="37.80">NTD 37.80</span></td></tr>
                             <tr><td data-translate="row4_col1">暗斑蛋減少收益</td><td data-translate="row4_col2">-75%次級蛋</td><td><span class="currency" data-value="12.60">NTD 12.60</span></td></tr>
                             <tr><td data-translate="row5_col1">健康度提升減少損失</td><td data-translate="row5_col2">死亡率-2%</td><td><span class="currency" data-value="8.40">NTD 8.40</span></td></tr>
-                            <tr style="background: #ffeaa7; font-weight: bold;"><td data-translate="row6_col1"><strong>總效益增加</strong></td><td>—</td><td><strong><span class="currency" data-value="111.30">NTD 111.30</span></strong></td></tr>
+                            <tr style="background: var(--accent-light);"><td><strong data-translate="row6_col1">總效益增加</strong></td><td>—</td><td><strong><span class="currency" data-value="111.30">NTD 111.30</span></strong></td></tr>
                             <tr><td data-translate="row7_col1">飼料添加成本增加</td><td data-translate="row7_col2">0.069元/天×280天</td><td><span class="currency" data-value="-19.32">NTD -19.32</span></td></tr>
-                            <tr style="background: linear-gradient(135deg, var(--primary) 0%, #d35400 100%); color: white; font-weight: bold;"><td data-translate="row8_col1">每隻蛋雞淨利潤增加</td><td>—</td><td><span class="currency" data-value="91.98">NTD 91.98</span></td></tr>
+                            <tr style="background: linear-gradient(135deg, var(--primary-green), var(--secondary-green)); color: white;"><td><strong data-translate="row8_col1">每隻蛋雞淨利潤增加</strong></td><td>—</td><td><strong><span class="currency" data-value="91.98">NTD 91.98</span></strong></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -857,61 +1112,92 @@
                     <div style="font-size: 0.9rem; opacity: 0.9;" data-translate="roi_desc">產蛋期每投入1元，創造6.76元淨收益｜投資回收期 &lt;15天</div>
                 </div>
             </div>
-            <div style="background: #fff8e1; padding: 18px; border-radius: 12px; margin-top: 18px; border-left: 4px solid var(--secondary); box-shadow: 0 2px 8px rgba(0,0,0,0.05);" class="fade-in">
+            <div class="bg-light p-3 rounded border-left-primary mt-4 fade-in">
                 <p><strong data-translate="large_scale_label">萬隻蛋雞場年度效益：</strong>
-                    <span data-translate="large_scale_text" style="display: inline;">
-                        <!-- 為數字加上單獨的currency以便切換，但整句翻譯保留，因此將數字拆出並用data-value動態更新 -->
-                        每批蛋雞淨利增加<span class="currency" data-value="919800">NTD 919,800</span>元｜年更新1.5批次總計增加<span class="currency" data-value="1379700">NTD 1,379,700</span>元｜飼料添加總成本僅增加<span class="currency" data-value="193200">NTD 193,200</span>元
-                    </span>
+                    <span data-translate="large_scale_text">每批蛋雞淨利增加<span class="currency" data-value="919800">NTD 919,800</span>元｜年更新1.5批次總計增加<span class="currency" data-value="1379700">NTD 1,379,700</span>元｜飼料添加總成本僅增加<span class="currency" data-value="193200">NTD 193,200</span>元</span>
                 </p>
             </div>
-            <div class="egg-image-container">
+            <div class="img-container" onclick="openLightbox(this)">
                 <img src="assets/roi-chart.png" alt="蛋雞經濟效益計算圖" data-translate="image6_alt" loading="lazy">
-                <p class="image-caption" data-translate="image6_caption">圖6：蛋雞場經濟效益計算 (ROI 580%｜每隻淨利+45.2元)</p>
+                <div class="image-caption" data-translate="image6_caption">圖6：蛋雞場經濟效益計算 (ROI 580%｜每隻淨利+45.2元)</div>
             </div>
         </section>
 
-        <!-- CTA行動區塊 (無返回主頁按鈕) -->
+        <!-- CTA 行動區塊 -->
         <section class="cta-section">
-            <h2 style="color: white; border-bottom: 2px solid var(--warning); padding-bottom: 10px;" data-translate="cta_title">🚀 立即啟動蛋雞性能提升方案</h2>
+            <h2 style="color: white;" data-translate="cta_title">🚀 立即啟動蛋雞性能提升方案</h2>
             <div class="big-number"><span class="currency" data-value="91.98">NTD 91.98</span></div>
             <p data-translate="cta_subtitle1">每隻蛋雞淨利潤增加(NTD)</p>
             <div class="big-number"><span data-translate="roi_value" data-percent="true">576%</span></div>
             <p data-translate="cta_subtitle2">投資報酬率(ROI)</p>
-            <div style="background: rgba(241, 196, 15, 0.2); padding: 12px 20px; border-radius: 25px; display: inline-block; margin: 15px 0; font-weight: bold; font-size: 0.9rem; border: 1px solid rgba(241, 196, 15, 0.3);" data-translate="cta_bullets">🥚 產蛋率提升5-8%｜⭐ 蛋黃品質提升3-4級｜🩺 發炎降低40-50%</div>
+            <div class="feature-badge" style="display: inline-block; margin: var(--space-md) auto; background: rgba(241, 196, 15, 0.2); color: white;" data-translate="cta_bullets">🥚 產蛋率提升5-8%｜⭐ 蛋黃品質提升3-4級｜🩺 發炎降低40-50%</div>
             <div class="cta-buttons">
                 <a class="btn btn-primary" href="tel:+886913866080" data-translate="cta_btn1">📞 獲取蛋雞專案技術諮詢</a>
                 <a class="btn btn-secondary" href="#" data-translate="cta_btn2">📋 免費索取蛋雞試用方案</a>
             </div>
         </section>
+    </main>
 
-        <!-- 頁腳 -->
-        <footer>
-            <div style="max-width: 800px; margin: 0 auto;">
-                <p><strong data-translate="footer_company">首池有限公司</strong>｜<span data-translate="footer_tagline">蛋雞性能優化 × 蛋品品質提升 × 健康養殖解決方案</span></p>
-                <p data-translate="footer_disclaimer">本技術資料表數據基於海蘭、羅曼等蛋雞品種實測結果，實際效果因管理條件略有差異</p>
-                <div style="margin-top: 18px; opacity: 0.8; font-size: 0.8rem; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1);" data-translate="footer_copyright">&copy; 2026 首池有限公司 版權所有｜蛋雞優化技術為商業機密，未經授權禁止轉載</div>
+    <!-- 頁尾 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section footer-logo">
+                    <div class="footer-logo-img">
+                        <img src="assets/logo.png" alt="活力旺logo" loading="lazy">
+                    </div>
+                    <h3 data-translate="vitality_pro">活力旺</h3>
+                    <p style="opacity: 0.8; font-size: 0.95rem;" data-translate="footer_tagline">精準營養解決方案</p>
+                </div>
+                <div class="footer-section">
+                    <h3 data-translate="company_name">首池有限公司</h3>
+                    <p data-translate="tagline">精準營養 · 先進生物技術 · 永續農業</p>
+                </div>
+                <div class="footer-section">
+                    <h3 data-translate="products_title">產品方案</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">🏠 <span data-translate="home">主頁</span></a></li>
+                        <li><a href="boar-semen-quality.html">🐗 <span data-translate="boar">種公豬</span></a></li>
+                        <li><a href="pregnant-sow-optimization.html">🤰 <span data-translate="preg_sow">懷孕母豬</span></a></li>
+                        <li><a href="nursing-sow-improvement.html">🍼 <span data-translate="lact_sow">哺乳母豬</span></a></li>
+                        <li><a href="piglet-milk-replacer.html">🐷 <span data-translate="piglet">仔豬</span></a></li>
+                        <li><a href="finisher-pig-fcr.html">📈 <span data-translate="finisher">育肥豬</span></a></li>
+                        <li><a href="breeder-chicken.html">🐔 <span data-translate="breeder">種雞</span></a></li>
+                        <li><a href="layer-chicken.html">🥚 <span data-translate="layer">蛋雞</span></a></li>
+                        <li><a href="native-chicken.html">🌾 <span data-translate="native">土雞</span></a></li>
+                        <li><a href="broiler-fcr.html">🍗 <span data-translate="broiler">白肉雞</span></a></li>
+                        <li><a href="tilapia-survival.html">🐟 <span data-translate="tilapia_solution_short">吳郭魚</span></a></li>
+                        <li><a href="shrimp-survival.html">🦐 <span data-translate="shrimp_solution_short">白蝦</span></a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 data-translate="contact_us">聯絡我們</h3>
+                    <ul class="footer-links">
+                        <li><a href="tel:+886913866080"><i class="fas fa-phone"></i> <span data-translate="tech_hotline">技術專線:0913-866-080</span></a></li>
+                        <li><a href="mailto:in1000318@gmail.com"><i class="fas fa-envelope"></i> in1000318@gmail.com</a></li>
+                        <li><a href="https://maps.google.com/?q=台灣省嘉義市自強街195巷33之28號" target="_blank"><i class="fas fa-map-marker-alt"></i> <span data-translate="company_address">台灣省嘉義市自強街195巷33之28號</span></a></li>
+                    </ul>
+                </div>
             </div>
-        </footer>
+            <div class="copyright">
+                <p data-translate="footer_copyright">© 2026 首池有限公司 版權所有｜蛋雞優化技術為商業機密，未經授權禁止轉載</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="" alt="">
+        <div id="lightbox-caption" class="caption"></div>
     </div>
 
     <script>
-        // ----- 精確匯率 (NTD:CNY = 1:0.2192, NTD:USD = 1:0.0320) -----
-        const exchangeRates = {
-            'zh-TW': { rate: 1, symbol: 'NTD ', format: 'NTD {value}' },
-            'zh-CN': { rate: 0.2192, symbol: '¥', format: 'CNY {value}' },
-            'en':    { rate: 0.0320, symbol: '$', format: 'USD {value}' }
-        };
-
-        let currentLang = 'zh-TW';
-
-        // ----- 完整三語翻譯詞庫 (涵蓋所有 data-translate 鍵，已完整補齊) -----
+        // ========== 完整三語翻譯物件 ==========
         const translations = {
             'zh-TW': {
                 'title': '活力旺蛋雞性能提升方案 TDS',
                 'subtitle': '產蛋率提升・蛋黃品質優化・暗斑蛋減少・產卵發炎降低',
                 'tagline': 'Egg Production Enhancement · Yolk Quality Improvement · Shell Strength Optimization',
-                'highlight': '🥚 產蛋率提升5-8%｜蛋黃品質提升3-4級｜暗斑蛋減少70-80%',
                 'feature1_label': '成本：{currency}/公斤',
                 'feature2_label': '添加量：1公斤/噸飼料',
                 'feature3_label': '發炎指數降低40%',
@@ -1056,15 +1342,31 @@
                 'cta_btn2': '📋 免費索取蛋雞試用方案',
                 'footer_company': '首池有限公司',
                 'footer_tagline': '蛋雞性能優化 × 蛋品品質提升 × 健康養殖解決方案',
-                'footer_disclaimer': '本技術資料表數據基於海蘭、羅曼等蛋雞品種實測結果，實際效果因管理條件略有差異',
-                'footer_copyright': '© 2026 首池有限公司 版權所有｜蛋雞優化技術為商業機密，未經授權禁止轉載'
+                'footer_copyright': '© 2026 首池有限公司 版權所有｜蛋雞優化技術為商業機密，未經授權禁止轉載',
+                'home': '首頁',
+                'boar': '種公豬',
+                'preg_sow': '懷孕母豬',
+                'lact_sow': '哺乳母豬',
+                'piglet': '仔豬',
+                'finisher': '育肥豬',
+                'breeder': '種雞',
+                'layer': '蛋雞',
+                'native': '土雞',
+                'broiler': '白肉雞',
+                'tilapia_solution_short': '吳郭魚',
+                'shrimp_solution_short': '白蝦',
+                'vitality_pro': '活力旺',
+                'company_name': '首池有限公司',
+                'tagline': '精準營養 · 先進生物技術 · 永續農業',
+                'products_title': '產品方案',
+                'contact_us': '聯絡我們',
+                'tech_hotline': '技術專線:0913-866-080',
+                'company_address': '台灣省嘉義市自強街195巷33之28號'
             },
             'zh-CN': {
-                // 簡體翻譯 (已完整對應，貨幣符號與文字配合動態轉換)
                 'title': '活力旺蛋鸡性能提升方案 TDS',
                 'subtitle': '产蛋率提升·蛋黄品质优化·暗斑蛋减少·产卵发炎降低',
                 'tagline': 'Egg Production Enhancement · Yolk Quality Improvement · Shell Strength Optimization',
-                'highlight': '🥚 产蛋率提升5-8%｜蛋黄品质提升3-4级｜暗斑蛋减少70-80%',
                 'feature1_label': '成本：{currency}/公斤',
                 'feature2_label': '添加量：1公斤/吨饲料',
                 'feature3_label': '发炎指数降低40%',
@@ -1209,15 +1511,31 @@
                 'cta_btn2': '📋 免费索取蛋鸡试用方案',
                 'footer_company': '首池有限公司',
                 'footer_tagline': '蛋鸡性能优化 × 蛋品品质提升 × 健康养殖解决方案',
-                'footer_disclaimer': '本技术资料表数据基于海兰、罗曼等蛋鸡品种实测结果，实际效果因管理条件略有差异',
-                'footer_copyright': '© 2026 首池有限公司 版权所有｜蛋鸡优化技术为商业机密，未经授权禁止转载'
+                'footer_copyright': '© 2026 首池有限公司 版权所有｜蛋鸡优化技术为商业机密，未经授权禁止转载',
+                'home': '主页',
+                'boar': '种公猪',
+                'preg_sow': '怀孕母猪',
+                'lact_sow': '哺乳母猪',
+                'piglet': '仔猪',
+                'finisher': '育肥猪',
+                'breeder': '种鸡',
+                'layer': '蛋鸡',
+                'native': '土鸡',
+                'broiler': '白肉鸡',
+                'tilapia_solution_short': '罗非鱼',
+                'shrimp_solution_short': '白虾',
+                'vitality_pro': '活力旺',
+                'company_name': '首池有限公司',
+                'tagline': '精准营养 · 先进生物技术 · 永续农业',
+                'products_title': '产品方案',
+                'contact_us': '联系我们',
+                'tech_hotline': '技术专线:0913-866-080',
+                'company_address': '台湾省嘉义市自强街195巷33之28号'
             },
             'en': {
-                // 英文翻譯
                 'title': 'Vitality Layer Performance Enhancement TDS',
                 'subtitle': 'Egg Production Increase · Yolk Quality Optimization · Shell Spots Reduction · Ovulation Inflammation Reduction',
                 'tagline': 'Egg Production Enhancement · Yolk Quality Improvement · Shell Strength Optimization',
-                'highlight': '🥚 +5-8% Egg Production | Yolk Color +3-4 grade | Shell Spots -70-80%',
                 'feature1_label': 'Cost: {currency}/kg',
                 'feature2_label': 'Dosage: 1 kg/ton feed',
                 'feature3_label': 'Inflammation Index -40%',
@@ -1362,120 +1680,66 @@
                 'cta_btn2': '📋 Request Free Trial',
                 'footer_company': 'Shou Chi Co., Ltd.',
                 'footer_tagline': 'Layer Performance Optimization × Egg Quality Improvement × Healthy Farming Solutions',
-                'footer_disclaimer': 'Data based on trials with Hy-Line, Lohmann etc. Actual results may vary with management conditions.',
-                'footer_copyright': '© 2026 Shou Chi Co., Ltd. All rights reserved. Trade secret – unauthorized reproduction prohibited.'
+                'footer_copyright': '© 2026 Shou Chi Co., Ltd. All rights reserved. Trade secret – unauthorized reproduction prohibited.',
+                'home': 'Home',
+                'boar': 'Boar',
+                'preg_sow': 'Pregnant Sow',
+                'lact_sow': 'Lactating Sow',
+                'piglet': 'Piglet',
+                'finisher': 'Finisher',
+                'breeder': 'Breeder',
+                'layer': 'Layer',
+                'native': 'Native Chicken',
+                'broiler': 'Broiler',
+                'tilapia_solution_short': 'Tilapia',
+                'shrimp_solution_short': 'Shrimp',
+                'vitality_pro': 'Vitality Pro',
+                'company_name': 'Shou Chi Co., Ltd.',
+                'tagline': 'Precision Nutrition · Advanced Biotechnology · Sustainable Agriculture',
+                'products_title': 'Product Plans',
+                'contact_us': 'Contact Us',
+                'tech_hotline': 'Technical Hotline: +886-913-866-080',
+                'company_address': 'No. 33-28, Lane 195, Ziqiang Street, Chiayi City, Taiwan'
             }
         };
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // 語言按鈕事件
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    switchLanguage(this.getAttribute('data-lang'));
-                });
-            });
-            // 初始化滾動動畫
-            initScrollAnimation();
-            // 預設語言
-            switchLanguage('zh-TW');
-        });
+        const exchangeRates = {
+            'zh-TW': { rate: 1, symbol: 'NTD ', format: 'NTD {value}' },
+            'zh-CN': { rate: 0.2192, symbol: '¥', format: 'CNY {value}' },
+            'en':    { rate: 0.0320, symbol: '$', format: 'USD {value}' }
+        };
+        let currentLang = 'zh-TW';
 
-        function switchLanguage(lang) {
-            // 更新按鈕狀態
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-            });
-            currentLang = lang;
-            document.documentElement.lang = lang === 'zh-CN' ? 'zh-Hans' : lang;
-
-            // 1️⃣ 更新所有 data-translate 文字（但跳過 .currency，避免覆蓋貨幣數字）
-            const dict = translations[lang] || translations['zh-TW'];
-            document.querySelectorAll('[data-translate]').forEach(el => {
-                const key = el.dataset.translate;
-                if (dict[key] !== undefined) {
-                    // 如果元素內有 .currency 子元素，需要保留其結構，只替換文字節點？
-                    // 簡單處理：如果沒有 .currency 子元素，直接替換；否則保留 HTML 結構，只替換非 .currency 的文字？
-                    // 但 feature1_label、feature4_label 包含 {currency} 佔位符，稍後由貨幣更新替換
-                    if (el.querySelector('.currency')) {
-                        // 複雜結構，使用自定義邏輯：將 dict[key] 中的 {currency} 替換為當前的貨幣符號+值？
-                        // 但貨幣值會由 updateCurrencyValues 獨立更新，所以這裡先保留
-                        // 為避免覆蓋 currency 子元素，我們只替換文本節點，但簡化：不處理，交給 updateCurrencyValues 後續更新 feature-badge 文字？
-                        // 我們直接在更新貨幣時重構 feature-badge 文字。
-                        // 這裡簡單略過，由後續專門處理。
-                    } else {
-                        el.textContent = dict[key];
-                    }
-                }
-            });
-
-            // 2️⃣ 更新所有貨幣 data-value
-            updateCurrencyValues(lang, dict);
-
-            // 3️⃣ 手動修正 feature-badge 文字，因為它們含有 {currency} 佔位符
-            const rateInfo = exchangeRates[lang];
-            const symbol = rateInfo.symbol;
-            // feature1 成本
-            const feature1 = document.querySelector('[data-translate="feature1_label"]');
-            if (feature1) {
-                const currencySpan = feature1.querySelector('.currency');
-                let currencyText = currencySpan ? currencySpan.textContent : 'NTD 600';
-                feature1.innerHTML = dict['feature1_label'].replace('{currency}', currencyText);
-            }
-            // feature4 ROI
-            const feature4 = document.querySelector('[data-translate="feature4_label"]');
-            if (feature4) {
-                const currencySpan = feature4.querySelector('.currency');
-                let currencyText = currencySpan ? currencySpan.textContent : '580%';
-                feature4.innerHTML = dict['feature4_label'].replace('{currency}', currencyText);
-            }
-
-            // 4️⃣ 更新表格表頭貨幣單位
-            const header3 = document.querySelector('[data-translate="table_header3"]');
-            if (header3) header3.textContent = dict['table_header3'];
-
-            // 5️⃣ 更新 CTA 小標貨幣單位
-            const ctaSub1 = document.querySelector('[data-translate="cta_subtitle1"]');
-            if (ctaSub1) ctaSub1.textContent = dict['cta_subtitle1'];
-
-            // 6️⃣ 更新萬隻蛋雞場年度效益文字（含有貨幣佔位符）
-            const largeScaleSpan = document.querySelector('[data-translate="large_scale_text"]');
-            if (largeScaleSpan) {
-                // 從 currency 元素取得格式化後的金額
-                const cur1 = document.querySelector('.currency[data-value="919800"]')?.textContent || 'NTD 919,800';
-                const cur2 = document.querySelector('.currency[data-value="1379700"]')?.textContent || 'NTD 1,379,700';
-                const cur3 = document.querySelector('.currency[data-value="193200"]')?.textContent || 'NTD 193,200';
-                largeScaleSpan.innerHTML = dict['large_scale_text']
-                    .replace('{currency1}', cur1)
-                    .replace('{currency2}', cur2)
-                    .replace('{currency3}', cur3);
-            }
-
-            // 7️⃣ 更新 ROI 百分比文字（確保顯示正確）
-            const roiValueEl = document.querySelector('[data-translate="roi_value"]');
-            if (roiValueEl && dict['roi_value']) roiValueEl.textContent = dict['roi_value'];
+        function openLightbox(element) {
+            const img = element.querySelector('img');
+            if (!img) return;
+            const caption = element.querySelector('.image-caption')?.innerText || '';
+            const lb = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lightbox-img');
+            const lbCaption = document.getElementById('lightbox-caption');
+            lbImg.src = img.src;
+            lbCaption.innerText = caption;
+            lb.style.display = 'flex';
         }
 
-        function updateCurrencyValues(lang, dict) {
+        function updateCurrencyValues(lang) {
             const rateInfo = exchangeRates[lang];
             document.querySelectorAll('.currency[data-value]').forEach(el => {
                 const rawVal = parseFloat(el.dataset.value);
                 if (isNaN(rawVal)) return;
                 const converted = rawVal * rateInfo.rate;
-                // 格式化
-                let formatted = formatCurrency(converted, lang);
+                let formatted = formatCurrency(converted);
                 el.textContent = rateInfo.symbol + formatted;
             });
         }
 
-        function formatCurrency(value, lang) {
+        function formatCurrency(value) {
             let absVal = Math.abs(value);
             let formatted;
             if (absVal === 0) formatted = '0';
             else if (absVal >= 1) formatted = value.toFixed(2).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, '$1');
             else if (absVal >= 0.01) formatted = value.toFixed(3).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, '$1');
             else formatted = value.toFixed(4).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, '$1');
-            // 千分位
             if (absVal >= 1000) {
                 let parts = formatted.split('.');
                 parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -1484,13 +1748,45 @@
             return formatted;
         }
 
-        // 滾動淡入
-        function initScrollAnimation() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(e => e.target.classList.toggle('visible', e.isIntersecting));
-            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-            document.querySelectorAll('.fade-in, .egg-image-container, .peak-mechanism').forEach(el => observer.observe(el));
+        function switchLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+            document.documentElement.lang = lang;
+
+            const dict = translations[lang] || translations['zh-TW'];
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (dict[key] !== undefined) {
+                    if (el.tagName === 'IMG' && el.hasAttribute('alt')) {
+                        el.alt = dict[key];
+                    } else {
+                        el.innerHTML = dict[key];
+                    }
+                }
+            });
+
+            updateCurrencyValues(lang);
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switchLanguage(this.getAttribute('data-lang'));
+                });
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+            switchLanguage('zh-TW');
+        });
     </script>
 </body>
 </html>
