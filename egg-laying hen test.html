@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <style>
+    /* 防止文字選取 */
+    body {
+        -webkit-user-select: none;  /* Safari */
+        -moz-user-select: none;     /* Firefox */
+        -ms-user-select: none;      /* IE/Edge */
+        user-select: none;           /* 標準語法 */
+    }
+
+    /* 針對圖片：禁止拖曳、禁止長按菜單，但保留點擊事件（由父層處理） */
+    img {
+        -webkit-touch-callout: none; /* iOS 長按選單 */
+        -webkit-user-drag: none;     /* Chrome 拖曳 */
+        user-drag: none;
+        pointer-events: none;         /* 讓圖片本身無法被點擊，但父容器可接收點擊 */
+    }
+
+    /* 圖片的容器需設定 cursor: pointer 提示可點擊 */
+    .img-container {
+        cursor: pointer;
+    }
+</style>
+
+<!-- 簡易 Lightbox 結構 -->
+<div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column;" onclick="this.style.display='none'">
+    <img id="lightbox-img" src="" style="max-width:90%; max-height:80%; object-fit:contain; border-radius:8px;">
+    <div id="lightbox-caption" style="color:white; margin-top:16px; font-size:1rem;"></div>
+</div>
+
+<script>
+    // 1. 禁止右鍵選單 (含手機長按)
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // 2. 禁止複製快捷鍵 (Ctrl+C, Ctrl+X)
+    document.addEventListener('copy', e => e.preventDefault());
+    document.addEventListener('cut', e => e.preventDefault());
+
+    // 3. 禁止選取事件 (滑鼠拖曳選取)
+    document.addEventListener('selectstart', e => e.preventDefault());
+
+    // 4. 輕量 Lightbox 功能：所有 .img-container 內的圖片點擊放大
+    function openLightbox(element) {
+        const img = element.querySelector('img');
+        if (!img) return;
+        const caption = element.querySelector('.img-title')?.innerText || '';
+        const lb = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lightbox-img');
+        const lbCaption = document.getElementById('lightbox-caption');
+        lbImg.src = img.src;
+        lbCaption.innerText = caption;
+        lb.style.display = 'flex';
+    }
+
+    // 為所有 .img-container 綁定點擊事件
+    document.querySelectorAll('.img-container').forEach(container => {
+        container.addEventListener('click', function() {
+            openLightbox(this);
+        });
+    });
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>凤雏生态农业 · 300日龄蛋鸡实验｜活力旺A剂+B剂</title>
+  <style>
+    :root {
+      --primary: #2c6e36;
+      --secondary: #4a9b52;
+      --accent: #f8a51c;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --success: #28a745;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md: 0 5px 15px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Microsoft JhengHei', '微軟正黑體', 'Noto Sans TC', sans-serif;
+    }
+    body {
+      background-color: #f5f7f9;
+      color: var(--dark);
+      line-height: 1.7;
+      scroll-behavior: smooth;
+      padding-top: 70px; /* 為返回首頁按鈕留出空間 */
+    }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ===== 返回首頁按鈕 (左上角固定) ===== */
+    .back-home-btn {
+      position: fixed;
+      top: 15px;
+      left: 20px;
+      z-index: 1000;
+      background: var(--primary);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+      border: 1px solid var(--secondary);
+    }
+    .back-home-btn:hover {
+      background: var(--secondary);
+      transform: scale(1.02);
+    }
+
+    /* ===== 返回頂部按鈕 (右下角浮動) ===== */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 999;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: 0.2s;
+      opacity: 0;
+      visibility: hidden;
+    }
+    .scroll-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    .scroll-to-top:hover {
+      background: var(--accent);
+      color: var(--dark);
+    }
+
+    /* 響應式圖片樣式 */
+    .responsive-img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      margin: clamp(15px, 3vw, 25px) 0;
+    }
+    .img-caption {
+      text-align: center;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      color: var(--gray);
+      margin-bottom: clamp(20px, 4vw, 30px);
+      font-style: italic;
+    }
+    /* 頁頭樣式強化 */
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 60px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0) 70%);
+      z-index: 0;
+      animation: bgFloat 15s ease-in-out infinite;
+    }
+    @keyframes bgFloat {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-5%, -5%) rotate(2deg); }
+    }
+    header .container {
+      position: relative;
+      z-index: 1;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      margin-bottom: 15px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      line-height: 1.3;
+    }
+    .subtitle {
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      opacity: 0.9;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .tagline {
+      background-color: var(--accent);
+      color: white;
+      padding: 10px 25px;
+      border-radius: 30px;
+      display: inline-block;
+      font-weight: bold;
+      margin: 25px auto;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    /* 區塊通用樣式 */
+    section {
+      padding: clamp(40px, 8vw, 60px) 0;
+    }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
+      color: var(--primary);
+      margin-bottom: clamp(30px, 5vw, 40px);
+      position: relative;
+      font-weight: 700;
+    }
+    .section-title::after {
+      content: "";
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: var(--accent);
+      margin: 15px auto;
+      border-radius: 2px;
+    }
+    /* 執行摘要優化 */
+    .executive-summary {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: var(--shadow-lg);
+      padding: clamp(25px, 5vw, 40px);
+      margin-bottom: 40px;
+      border-top: 5px solid var(--secondary);
+    }
+    .executive-summary p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: clamp(20px, 3vw, 30px);
+      margin-top: 30px;
+    }
+    .summary-card {
+      background: linear-gradient(145deg, #ffffff, #f0f5f2);
+      border-radius: 12px;
+      padding: clamp(20px, 4vw, 25px);
+      text-align: center;
+      border-left: 4px solid var(--secondary);
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+    .summary-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-left-color: var(--accent);
+    }
+    .card-title {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    .card-value {
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
+      font-weight: bold;
+      color: var(--accent);
+      margin: 10px 0;
+      line-height: 1.2;
+    }
+    .card-desc {
+      color: var(--gray);
+      font-size: clamp(0.95rem, 2vw, 1.05rem);
+      line-height: 1.6;
+    }
+    /* 技術機制區塊 */
+    .tech-mechanism {
+      background-color: #e8f4ec;
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 20px 0;
+      padding: clamp(20px, 4vw, 30px);
+    }
+    .mechanism-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: clamp(20px, 3vw, 30px);
+      margin-top: 40px;
+    }
+    .mechanism-card {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(20px, 4vw, 30px);
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease;
+    }
+    .mechanism-card:hover {
+      transform: translateY(-3px);
+    }
+    .mechanism-title {
+      font-size: clamp(1.3rem, 3vw, 1.6rem);
+      color: var(--primary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+    }
+    .mechanism-title::before {
+      content: "•";
+      color: var(--accent);
+      font-size: 2.5rem;
+      margin-right: 15px;
+      line-height: 1;
+    }
+    .mechanism-card p {
+      margin-bottom: 15px;
+      line-height: 1.7;
+    }
+    /* 表格優化 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    th {
+      background-color: var(--primary);
+      color: white;
+      padding: clamp(10px, 2vw, 15px);
+      text-align: left;
+      font-weight: 600;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+    td {
+      padding: clamp(10px, 2vw, 14px);
+      border-bottom: 1px solid #e9ecef;
+      font-size: clamp(0.85rem, 2vw, 0.95rem);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background-color: #f8fcfa;
+    }
+    .highlight {
+      color: var(--accent);
+      font-weight: bold;
+    }
+    /* 效益高亮卡片 */
+    .benefit-highlight {
+      background: linear-gradient(135deg, var(--primary) 0%, #1a4a24 100%);
+      color: white;
+      border-radius: 15px;
+      padding: clamp(30px, 6vw, 40px);
+      text-align: center;
+      margin: clamp(30px, 5vw, 50px) 0;
+      box-shadow: 0 10px 30px rgba(44, 110, 54, 0.3);
+      transition: transform 0.3s ease;
+    }
+    .benefit-highlight:hover {
+      transform: scale(1.02);
+    }
+    .benefit-value {
+      font-size: clamp(2.5rem, 7vw, 3.5rem);
+      font-weight: bold;
+      margin: 20px 0;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      line-height: 1.2;
+    }
+    .benefit-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      opacity: 0.9;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    /* 實施建議區塊 */
+    .implementation {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: var(--shadow-lg);
+      padding: clamp(25px, 5vw, 40px);
+      margin-top: 30px;
+    }
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: clamp(20px, 3vw, 25px);
+      margin-top: 30px;
+    }
+    .stage-card {
+      border: 2px solid var(--secondary);
+      border-radius: 12px;
+      padding: clamp(20px, 4vw, 25px);
+      text-align: center;
+      transition: all 0.3s ease;
+      background: linear-gradient(180deg, #ffffff 0%, #f9fcfb 100%);
+    }
+    .stage-card:hover {
+      border-color: var(--accent);
+      transform: scale(1.03);
+      box-shadow: var(--shadow-md);
+    }
+    .stage-number {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background-color: var(--accent);
+      color: white;
+      border-radius: 50%;
+      line-height: 40px;
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+    .stage-card h3 {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    .stage-card p {
+      margin-bottom: 10px;
+      line-height: 1.6;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+    /* 數據對比區塊 */
+    .comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: clamp(20px, 3vw, 30px);
+      margin-top: 40px;
+    }
+    .comparison-card {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(25px, 4vw, 30px);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      border-top: 5px solid var(--secondary);
+    }
+    .comparison-title {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      margin-bottom: 20px;
+      color: var(--gray);
+      font-weight: 600;
+    }
+    .market-value {
+      font-size: clamp(1.5rem, 3vw, 1.8rem);
+      color: var(--gray);
+      text-decoration: line-through;
+      margin: 10px 0;
+    }
+    .improved-value {
+      font-size: clamp(1.8rem, 3.5vw, 2.2rem);
+      color: var(--success);
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .improvement {
+      color: var(--accent);
+      font-weight: bold;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+    }
+    /* 結論區塊 */
+    .conclusion-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: clamp(20px, 4vw, 40px);
+      margin-top: 30px;
+    }
+    .conclusion-card h3 {
+      margin-bottom: 20px;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-weight: 600;
+    }
+    .conclusion-card ul {
+      padding-left: 20px;
+      line-height: 2.2;
+    }
+    .conclusion-card li {
+      margin-bottom: 15px;
+    }
+    .conclusion-highlight {
+      background: linear-gradient(135deg, #e8f4ec 0%, #d4e8d9 100%);
+      border-radius: 12px;
+      padding: clamp(20px, 4vw, 30px);
+      margin-top: 40px;
+      text-align: center;
+      border: 1px solid var(--secondary);
+    }
+    .conclusion-highlight p {
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .conclusion-highlight .key-value {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      font-weight: bold;
+      color: var(--primary);
+      line-height: 1.8;
+    }
+    /* 頁腳樣式 (公司資訊更新) */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.85);
+      text-align: center;
+      padding: 40px 0 20px;
+      margin-top: 30px;
+    }
+    .company-info {
+      max-width: 800px;
+      margin: 0 auto 25px;
+      line-height: 1.8;
+    }
+
+    /* ===== 新增產品連結列 ===== */
+    .product-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 25px 0;
+      list-style: none;
+      padding: 0 15px;
+    }
+    .product-links a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 18px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: 0.2s;
+      border: 1px solid transparent;
+    }
+    .product-links a:hover {
+      background: var(--primary);
+      border-color: var(--accent);
+    }
+
+    /* 淡入動畫 */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* 響應式優化 */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 120px;
+      }
+      header {
+        padding: 40px 0;
+      }
+      section {
+        padding: 40px 0;
+      }
+      .executive-summary, .implementation {
+        padding: 25px 20px;
+      }
+      .summary-grid, .mechanism-grid, .stage-grid, .comparison {
+        grid-template-columns: 1fr;
+      }
+      .benefit-highlight {
+        padding: 30px 20px;
+      }
+      table {
+        font-size: 0.9rem;
+        overflow-x: auto;
+        display: block;
+      }
+      td, th {
+        padding: 10px 8px;
+      }
+      .conclusion-grid {
+        gap: 30px;
+      }
+      .responsive-img {
+        margin: 15px 0;
+      }
+      .back-home-btn {
+        top: 10px;
+        left: 10px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+      .scroll-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .tagline {
+        padding: 8px 20px;
+        margin: 20px auto;
+      }
+      .stage-number {
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 1.1rem;
+      }
+      .benefit-value {
+        font-size: 2.2rem;
+      }
+      .back-home-btn {
+        top: 5px;
+        left: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 返回首頁按鈕 (左上角固定) -->
+  <a href="index.html" class="back-home-btn"><i class="fa-solid fa-arrow-left"></i> 返回主頁</a>
+
+  <header>
+    <div class="container">
+      <h1>凤雏生态农业 · 300日龄蛋鸡实验（60天正试期）</h1>
+      <p class="subtitle">活力旺A剂+B剂组合｜延缓产蛋下降｜改善蛋壳品质｜提升抗氧化能力</p>
+      <div class="tagline">每吨添加A剂0.35kg + B剂0.1kg · 实验组4万羽 vs 对照组4万羽 · 依据GB/T 44964-2026</div>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <!-- 主图：使用指定路径 /assets/vitality-plus-concept.png -->
+      <div class="img-container" onclick="openLightbox(this)">
+        <img src="/assets/vitality-plus-concept.png" alt="活力旺蛋鸡实验概念图" class="responsive-img fade-in">
+        <div class="img-title">活力旺A剂+B剂 · 300日龄蛋鸡实验概念</div>
+      </div>
+      
+      <h2 class="section-title">执行摘要：蛋鸡生产性能延缓下降方案</h2>
+      <div class="executive-summary">
+        <p>凤雏生态农业联合活力旺研发团队，针对300日龄蛋鸡产蛋后期生理特点，推出「活力旺A剂+B剂」精准营养方案。本方案通过蛋白酶（A剂）提升蛋白质利用率，虾青素（B剂）强效抗氧化，双效协同，旨在延缓产蛋率下降、改善蛋壳品质、降低破蛋率，并提升蛋黄颜色与机体健康。60天正试期（276吨饲料）内，实验组（4万羽）与对照组（4万羽）严格遵循GB/T 44964-2026测定规范，实现三大核心指标优化。</p>
+        
+        <div class="summary-grid">
+          <div class="summary-card fade-in">
+            <div class="card-title">产蛋率下降幅度</div>
+            <div class="card-value">↓减缓35%</div>
+            <div class="card-desc">实验组60天产蛋率下降3.5%，对照组下降6.2%，下降速度减缓35%，有效延长产蛋高峰期</div>
+          </div>
+          <div class="summary-card fade-in">
+            <div class="card-title">破蛋率</div>
+            <div class="card-value">↓降低28%</div>
+            <div class="card-desc">实验组破蛋率从1.8%降至1.3%，对照组从1.9%升至2.1%，改善蛋壳强度与厚度</div>
+          </div>
+          <div class="summary-card fade-in">
+            <div class="card-title">蛋黄颜色</div>
+            <div class="card-value">+2.5 罗氏级</div>
+            <div class="card-desc">实验组蛋黄颜色由8级升至10.5级，消费者偏好显著提升，B剂虾青素直接沉积</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 三大核心機轉區塊 (對應蛋雞實驗) -->
+      <div class="tech-mechanism">
+        <h2 class="section-title">三大生產性能提升核心機轉</h2>
+        
+        <div class="mechanism-grid">
+          <div class="mechanism-card fade-in">
+            <div class="mechanism-title">产蛋性能优化</div>
+            <!-- 可選圖片，此處沿用主圖 -->
+            <div class="img-container" onclick="openLightbox(this)">
+              <img src="/assets/vitality-plus-concept.png" alt="产蛋率提升" class="responsive-img">
+              <div class="img-title">A剂蛋白酶提升蛋白质消化率，维持产蛋性能</div>
+            </div>
+            <p><strong>核心作用机制：</strong>活力旺A剂（蛋白酶0.35kg/t）提高饲料蛋白质消化率12%，增加可利用氨基酸，直接支持卵泡发育与产蛋。B剂虾青素清除自由基，保护卵巢颗粒细胞，延缓衰老。</p>
+            <table>
+              <tr><th>指標</th><th>實驗組</th><th>對照組</th><th>差異</th></tr>
+              <tr><td>產蛋率下降（60天）</td><td>3.5%</td><td>6.2%</td><td class="highlight">-2.7%</td></tr>
+              <tr><td>平均蛋重</td><td>63.2g</td><td>61.8g</td><td class="highlight">+1.4g</td></tr>
+              <tr><td>料蛋比</td><td>2.18</td><td>2.25</td><td class="highlight">-0.07</td></tr>
+            </table>
+          </div>
+          
+          <div class="mechanism-card fade-in">
+            <div class="mechanism-title">蛋壳品质改善</div>
+            <p><strong>核心作用机制：</strong>蛋白酶提升鈣結合蛋白合成，蝦青素促進蛋殼腺抗氧化能力，降低暗斑與破蛋。</p>
+            <table>
+              <tr><th>指標</th><th>實驗組</th><th>對照組</th><th>差異</th></tr>
+              <tr><td>破蛋率</td><td>1.3%</td><td>2.1%</td><td class="highlight">-0.8%</td></tr>
+              <tr><td>蛋殼厚度</td><td>0.38mm</td><td>0.35mm</td><td class="highlight">+0.03mm</td></tr>
+              <tr><td>暗斑蛋比例</td><td>8.2%</td><td>12.6%</td><td class="highlight">-4.4%</td></tr>
+            </table>
+          </div>
+          
+          <div class="mechanism-card fade-in">
+            <div class="mechanism-title">抗氧化與健康</div>
+            <p><strong>核心作用机制：</strong>蝦青素（B劑）是強效抗氧化劑，顯著降低血清MDA，提升總抗氧化能力（T-AOC）。</p>
+            <table>
+              <tr><th>指標</th><th>實驗組</th><th>對照組</th><th>差異</th></tr>
+              <tr><td>血清MDA</td><td>2.1 nmol/mL</td><td>3.4 nmol/mL</td><td class="highlight">↓38%</td></tr>
+              <tr><td>T-AOC</td><td>8.6 U/mL</td><td>5.2 U/mL</td><td class="highlight">↑65%</td></tr>
+              <tr><td>死淘率</td><td>1.2%</td><td>2.5%</td><td class="highlight">↓1.3%</td></tr>
+            </table>
+            <p style="margin-top:15px; background:#e8f4ec; padding:10px; border-radius:8px;"><strong>🌱 天然來源：</strong>A劑蛋白酶源自發酵技術，B劑蝦青素萃取自雨生紅球藻，符合歐盟添加劑標準。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 用量統計與混合操作（包裝為效益/實施） -->
+      <section style="padding: 20px 0;">
+        <div class="container">
+          <h2 class="section-title">添加剂用量统计 · 60天正试期</h2>
+          <div class="benefit-highlight fade-in" style="background: linear-gradient(135deg, #4a9b52 0%, #2c6e36 100%);">
+            <div class="benefit-subtitle">实验组（4万羽）总耗料276吨</div>
+            <div class="benefit-value">活力旺A剂 96.6 kg</div>
+            <div class="benefit-value">活力旺B剂 27.6 kg</div>
+            <div class="benefit-subtitle">逐级混合均匀 · 每日添加 · 变异系数≤5%</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="section-title">台灣市場數據對比（模擬）</h2>
+        <div class="comparison">
+          <div class="comparison-card fade-in">
+            <div class="comparison-title">產蛋率下降幅度（60天）</div>
+            <div class="market-value">6.2%</div>
+            <div class="improvement">行業平均</div>
+            <div style="margin: 15px 0; font-size: clamp(2rem, 4vw, 2.5rem);">→</div>
+            <div class="improved-value">3.5%</div>
+            <div class="improvement">↓43%</div>
+          </div>
+          <div class="comparison-card fade-in">
+            <div class="comparison-title">破蛋率（60天）</div>
+            <div class="market-value">2.1%</div>
+            <div class="improvement">對照組</div>
+            <div style="margin: 15px 0; font-size: clamp(2rem, 4vw, 2.5rem);">→</div>
+            <div class="improved-value">1.3%</div>
+            <div class="improvement">↓38%</div>
+          </div>
+          <div class="comparison-card fade-in">
+            <div class="comparison-title">蛋殼厚度</div>
+            <div class="market-value">0.35 mm</div>
+            <div class="improvement">對照組</div>
+            <div style="margin: 15px 0; font-size: clamp(2rem, 4vw, 2.5rem);">→</div>
+            <div class="improved-value">0.38 mm</div>
+            <div class="improvement">+8.6%</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 三階段實施建議 (對應混合操作) -->
+      <section class="tech-mechanism">
+        <div class="container">
+          <h2 class="section-title">三階段實施建議｜充分混合均勻操作</h2>
+          <div class="implementation">
+            <div class="stage-grid">
+              <div class="stage-card fade-in">
+                <div class="stage-number">1</div>
+                <h3>效果驗證階段</h3>
+                <p><strong>推薦規模：</strong>4,000羽（1個重複組）</p>
+                <p><strong>試驗週期：</strong>60天（含預飼7-10天）</p>
+                <p><strong>總投入添加劑：</strong>A劑9.7kg，B劑2.8kg</p>
+                <p><strong>混合操作：</strong>每日飼料4.6噸，A劑1.61kg、B劑0.46kg，與10kg麩皮預混後再混合5分鐘</p>
+              </div>
+              <div class="stage-card fade-in">
+                <div class="stage-number">2</div>
+                <h3>效益驗證階段</h3>
+                <p><strong>推薦規模：</strong>20,000羽（5個重複）</p>
+                <p><strong>試驗週期：</strong>2批次（約6個月）</p>
+                <p><strong>總投入添加劑：</strong>A劑48.3kg，B劑13.8kg</p>
+                <p><strong>混合操作：</strong>建立專用預混線，每日預混後投入混合機，CV值<5%</p>
+              </div>
+              <div class="stage-card fade-in">
+                <div class="stage-number">3</div>
+                <h3>全面導入階段</h3>
+                <p><strong>推薦規模：</strong>全場40,000羽</p>
+                <p><strong>實施時機：</strong>連續添加，全年無休</p>
+                <p><strong>年投入添加劑：</strong>A劑約580kg，B劑約166kg（按6批次計）</p>
+                <p><strong>混合操作：</strong>自動化配料系統，每班留樣檢測</p>
+              </div>
+            </div>
+            <div style="background-color: #fff8e1; border-left: 4px solid var(--accent); padding: 20px; border-radius: 0 8px 8px 0; margin-top: 30px;">
+              <p><strong>※ 關鍵混合要點：</strong></p>
+              <p>1. 採用「等量遞增法」，先將每日A劑+B劑與10倍稀釋載體（如玉米粉）預混3分鐘，再與50kg基礎料混合，最後投入全價料混合6~8分鐘。</p>
+              <p>2. 定期檢測混合均勻度（CV值），確保變異係數≤5%。</p>
+              <p>3. 每日記錄添加量，每批留樣1kg備檢。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 結論區塊 -->
+      <section>
+        <h2 class="section-title">結論：從「被動下降」到「主動延緩」</h2>
+        <div style="background: white; border-radius: 15px; box-shadow: var(--shadow-lg); padding: clamp(25px, 5vw, 40px); margin-bottom: 40px;">
+          <div class="conclusion-grid">
+            <div class="conclusion-card fade-in">
+              <h3 style="color: var(--gray);">傳統養殖思維</h3>
+              <ul>
+                <li>300日齡後產蛋率自然下降，無可奈何</li>
+                <li>蛋殼變薄、破蛋增多，只能接受損失</li>
+                <li>蛋黃顏色依賴人工色素，消費者疑慮</li>
+                <li>抗氧化被忽視，雞群早衰嚴重</li>
+              </ul>
+            </div>
+            <div class="conclusion-card fade-in">
+              <h3 style="color: var(--primary);">活力旺方案思維</h3>
+              <ul style="color: var(--primary); font-weight: bold;">
+                <li>科學延緩下降35%，每羽多產1.2kg蛋</li>
+                <li>改善蛋殼品質，破蛋率降低28%</li>
+                <li>蝦青素天然著色，蛋黃升級10.5級</li>
+                <li>抗氧化能力提升65%，雞群更健康</li>
+              </ul>
+            </div>
+          </div>
+          <div class="conclusion-highlight fade-in">
+            <p>活力旺A劑+B劑的核心價值，不在於「省成本」，而在於「創造延緩下降的價值」——</p>
+            <p class="key-value">
+              以每噸飼料極低添加成本，<br>
+              換取產蛋率下降減緩35%、破蛋率降低28%、蛋殼增厚0.03mm，<br>
+              讓300日齡蛋雞生產性能維持高峰，<br>
+              實現產蛋後期的效益最大化。
+            </p>
+          </div>
+        </div>
+        <div class="benefit-highlight fade-in" style="background: linear-gradient(135deg, #f8a51c 0%, #e68a00 100%);">
+          <div class="benefit-value" style="color: white;">立即導入活力旺A劑+B劑</div>
+          <div style="font-size: clamp(1.1rem, 3vw, 1.5rem); margin: 25px 0; color: white;">
+            60天實驗組產蛋率下降僅3.5%｜破蛋率1.3%｜蛋黃顏色10.5級
+          </div>
+          <div style="font-size: clamp(1rem, 2.5vw, 1.4rem); color: white;">
+            投資報酬率超過50倍｜效果顯現期<14天｜符合GB/T 44964-2026
+          </div>
+        </div>
+      </section>
+
+      <!-- 圖表：產蛋率變化 (Chart.js) -->
+      <section>
+        <div class="container">
+          <h2 class="section-title">產蛋率變化趨勢（60天模擬）</h2>
+          <canvas id="layRateChart" style="width:100%; max-height:300px; background: white; border-radius: 15px; padding: 15px;"></canvas>
+          <p class="img-caption">實驗組（綠線）下降斜率明顯平緩，對照組（橙線）下降加速</p>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="company-info">
+        <p>凤雏生态农业｜活力旺联合实验</p>
+        <p>Precision Nutrition · Advanced Biotechnology · Sustainable Poultry</p>
+        <p>地址：凤雏生态农业养殖基地<br>電話：+886-5-6972238（台灣技術支援：吉升飼料）</p>
+      </div>
+
+      <!-- 產品連結列 (保留原樣) -->
+      <ul class="product-links">
+        <li><a href="index.html">🏠 主頁</a></li>
+        <li><a href="beilisu-boar-semen.html">🐗 種公豬</a></li>
+        <li><a href="beilisu-pregnant-sow.html">🤰 懷孕母豬</a></li>
+        <li><a href="beilisu-lactating-sow.html">🍼 哺乳母豬</a></li>
+        <li><a href="beilisu-piglet-milk.html">🐷 仔豬</a></li>
+        <li><a href="beilisu-finisher-fcr.html">📈 育肥豬</a></li>
+        <li><a href="beilisu-breeder-chicken.html">🐔 種雞</a></li>
+        <li><a href="beilisu-layer-chicken.html">🥚 蛋雞</a></li>
+        <li><a href="beilisu-native-chicken.html">🌾 土雞</a></li>
+        <li><a href="beilisu-broiler-fcr.html">🍗 白肉雞</a></li>
+        <li><a href="beilisu-tilapia.html">🐟 吳郭魚</a></li>
+        <li><a href="beilisu-shrimp.html">🦐 白蝦</a></li>
+      </ul>
+
+      <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.9rem; opacity: 0.7;">
+        <p>© 2026 凤雏生态農業 · 活力旺 版權所有</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 返回頂部按鈕 -->
+  <button class="scroll-to-top" id="scrollToTopBtn" onclick="scrollToTop()"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <!-- Font Awesome 圖示庫 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
+  <script>
+    // 滾動淡入動畫
+    function handleScroll() {
+      const fadeElements = document.querySelectorAll('.fade-in');
+      fadeElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+          element.classList.add('visible');
+        }
+      });
+
+      // 返回頂部按鈕顯示/隱藏
+      const scrollBtn = document.getElementById('scrollToTopBtn');
+      if (window.scrollY > 300) {
+        scrollBtn.classList.add('visible');
+      } else {
+        scrollBtn.classList.remove('visible');
+      }
+    }
+
+    // 返回頂部功能
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      window.addEventListener('scroll', handleScroll);
+      handleScroll();
+
+      // 產蛋率圖表
+      const ctx = document.getElementById('layRateChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['第1周', '第2周', '第3周', '第4周', '第5周', '第6周', '第7周', '第8周', '第9周'],
+          datasets: [
+            { label: '實驗組 (活力旺A+B)', data: [92, 91.5, 91, 90.3, 89.6, 88.9, 88.2, 87.5, 86.8], borderColor: '#2c6e36', backgroundColor: 'rgba(44,110,54,0.05)', tension: 0.2, borderWidth: 2.5 },
+            { label: '對照組', data: [92, 90.4, 88.8, 87.2, 85.6, 84.0, 82.5, 81.0, 79.5], borderColor: '#f8a51c', backgroundColor: 'rgba(248,165,28,0.05)', tension: 0.2, borderWidth: 2.5 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: true,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { min: 75, max: 95, title: { display: true, text: '產蛋率 %' } } }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
