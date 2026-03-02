@@ -183,7 +183,13 @@
             text-decoration: none;
             box-shadow: var(--shadow-btn);
             transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .back-to-top.visible {
             opacity: 0.8;
+            visibility: visible;
         }
 
         .back-to-top:hover {
@@ -322,6 +328,7 @@
             transition: var(--transition);
             border-left: 4px solid var(--primary-green);
             margin-bottom: var(--space-md);
+            height: fit-content;
         }
 
         .card:hover, .metric-card:hover, .spec-card:hover, .stage-card:hover {
@@ -344,8 +351,22 @@
             margin: var(--space-xs) 0;
         }
 
-        /* 网格布局 */
-        .grid-2, .grid-3, .grid-4 {
+        /* 网格布局 - 用于三个机制卡片 */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+
+        @media (min-width: 768px) {
+            .grid-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* 其他网格 */
+        .grid-2 {
             display: grid;
             grid-template-columns: 1fr;
             gap: var(--space-lg);
@@ -353,14 +374,9 @@
         }
 
         @media (min-width: 640px) {
-            .grid-2 { grid-template-columns: repeat(2, 1fr); }
-            .grid-3 { grid-template-columns: repeat(2, 1fr); }
-            .grid-4 { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (min-width: 1024px) {
-            .grid-3 { grid-template-columns: repeat(3, 1fr); }
-            .grid-4 { grid-template-columns: repeat(4, 1fr); }
+            .grid-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         /* 规格网格 */
@@ -440,56 +456,6 @@
             border-radius: 0 0 var(--radius-md) var(--radius-md);
         }
 
-        /* 机制区块 */
-        .mechanism-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            box-shadow: var(--shadow-card);
-            border-left: 4px solid var(--primary-green);
-            margin-bottom: var(--space-lg);
-        }
-
-        .mechanism-title {
-            font-size: var(--fs-product-title);
-            color: var(--primary-green);
-            margin-bottom: var(--space-md);
-            font-weight: var(--fw-bold);
-        }
-
-        .mechanism-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: var(--space-md) 0;
-            background: white;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            box-shadow: var(--shadow-card);
-        }
-
-        .mechanism-table th {
-            background: var(--primary-green);
-            color: white;
-            padding: var(--space-sm);
-            font-weight: var(--fw-semibold);
-            font-size: 0.9rem;
-        }
-
-        .mechanism-table td {
-            padding: var(--space-sm);
-            border-bottom: 1px solid var(--border-light);
-            font-size: 0.9rem;
-        }
-
-        .mechanism-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .mechanism-table .highlight {
-            color: var(--accent-gold);
-            font-weight: var(--fw-bold);
-        }
-
         /* 表格容器（滚动） */
         .table-container {
             width: 100%;
@@ -524,6 +490,11 @@
 
         .data-table tr:hover td {
             background: rgba(42, 122, 42, 0.05);
+        }
+
+        .highlight {
+            color: var(--accent-gold);
+            font-weight: var(--fw-bold);
         }
 
         /* 高亮卡片 */
@@ -627,6 +598,40 @@
             line-height: 1.8;
         }
 
+        /* 观察指标列表 */
+        .indicator-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        @media (min-width: 640px) {
+            .indicator-list {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .indicator-item {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            text-align: center;
+            box-shadow: var(--shadow-card);
+            border-bottom: 3px solid var(--primary-green);
+        }
+
+        .indicator-item .title {
+            font-weight: var(--fw-bold);
+            color: var(--primary-green);
+            margin-bottom: var(--space-xs);
+        }
+
+        .indicator-item .freq {
+            font-size: 0.85rem;
+            color: var(--secondary-dark);
+        }
+
         /* 页脚 */
         footer {
             background: linear-gradient(135deg, var(--footer-gradient-start), var(--footer-gradient-end));
@@ -661,7 +666,7 @@
 
         @media (min-width: 1024px) {
             .footer-content {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -767,11 +772,11 @@
         <a href="#" class="home-btn">
             <i class="fas fa-home"></i> 凤雏生态农业
         </a>
-        <div style="width: 100px;"></div> <!-- 占位保持对称 -->
+        <div style="width: 100px;"></div>
     </div>
 
     <!-- 回到顶部按钮 -->
-    <a href="#" class="back-to-top" aria-label="回到顶部">
+    <a href="#" class="back-to-top" id="backToTop" aria-label="回到顶部">
         <i class="fas fa-arrow-up"></i>
     </a>
 
@@ -782,8 +787,8 @@
             <p class="subtitle">活力旺A剂+B剂组合 | 延缓产蛋下降 | 改善蛋壳品质 | 提升抗氧化能力</p>
             <div class="tagline">每吨添加A剂0.35kg + B剂0.1kg · 实验组4万羽 vs 对照组4万羽 · 依据GB/T 44964-2026</div>
             <div class="feature-badges">
-                <div class="feature-badge">A剂添加量：0.35kg/t</div>
-                <div class="feature-badge">B剂添加量：0.1kg/t</div>
+                <div class="feature-badge">A剂添加量：0.35kg/吨</div>
+                <div class="feature-badge">B剂添加量：0.1kg/吨</div>
                 <div class="feature-badge">实验周期：60天</div>
                 <div class="feature-badge">总耗料：276吨</div>
             </div>
@@ -797,16 +802,23 @@
             <div class="image-caption">图1：活力旺A剂+B剂 · 300日龄蛋鸡实验概念</div>
         </div>
 
-        <!-- 执行摘要 -->
+        <!-- 执行摘要 + 300日龄痛点 -->
         <section>
-            <h2 class="section-title">执行摘要 · 科学验证</h2>
+            <h2 class="section-title">执行摘要 · 300日龄蛋鸡痛点与改善</h2>
             <div class="card fade-in">
-                <p>本实验针对凤雏生态农业8万羽300日龄蛋鸡（实验组4万羽，对照组4万羽），依据国家标准GB/T 44964-2026《蛋鸡生产性能测定技术规范》设计，正试期60天。旨在评估活力旺A剂（蛋白酶）与B剂（虾青素）组合对产蛋后期生产性能、蛋品质及抗氧化能力的改善效果。实验采用完全随机分组，每组8~10个重复，预饲期7~10天消除差异。</p>
+                <p>300日龄蛋鸡正处于产蛋高峰后期，普遍面临以下核心痛点：</p>
+                <ul style="margin: var(--space-md) 0 var(--space-md) var(--space-lg);">
+                    <li><strong>产蛋率自然下降</strong>：每周下降0.5~1%，影响总产蛋量；</li>
+                    <li><strong>蛋壳品质恶化</strong>：蛋壳变薄、破蛋率上升，经济损失显著；</li>
+                    <li><strong>蛋黄颜色变浅</strong>：消费者偏好降低，市场溢价能力下降；</li>
+                    <li><strong>氧化应激加剧</strong>：体内自由基增多，导致早衰、死淘率升高。</li>
+                </ul>
+                <p>本实验针对以上痛点，在60天正试期内系统评估活力旺A剂+B剂对300日龄蛋鸡生产性能的改善效果。实验组与对照组各4万羽，采用完全随机分组，严格遵循GB/T 44964-2026测定规范。核心改善指标如下：</p>
                 <div class="grid-3" style="margin-top: var(--space-lg);">
                     <div class="metric-card">
                         <h4>📉 产蛋率下降幅度</h4>
                         <div class="metric-value">减缓35%</div>
-                        <p>实验组下降3.5%，对照组下降6.2%</p>
+                        <p>实验组下降3.5% vs 对照组6.2%</p>
                     </div>
                     <div class="metric-card">
                         <h4>🥚 破蛋率</h4>
@@ -822,13 +834,69 @@
             </div>
         </section>
 
+        <!-- 实验观察指标明确列出 -->
+        <section>
+            <h2 class="section-title">实验观察指标（依据GB/T 44964-2026）</h2>
+            <div class="indicator-list">
+                <div class="indicator-item">
+                    <div class="title">产蛋率</div>
+                    <div class="freq">每日记录</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">平均蛋重</div>
+                    <div class="freq">每周统计</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">料蛋比</div>
+                    <div class="freq">每周计算</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">破蛋率/次品蛋</div>
+                    <div class="freq">每日记录</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">蛋壳厚度</div>
+                    <div class="freq">每2周抽检</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">蛋壳强度</div>
+                    <div class="freq">每2周抽检</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">哈氏单位</div>
+                    <div class="freq">每2周抽检</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">蛋黄颜色</div>
+                    <div class="freq">每2周抽检</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">暗斑蛋比例</div>
+                    <div class="freq">每2周抽检</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">血清MDA</div>
+                    <div class="freq">试验结束</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">总抗氧化能力(T-AOC)</div>
+                    <div class="freq">试验结束</div>
+                </div>
+                <div class="indicator-item">
+                    <div class="title">死淘率</div>
+                    <div class="freq">每周统计</div>
+                </div>
+            </div>
+            <p class="image-caption">表：实验全程采集指标及频率，每组随机抽样保证代表性。</p>
+        </section>
+
         <!-- 实验设计核心 -->
         <section>
             <h2 class="section-title">实验设计核心</h2>
             <div class="grid-2">
                 <div class="card">
                     <h4><i class="fas fa-clipboard-list"></i> 分组设计</h4>
-                    <p><strong>实验组：</strong>40,000羽，基础日粮 + 活力旺A剂0.35kg/t + 活力旺B剂0.1kg/t</p>
+                    <p><strong>实验组：</strong>40,000羽，基础日粮 + 活力旺A剂0.35kg/吨 + 活力旺B剂0.1kg/吨</p>
                     <p><strong>对照组：</strong>40,000羽，基础日粮（不添加）</p>
                     <p>每组8~10个重复（2,000~2,500羽/重复），确保起始条件一致。</p>
                 </div>
@@ -843,7 +911,7 @@
             </div>
         </section>
 
-        <!-- 添加剂用量统计 -->
+        <!-- 添加剂用量统计（验证用量） -->
         <section>
             <h2 class="section-title">添加剂用量统计（60天正试期）</h2>
             <div class="highlight-card fade-in">
@@ -886,13 +954,12 @@
             </div>
         </section>
 
-        <!-- 三大核心机制 -->
+        <!-- 三大核心机制（仅保留表格数据，删除具体成分描述） -->
         <section>
-            <h2 class="section-title">三大生产性能核心机制</h2>
+            <h2 class="section-title">三大生产性能核心数据</h2>
             <div class="grid-3">
-                <div class="mechanism-card">
-                    <div class="mechanism-title">产蛋性能优化</div>
-                    <p>A剂蛋白酶提高蛋白质消化率12%，增加可利用氨基酸，支持卵泡发育。B剂虾青素清除自由基，保护卵巢颗粒细胞，延缓衰老。</p>
+                <div class="card">
+                    <h4>📊 产蛋性能优化</h4>
                     <div class="table-container">
                         <table class="data-table">
                             <thead><tr><th>指标</th><th>实验组</th><th>对照组</th></tr></thead>
@@ -904,9 +971,8 @@
                         </table>
                     </div>
                 </div>
-                <div class="mechanism-card">
-                    <div class="mechanism-title">蛋壳品质改善</div>
-                    <p>蛋白酶提升钙结合蛋白合成，虾青素促进蛋壳腺抗氧化，降低暗斑与破蛋。</p>
+                <div class="card">
+                    <h4>🛡️ 蛋壳品质改善</h4>
                     <div class="table-container">
                         <table class="data-table">
                             <thead><tr><th>指标</th><th>实验组</th><th>对照组</th></tr></thead>
@@ -918,9 +984,8 @@
                         </table>
                     </div>
                 </div>
-                <div class="mechanism-card">
-                    <div class="mechanism-title">抗氧化与健康</div>
-                    <p>虾青素强效抗氧化，显著降低血清MDA，提升总抗氧化能力。</p>
+                <div class="card">
+                    <h4>💪 抗氧化与健康</h4>
                     <div class="table-container">
                         <table class="data-table">
                             <thead><tr><th>指标</th><th>实验组</th><th>对照组</th></tr></thead>
@@ -931,7 +996,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <p style="margin-top:var(--space-sm); background:var(--accent-light); padding:var(--space-sm); border-radius:var(--radius-sm);">🌱 天然来源：A剂蛋白酶源自发酵技术，B剂虾青素萃取自雨生红球藻。</p>
                 </div>
             </div>
         </section>
@@ -994,7 +1058,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="image-caption">表1：实验组与对照组主要性能指标对比</p>
+            <p class="image-caption">表2：实验组与对照组主要性能指标对比</p>
         </section>
 
         <!-- 产蛋率变化图表 -->
@@ -1009,7 +1073,7 @@
             <h2 class="section-title">结论：从被动下降到主动延缓</h2>
             <div class="conclusion-grid">
                 <div class="conclusion-card">
-                    <h3>传统养殖思维</h3>
+                    <h3>传统养殖痛点</h3>
                     <ul>
                         <li>300日龄后产蛋率自然下降，无法干预</li>
                         <li>蛋壳变薄、破蛋增多，被动接受损失</li>
@@ -1018,63 +1082,53 @@
                     </ul>
                 </div>
                 <div class="conclusion-card">
-                    <h3>活力旺方案思维</h3>
+                    <h3>活力旺方案改善</h3>
                     <ul>
                         <li>科学延缓下降35%，每羽多产约1.2kg蛋</li>
                         <li>改善蛋壳品质，破蛋率降低28%</li>
-                        <li>虾青素天然着色，蛋黄升级至10.5级</li>
+                        <li>天然着色，蛋黄升级至10.5级</li>
                         <li>抗氧化能力提升65%，鸡群更健康</li>
                     </ul>
                 </div>
             </div>
             <div class="conclusion-highlight">
-                <p class="key-statement">活力旺A剂+B剂以极低添加成本，换取产蛋率下降减缓35%、破蛋率降低28%、蛋壳增厚0.03mm，实现300日龄蛋鸡生产性能的主动延缓与效益最大化。</p>
+                <p class="key-statement">活力旺A剂+B剂以极低添加成本，实现300日龄蛋鸡生产性能的主动延缓，产蛋率下降减缓35%、破蛋率降低28%、蛋壳增厚0.03mm，综合效益显著。</p>
             </div>
         </section>
 
-        <!-- 参考文献 -->
+        <!-- 参考文献（已删除敏感内容） -->
         <section>
             <h2 class="section-title">参考文献与标准</h2>
             <div class="card">
                 <ul style="margin-left: var(--space-lg);">
                     <li>GB/T 44964-2026《蛋鸡生产性能测定技术规范》</li>
                     <li>《Journal of Animal Science》2023, 蛋白酶对蛋鸡产蛋后期蛋白质利用率的影响</li>
-                    <li>《Poultry Science》2024, 虾青素对蛋鸡抗氧化性能及蛋品质的调控</li>
-                    <li>凤雏生态农业内部实验报告（2026）</li>
                 </ul>
             </div>
         </section>
     </main>
 
-    <!-- 页脚 -->
+    <!-- 页脚（仅保留活力旺信息） -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>凤雏生态农业</h3>
-                    <p>300日龄蛋鸡实验测试方案 v2.0</p>
+                    <h3>活力旺 · 联合实验</h3>
+                    <p>凤雏生态农业300日龄蛋鸡实验</p>
                     <p>科学严谨 · 数据驱动 · 持续创新</p>
-                </div>
-                <div class="footer-section">
-                    <h3>技术支持</h3>
-                    <ul class="footer-links">
-                        <li>襄阳市农业科学院</li>
-                        <li>活力旺研发中心</li>
-                        <li>国家标准起草单位</li>
-                    </ul>
                 </div>
                 <div class="footer-section">
                     <h3>联系方式</h3>
                     <ul class="footer-links">
-                        <li>地址：凤雏生态农业养殖基地</li>
-                        <li>邮箱：fc@fengchuagri.com</li>
-                        <li>电话：+86-710-xxxxxxx</li>
+                        <li>技术专线：0913-866-080</li>
+                        <li>邮箱：in1000318@gmail.com</li>
+                        <li>地址：台湾省嘉义市自強街195巷33之28号</li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>© 2026 凤雏生态农业 · 活力旺联合实验 版权所有</p>
-                <p>本页面内容基于真实实验数据，未经授权不得用于商业营销。</p>
+                <p>© 2026 活力旺 · 凤雏生态农业 联合实验 版权所有</p>
+                <p>本页面基于真实实验数据，未经授权不得用于商业营销。</p>
             </div>
         </div>
     </footer>
@@ -1137,9 +1191,12 @@
 
         // 返回顶部按钮显示
         window.addEventListener('scroll', function() {
-            const btn = document.querySelector('.back-to-top');
-            if (window.scrollY > 300) btn.style.opacity = '1';
-            else btn.style.opacity = '0';
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
         });
 
         // 平滑滚动
